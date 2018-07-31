@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!--  Base application theme.  -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--  Customize your theme here.  -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlActivated">#dd325cd9</item>
+        <item name="colorControlHighlight">#dd325cd9</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="successToast">
+        <item name="textBold">true</item>
+        <item name="textColor">#fff</item>
+        <item name="textSize">14sp</item>
+        <item name="colorBackground">#cb54a95e</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="length">LONG</item>
+        <item name="iconStart">@drawable/ic_done</item>
+        <item name="gravity">top</item>
+        <item name="radius">20dp</item>
+    </style>
+
+    <style name="errorToast">
+        <item name="textBold">true</item>
+        <item name="textColor">#fff</item>
+        <item name="textSize">14sp</item>
+        <item name="colorBackground">@android:color/holo_red_light</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="length">LONG</item>
+        <item name="iconStart">@drawable/ic_error</item>
+        <item name="gravity">top</item>
+        <item name="radius">20dp</item>
+    </style>
+
+</resources>

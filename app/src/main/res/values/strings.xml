@@ -1,0 +1,59 @@
+<resources>
+
+    <string name="app_name">Orari Sapienza</string>
+    <string name="app_version">Versione App: </string>
+    <string name="manufacturer">Produttore: </string>
+    <string name="device_name">Dispositivo: </string>
+    <string name="device_model">Modello: </string>
+    <string name="os_version">Versione SO: </string>
+    <string name="class_detail">Dettagli</string>
+    <string name="describe">Descrizione</string>
+    <string name="confirm">Conferma</string>
+    <string name="error">Errore</string>
+    <string name="attachment_remove">Rimozione allegato</string>
+    <string name="attachment_remove_question">Sei sicuro di voler rimuovere l\'allegato selezionato?</string>
+    <string name="attachment_too_many">Questo é un messaggio di errore, hai inserito troppi allegati!</string>
+    <string name="gallery_permission_denied">Permesso di accedere alla galleria negato</string>
+    <string name="report_a_bug">Segnala un Bug</string>
+    <string name="report_sent">Segnalazione inviata!</string>
+    <string name="report_not_sent">La segnalazione non é stata inviata</string>
+    <string name="sending_report">Invio segnalazione</string>
+    <string name="sending_feedback">Invio feedback</string>
+    <string name="feedback_sent">Feedback inviato!</string>
+    <string name="feedback_not_sent">Il feedback non é stata inviato</string>
+    <string name="please_wait">Attendere prego ...</string>
+    <string name="tell_us_about_issue">Raccontaci del problema che hai riscontrato utilizzando l\'app Aule Sapienza.</string>
+    <string name="frequency">Frequenza</string>
+    <string name="type_of_problem">Tipo di problema</string>
+    <string name="add_attachments">AGGIUNGI ALLEGATI</string>
+    <string name="settings">settings</string>
+    <string name="map">map</string>
+
+
+    <string-array name="query_suggestions">
+        <item>Android</item>
+        <item>And</item>
+        <item>iOS</item>
+        <item>SCALA</item>
+        <item>Ruby</item>
+        <item>JavaScript</item>
+    </string-array>
+
+    <string-array name="issue_type">
+        <item>Seleziona tipo di problema</item>
+        <item>Crash/Freeze</item>
+        <item>Problema grafico</item>
+        <item>Altro</item>
+    </string-array>
+
+    <string-array name="frequency_type">
+        <item>Seleziona la frequenza</item>
+        <item>Alta</item>
+        <item>Media</item>
+        <item>Bassa</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
