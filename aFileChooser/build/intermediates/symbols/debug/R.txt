@@ -19,8 +19,7 @@ int attr layout_insetEdge 0x7f040012
 int attr layout_keyline 0x7f040013
 int attr statusBarBackground 0x7f040014
 int attr ttcIndex 0x7f040015
-int bool use_activity 0x7f050001
-int bool use_provider 0x7f050002
+int bool use_provider 0x7f050001
 int color notification_action_color_filter 0x7f060001
 int color notification_icon_bg_color 0x7f060002
 int color notification_material_background_media_default_color 0x7f060003
@@ -172,7 +171,7 @@ int styleable FontFamily_fontProviderFetchStrategy 2
 int styleable FontFamily_fontProviderFetchTimeout 3
 int styleable FontFamily_fontProviderPackage 4
 int styleable FontFamily_fontProviderQuery 5
-int[] styleable FontFamilyFont { 0x0, 0x0, 0x0, 0x0, 0x0, 0x7f040003, 0x7f04000a, 0x7f04000b, 0x7f04000c, 0x7f040015 }
+int[] styleable FontFamilyFont { 0x1010532, 0x101053f, 0x0, 0x1010533, 0x0, 0x7f040003, 0x7f04000a, 0x7f04000b, 0x7f04000c, 0x7f040015 }
 int styleable FontFamilyFont_android_font 0
 int styleable FontFamilyFont_android_fontStyle 1
 int styleable FontFamilyFont_android_fontVariationSettings 2
@@ -183,7 +182,7 @@ int styleable FontFamilyFont_fontStyle 6
 int styleable FontFamilyFont_fontVariationSettings 7
 int styleable FontFamilyFont_fontWeight 8
 int styleable FontFamilyFont_ttcIndex 9
-int[] styleable GradientColor { 0x101020b, 0x10101a2, 0x10101a3, 0x101019e, 0x0, 0x0, 0x10101a4, 0x101019d, 0x0, 0x0, 0x1010201, 0x10101a1 }
+int[] styleable GradientColor { 0x101020b, 0x10101a2, 0x10101a3, 0x101019e, 0x1010512, 0x1010513, 0x10101a4, 0x101019d, 0x1010510, 0x1010511, 0x1010201, 0x10101a1 }
 int styleable GradientColor_android_centerColor 0
 int styleable GradientColor_android_centerX 1
 int styleable GradientColor_android_centerY 2
@@ -196,7 +195,7 @@ int styleable GradientColor_android_startX 8
 int styleable GradientColor_android_startY 9
 int styleable GradientColor_android_tileMode 10
 int styleable GradientColor_android_type 11
-int[] styleable GradientColorItem { 0x10101a5, 0x0 }
+int[] styleable GradientColorItem { 0x10101a5, 0x1010514 }
 int styleable GradientColorItem_android_color 0
 int styleable GradientColorItem_android_offset 1
 int xml mimetypes 0x7f180001

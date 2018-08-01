@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout android:id="@+id/mainGrid"
+<GridLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainGrid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/toolbar"
@@ -37,12 +38,13 @@
                 android:src="@drawable/ic_library"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Piano di studi"
+                android:text="@string/piano_di_studi"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="@android:color/black"
@@ -77,12 +79,13 @@
                 android:src="@drawable/ic_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Orari aule"
+                android:text="@string/class_timetables"
                 android:fontFamily="sans-serif-condensed"
 
                 android:textAlignment="center"
@@ -121,12 +124,13 @@
                 android:src="@drawable/ic_study_plan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="P.D.S. attivo"
+                android:text="@string/study_plan_active"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
 
@@ -162,14 +166,15 @@
                 android:src="@drawable/ic_classroom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
 
-                android:text="Elenco aule"
+                android:text="@string/classrooms_list"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
@@ -206,12 +211,13 @@
                 android:src="@drawable/ic_faq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FAQ"
+                android:text="@string/faq"
                 android:fontFamily="sans-serif-condensed"
 
                 android:textAlignment="center"
@@ -248,12 +254,13 @@
                 android:src="@drawable/ic_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contatti"
+                android:text="@string/contacts"
                 android:fontFamily="sans-serif-condensed"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"

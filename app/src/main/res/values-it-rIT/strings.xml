@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manufacturer">Produttore</string>
+    <string name="device_name">"Dispositivo: "</string>
+    <string name="device_model">"Modello: "</string>
+    <string name="os_version">"Versione SO: "</string>
+    <string name="piano_di_studi">Piano di studi</string>
+    <string name="map">Mappa</string>
+    <string name="settings">Impostazioni</string>
+    <string name="add_attachments">AGGIUNGI ALLEGATI</string>
+    <string name="type_of_problem">Tipo di problema</string>
+    <string name="frequency">Frequenza</string>
+    <string name="tell_us_about_issue">Raccontaci del problema che hai riscontrato utilizzando l\'app Orari Sapienza.</string>
+    <string name="please_wait">Attendere prego ...</string>
+    <string name="feedback_not_sent">Il feedback non é stata inviato</string>
+    <string name="feedback_sent">Feedback inviato!</string>
+    <string name="sending_feedback">Invio feedback</string>
+    <string name="sending_report">Invio segnalazione</string>
+    <string name="report_not_sent">La segnalazione non é stata inviata</string>
+    <string name="report_sent">Segnalazione inviata!</string>
+    <string name="gallery_permission_denied">Permesso di accedere alla galleria negato.</string>
+    <string name="attachment_too_many">Questo é un messaggio di errore, hai inserito troppi allegati!</string>
+    <string name="attachment_remove_question">Sei sicuro di voler rimuovere l\'allegato selezionato?</string>
+    <string name="attachment_remove">Rimozione allegato</string>
+    <string name="error">Errore</string>
+    <string name="confirm">Conferma</string>
+    <string name="describe">Descrizione</string>
+    <string name="class_detail">Dettagli</string>
+    <string name="app_version">"Versione App: "</string>
+    <string name="class_timetables">Orari aule</string>
+    <string name="study_plan_active">P.D.S. attivo</string>
+    <string name="classrooms_list">Elenco aule</string>
+    <string name="contacts">Contatti</string>
+    <string name="report_a_bug">Segnala un bug</string>
+    <string name="lets_start">AVVIA L\'APP</string>
+    <string name="skip_tutorial">SALTA IL TUTORIAL</string>
+</resources>

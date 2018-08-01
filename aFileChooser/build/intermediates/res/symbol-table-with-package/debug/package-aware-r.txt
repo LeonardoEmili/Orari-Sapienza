@@ -20,7 +20,6 @@ attr layout_insetEdge
 attr layout_keyline
 attr statusBarBackground
 attr ttcIndex
-bool use_activity
 bool use_provider
 color notification_action_color_filter
 color notification_icon_bg_color

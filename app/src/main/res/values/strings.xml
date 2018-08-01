@@ -1,33 +1,18 @@
 <resources>
 
-    <string name="app_name">Orari Sapienza</string>
-    <string name="app_version">Versione App: </string>
-    <string name="manufacturer">Produttore: </string>
-    <string name="device_name">Dispositivo: </string>
-    <string name="device_model">Modello: </string>
-    <string name="os_version">Versione SO: </string>
-    <string name="class_detail">Dettagli</string>
-    <string name="describe">Descrizione</string>
-    <string name="confirm">Conferma</string>
-    <string name="error">Errore</string>
-    <string name="attachment_remove">Rimozione allegato</string>
-    <string name="attachment_remove_question">Sei sicuro di voler rimuovere l\'allegato selezionato?</string>
-    <string name="attachment_too_many">Questo é un messaggio di errore, hai inserito troppi allegati!</string>
-    <string name="gallery_permission_denied">Permesso di accedere alla galleria negato</string>
-    <string name="report_a_bug">Segnala un Bug</string>
-    <string name="report_sent">Segnalazione inviata!</string>
-    <string name="report_not_sent">La segnalazione non é stata inviata</string>
-    <string name="sending_report">Invio segnalazione</string>
-    <string name="sending_feedback">Invio feedback</string>
-    <string name="feedback_sent">Feedback inviato!</string>
-    <string name="feedback_not_sent">Il feedback non é stata inviato</string>
-    <string name="please_wait">Attendere prego ...</string>
-    <string name="tell_us_about_issue">Raccontaci del problema che hai riscontrato utilizzando l\'app Aule Sapienza.</string>
-    <string name="frequency">Frequenza</string>
-    <string name="type_of_problem">Tipo di problema</string>
-    <string name="add_attachments">AGGIUNGI ALLEGATI</string>
-    <string name="settings">settings</string>
-    <string name="map">map</string>
+    <string name="app_name" translatable="false">Orari Sapienza</string>
+    <string name="app_version">"App Version: "</string>
+    <string name="manufacturer">Manufacturer:</string>
+    <string name="class_detail">Details</string>
+    <string name="describe">Description</string>
+    <string name="confirm">Confirm</string>
+    <string name="error">Error</string>
+    <string name="attachment_remove_question">Are you sure you want to remove the selected attachment?</string>
+    <string name="gallery_permission_denied">Permission to access the gallery denied.</string>
+    <string name="report_sent">Report sent!</string>
+    <string name="feedback_not_sent">Feedback has not been sent</string>
+    <string name="settings">Settings</string>
+    <string name="map">Map</string>
 
 
     <string-array name="query_suggestions">
@@ -53,7 +38,28 @@
         <item>Bassa</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="device_name">Device:</string>
+    <string name="device_model">Model:</string>
+    <string name="os_version">OS Version:</string>
+    <string name="piano_di_studi">Study plan</string>
+    <string name="add_attachments">ATTACH FOTO</string>
+    <string name="type_of_problem">Issue type</string>
+    <string name="frequency">Frequency</string>
+    <string name="tell_us_about_issue">Tell us about the issue you experienced using the app Orari Sapienza.</string>
+    <string name="please_wait">Please wait ...</string>
+    <string name="feedback_sent">Feedback sent!</string>
+    <string name="sending_feedback">Sending feedback</string>
+    <string name="sending_report">Sending report</string>
+    <string name="report_not_sent">Report has not been sent</string>
+    <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
+    <string name="attachment_remove">Attachment removal</string>
+    <string name="class_timetables">Classrooms timetables</string>
+    <string name="faq" translatable="false">FAQ</string>
+    <string name="study_plan_active">Active Study Plan</string>
+    <string name="classrooms_list">Classroom list</string>
+    <string name="contacts">Contatcs</string>
+    <string name="report_a_bug">Report a Bug</string>
+    <string name="lets_start">LET\'S START</string>
+    <string name="skip_tutorial">SKIP TUTORIAL</string>
 
 </resources>
