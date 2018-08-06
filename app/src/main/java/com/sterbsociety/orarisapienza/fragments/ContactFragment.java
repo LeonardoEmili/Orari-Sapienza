@@ -1,6 +1,7 @@
 package com.sterbsociety.orarisapienza.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,6 +16,8 @@ import android.view.animation.Animation;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.BugReportActivity;
+import com.sterbsociety.orarisapienza.activities.FeedbackActivity;
 import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
@@ -61,10 +64,24 @@ public class ContactFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact, container, false);
+        View view = inflater.inflate(R.layout.fragment_contact, container, false);
+
+        view.findViewById(R.id.feedback_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), FeedbackActivity.class));
+            }
+        });
+        view.findViewById(R.id.bug_report_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), BugReportActivity.class));
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

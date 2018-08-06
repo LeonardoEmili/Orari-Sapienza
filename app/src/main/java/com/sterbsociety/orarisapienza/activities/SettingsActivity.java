@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.sterbsociety.orarisapienza.AppCompatPreferenceActivity;
+import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import androidx.appcompat.app.ActionBar;
@@ -56,7 +58,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
     }
-
 
     /**
      * Here an inner class is used since we only have one main prefsFragment (not using headers .. ).
@@ -247,6 +248,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                 break;
             case KEY_PREF_LANGUAGE:
                 translateOnDemand(languagePreference.getValue());
+                languagePreference.setNegativeButtonText(AppUtils.getStringByLocal(SettingsActivity.this, R.string.cancel, languagePreference.getValue()));
                 break;
         }
     }

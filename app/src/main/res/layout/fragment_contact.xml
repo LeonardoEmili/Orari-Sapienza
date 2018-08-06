@@ -14,11 +14,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Row 1 -->
-
     <!-- Column 1 -->
+
     <androidx.cardview.widget.CardView
         android:layout_width="136dp"
         android:layout_height="136dp"
+        android:id="@+id/feedback_btn"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
@@ -45,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feedback"
+                android:text="@string/feedback"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"
@@ -60,6 +61,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="136dp"
         android:layout_height="136dp"
+        android:id="@+id/bug_report_btn"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
@@ -86,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bug"
+                android:text="@string/bug"
                 android:fontFamily="sans-serif-condensed"
                 android:textAlignment="center"
                 android:textColor="?attr/textStyle"
@@ -130,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Autori"
+                android:text="@string/authors"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"
@@ -170,7 +172,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Donazioni"
+                android:text="@string/donations"
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"

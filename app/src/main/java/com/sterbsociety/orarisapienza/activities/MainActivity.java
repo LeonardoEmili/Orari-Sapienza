@@ -13,7 +13,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
-import com.sterbsociety.orarisapienza.SettingsActivity;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;
 import com.sterbsociety.orarisapienza.fragments.HomeFragment;
@@ -26,10 +25,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         addCallbacks();
         callAuthTask();
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
 
@@ -228,12 +227,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         showHomeFragment();
 
         // AdMob App ID: ca-app-pub-9817701892167034~2496155654
+        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = AppUtils.hash(androidId).toUpperCase();
+
         mAdView = new AdView(getApplicationContext());
         mAdView.setAdSize(AdSize.BANNER);
         mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         mAdRequest = new AdRequest.Builder()
-                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                //.addTestDevice()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(deviceId)
                 .build();
         mAdView.loadAd(mAdRequest);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);

@@ -23,7 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.SettingsActivity;
+import com.sterbsociety.orarisapienza.activities.SettingsActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -40,6 +40,7 @@ import androidx.preference.PreferenceManager;
 public class AppUtils {
 
     private static final int PICK_FROM_GALLERY = 1;
+    public static final String APP_VERSION = "1.0";
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
