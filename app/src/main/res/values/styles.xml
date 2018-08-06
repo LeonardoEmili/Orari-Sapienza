@@ -2,6 +2,10 @@
 
 <resources>
     <!--  Base application theme.  -->
+    <attr format="reference" name="cardStyle"/>
+    <attr format="reference" name="textStyle"/>
+    <attr format="reference" name="drawColor"/>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!--  Customize your theme here.  -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -9,6 +13,21 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlActivated">#dd325cd9</item>
         <item name="colorControlHighlight">#dd325cd9</item>
+        <item name="cardStyle">@style/CardView.Light</item>
+        <item name="textStyle">@android:color/black</item>
+        <item name="drawColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="cardStyle">@style/CardView.Dark</item>
+        <item name="textStyle">@android:color/white</item>
+        <item name="drawColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <item name="cardStyle">@style/CardView.Dark</item>
+        <item name="textStyle">@android:color/white</item>
+        <item name="drawColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -44,6 +63,11 @@
         <item name="iconStart">@drawable/ic_error</item>
         <item name="gravity">top</item>
         <item name="radius">20dp</item>
+    </style>
+
+    <style name="SettingsTheme" parent="AppTheme">
+        <item name="colorAccent">@color/colorSecondary</item>
+        <item name="colorControlActivated">@color/colorSecondary</item>
     </style>
 
 </resources>

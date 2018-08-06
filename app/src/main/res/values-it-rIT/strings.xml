@@ -26,7 +26,7 @@
     <string name="confirm">Conferma</string>
     <string name="describe">Descrizione</string>
     <string name="class_detail">Dettagli</string>
-    <string name="app_version">"Versione App: "</string>
+    <string name="app_version">"Versione App "</string>
     <string name="class_timetables">Orari aule</string>
     <string name="study_plan_active">P.D.S. attivo</string>
     <string name="classrooms_list">Elenco aule</string>
@@ -34,4 +34,23 @@
     <string name="report_a_bug">Segnala un bug</string>
     <string name="lets_start">AVVIA L\'APP</string>
     <string name="skip_tutorial">SALTA IL TUTORIAL</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="pref_header_general">Generale</string>
+    <string name="pref_theme">Tema</string>
+    <string name="theme_desc">Applica un tema scuro</string>
+    <string name="theme_title">Tema scuro</string>
+    <string name="sync_desc">Permetti all\'app di sincronizzare i dati in automatico</string>
+    <string name="sync_title">Controlla automaticamente aggiornamenti</string>
+    <string name="lang_title">Lingua</string>
+    <string name="animations_title">Mostra animazioni</string>
+    <string name="exit_box_desc">Mostra conferma all\'uscita</string>
+    <string name="exit_box_title">Conferma uscita dall\'app</string>
+    <string name="notifications_title">Attiva notifiche</string>
+    <string name="ringtone_title">Tono</string>
+    <string name="ringtone_desc">Seleziona un tono</string>
+    <string name="vibration_title">Vibrazione</string>
+    <string name="animations_desc">Mostra animazioni durante le transizioni</string>
+    <string name="confirm_exit">Sicuro di voler uscire?</string>
+    <string name="yes">Si</string>
+    <string name="app_ver">Versione App</string>
 </resources>

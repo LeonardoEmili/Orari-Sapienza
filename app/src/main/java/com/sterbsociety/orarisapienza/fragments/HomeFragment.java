@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,8 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.MainActivity;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
 /**
@@ -27,6 +31,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ChangeFragmentListener changeFragmentListener;
     public final static String TAG = "HOME_FRAGMENT";
+    private static Context mContext;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -38,8 +43,9 @@ public class HomeFragment extends Fragment {
      *
      * @return A new instance of fragment HomeFragment.
      */
-    public static HomeFragment newInstance() {
+    public static HomeFragment newInstance(Context context) {
         HomeFragment fragment = new HomeFragment();
+        mContext = context;
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -63,7 +69,6 @@ public class HomeFragment extends Fragment {
                 changeFragmentListener.onChangeFragmentLicked("CONTACT_FRAGMENT");
             }
         });
-
         return view;
     }
 

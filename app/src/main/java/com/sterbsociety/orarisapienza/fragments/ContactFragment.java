@@ -15,6 +15,8 @@ import android.view.animation.Animation;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.MainActivity;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
 /**
@@ -75,9 +77,10 @@ public class ContactFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint()) {
+        if (this.isVisible()) {
             mActionbar.setDisplayHomeAsUpEnabled(true);
         }
+
     }
 
     @Override
@@ -128,6 +131,9 @@ public class ContactFragment extends Fragment {
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return CubeAnimation.create(CubeAnimation.RIGHT, enter, 500);
+        if (AppUtils.areAnimationsAllowed()) {
+            return CubeAnimation.create(CubeAnimation.RIGHT, enter, 500);
+        }
+        return null;
     }
 }

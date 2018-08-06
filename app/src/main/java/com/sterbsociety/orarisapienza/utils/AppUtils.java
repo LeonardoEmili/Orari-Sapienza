@@ -1,10 +1,19 @@
 package com.sterbsociety.orarisapienza.utils;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.SettingsActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -21,8 +31,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
 public class AppUtils {
 
@@ -144,5 +157,146 @@ public class AppUtils {
         view.measure(widthMeasureSpec, heightMeasureSpec);
         int height = view.getMeasuredHeight();
         view.getLayoutParams().height = height;
+    }
+
+    private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
+    private static String sCurrentRingtone, currentLanguage;
+
+    public static void loadSettings(Activity activity) {
+
+        // The code below ensures that the settings are properly initialized with their default values.
+        PreferenceManager.setDefaultValues(activity, R.xml.preferences, false);
+
+        // The code below retrieves an object representation (SharedPreferences) of settings, then retrieves the value associated to the key.
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        animationsAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ANIMATION_SWITCH, false);
+        updatesAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_UPDATE_SWITCH, false);
+        secureExitAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_EXIT_SWITCH, false);
+        notificationAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_NOTIFICATION_SWITCH, false);
+        vibrationAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_VIBRATION_SWITCH, false);
+        currentTheme = sharedPref.getBoolean(SettingsActivity.KEY_PREF_THEME, false);
+        sCurrentRingtone = sharedPref.getString(SettingsActivity.KEY_PREF_RINGTONE, "");
+        currentLanguage = sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
+
+        if (currentLanguage.equals("")) {
+            if (isUserLanguageSupported(activity))
+                currentLanguage = Locale.getDefault().getLanguage();
+            else
+                currentLanguage = "en";
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage);
+            editor.apply();
+        }
+    }
+
+    public static boolean areAnimationsAllowed() {
+        return animationsAllowed;
+    }
+
+    public static boolean areUpdatesAllowed() {
+        return updatesAllowed;
+    }
+
+    public static boolean isSecureExitAllowed() {
+        return secureExitAllowed;
+    }
+
+    public static boolean areNotificationAllowed() {
+        return notificationAllowed;
+    }
+
+    public static boolean isVibrationAllowed() {
+        return vibrationAllowed;
+    }
+
+    private static boolean rebootScheduled = false;
+
+    public static void scheduleReboot() {
+        rebootScheduled = true;
+    }
+
+    public static boolean isRebootScheduled() {
+        return rebootScheduled;
+    }
+
+    public static void reboot(Activity activity, Intent intent) {
+        rebootScheduled = false;
+        activity.finish();
+        activity.startActivity(intent);
+    }
+
+    public static boolean isDarkTheme() {
+        return currentTheme;
+    }
+
+    public static Ringtone getDefaultRingtone(Activity activity) {
+        return RingtoneManager.getRingtone(activity, Settings.System.DEFAULT_RINGTONE_URI);
+    }
+
+    public static Ringtone getCurrentRingtone(Activity activity) {
+        if (sCurrentRingtone.equals("")) {
+            return getDefaultRingtone(activity);
+        }
+        return RingtoneManager.getRingtone(activity, Uri.parse(sCurrentRingtone));
+    }
+
+    public static String getCurrentRingtoneTitle(Activity activity) {
+        return getCurrentRingtone(activity).getTitle(activity);
+    }
+
+    public static String getTitleOf(Uri ringtone, Activity activity) {
+        return RingtoneManager.getRingtone(activity, ringtone).getTitle(activity);
+    }
+
+    public static String getCurrentLanguage() {
+        return currentLanguage;
+    }
+
+    private static boolean isUserLanguageSupported(Activity activity) {
+        String[] supportedLanguages = activity.getResources().getStringArray(R.array.languagesValues);
+        String usrLang = Locale.getDefault().getLanguage();
+        for (String lang: supportedLanguages) {
+            if (usrLang.equals(lang))
+                return true;
+        }
+        return false;
+    }
+
+    @NonNull
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static String getStringByLocal(Activity context, int id, String locale) {
+        Configuration configuration = new Configuration(context.getResources().getConfiguration());
+        configuration.setLocale(new Locale(locale));
+        return context.createConfigurationContext(configuration).getResources().getString(id);
+    }
+
+    @NonNull
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static String getStringByLocal(Activity context, int id) {
+        return getStringByLocal(context, id, currentLanguage);
+    }
+
+    public static void setLocale(Activity activity) {
+        Locale myLocale = new Locale(AppUtils.getCurrentLanguage());
+        Resources res = activity.getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+    }
+
+    public static void changeTheme() {
+        currentTheme = !currentTheme;
+    }
+
+    public static void applyTheme(Activity activity) {
+        if (isDarkTheme()) {
+            activity.setTheme(R.style.AppTheme_Dark);
+        }
+    }
+
+    public static void applayThemeNoActionBar(Activity activity) {
+        if (AppUtils.isDarkTheme())
+            activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
     }
 }

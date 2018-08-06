@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">Orari Sapienza</string>
-    <string name="app_version">"App Version: "</string>
+    <string name="app_version">"App Version"</string>
     <string name="manufacturer">Manufacturer:</string>
     <string name="class_detail">Details</string>
     <string name="describe">Description</string>
@@ -61,5 +61,59 @@
     <string name="report_a_bug">Report a Bug</string>
     <string name="lets_start">LET\'S START</string>
     <string name="skip_tutorial">SKIP TUTORIAL</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="confirm_exit">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_theme">Theme</string>
+    <string name="theme_desc">Apply a dark theme throughout the app</string>
+    <string name="theme_title">Dark Theme</string>
+    <string name="sync_desc">By enabling this you will allow the app to auto sync itself.</string>
+    <string name="sync_title">Automatically check for updates</string>
+    <string name="lang_title">Current language</string>
+    <string name="animations_title">Show animations</string>
+    <string name="exit_box_desc">Show confirm dialog before exiting.</string>
+    <string name="exit_box_title">Confirm exit</string>
+    <string name="notifications_title">Enable notifications</string>
+    <string name="ringtone_title">Ringtone</string>
+    <string name="ringtone_desc">Select a ringtone</string>
+    <string name="vibration_title">Vibrate</string>
+    <string name="animations_desc">Show animations during transitions</string>
+    <string-array name="pref_theme_list_titles">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="pref_theme_list_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="pref_font_list_titles">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+    </string-array>
+    <string-array name="pref_font_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item name="english">English</item>
+        <item name="italiano">Italiano</item>
+    </string-array>
+
+    <string-array name="languagesValues">
+        <item name="english">en</item>
+        <item name="italiano">it</item>
+    </string-array>
+
 
 </resources>

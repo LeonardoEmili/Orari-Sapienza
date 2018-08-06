@@ -1,0 +1,72 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Base Theme">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_theme"
+            android:summary="@string/theme_desc"
+            android:title="@string/theme_title"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="General">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="allow_updates"
+            android:summary="@string/sync_desc"
+            android:title="@string/sync_title" />
+
+        <ListPreference
+            android:entries="@array/languages"
+            android:entryValues="@array/languagesValues"
+            android:key="lang_pref"
+            android:title="@string/lang_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="allow_animations"
+            android:summary="@string/animations_desc"
+            android:title="@string/animations_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="allow_confirm_exit"
+            android:summary="@string/exit_box_desc"
+            android:title="@string/exit_box_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notifications">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="allow_notifications"
+            android:title="@string/notifications_title" />
+
+        <Preference
+            android:name="Ringtone Preference"
+            android:summary="@string/ringtone_desc"
+            android:title="@string/ringtone_title"
+            android:key="ringtone_pref"
+            android:dependency="allow_notifications"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="allow_vibration"
+            android:title="@string/vibration_title"
+            android:dependency="allow_notifications"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+
+        <Preference
+            android:title="@string/app_version"
+            android:key="version"
+            android:summary="1.0" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

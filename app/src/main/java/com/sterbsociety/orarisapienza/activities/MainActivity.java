@@ -1,14 +1,19 @@
 package com.sterbsociety.orarisapienza.activities;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
+import com.sterbsociety.orarisapienza.SettingsActivity;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;
 import com.sterbsociety.orarisapienza.fragments.HomeFragment;
@@ -24,7 +29,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.DatabaseHelper;
@@ -39,10 +46,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener, ContactFragment.OnFragmentInteractionListener, ChangeFragmentListener {
+
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
+        ContactFragment.OnFragmentInteractionListener, ChangeFragmentListener {
 
     private static final String TAG = "MainActivity";
     private DatabaseReference onlineDatabase;
@@ -55,9 +65,18 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     private HomeFragment homeFragment;
     private ContactFragment contactFragment;
     private FragmentTransaction fragmentTransaction;
+    private LinearLayout mAdsContainer;
+    private boolean mStartTheme;
+    public Intent mStartIntent;
+    private AdView mAdView;
+    private AdRequest mAdRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        AppUtils.loadSettings(MainActivity.this);
+        AppUtils.applayThemeNoActionBar(MainActivity.this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -68,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         addCallbacks();
         callAuthTask();
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
 
@@ -82,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         switch (item.getItemId()) {
             case R.id.settings:
-                // Something else to do here
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -154,7 +175,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentDataSnapshot = dataSnapshot;
-                if (!MainActivity.this.getDatabasePath(DatabaseHelper.DATABASE_NAME).exists()) {
+                if (!MainActivity.this.getDatabasePath(DatabaseHelper.DATABASE_NAME).exists() &&
+                        AppUtils.areUpdatesAllowed()) {
                     DatabaseHelper.getInstance(MainActivity.this).createDB(currentDataSnapshot);
                 }
             }
@@ -166,6 +188,17 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //AppUtils.loadSettings(MainActivity.this);
+        if (AppUtils.isRebootScheduled()) {
+            AppUtils.reboot(MainActivity.this, mStartIntent);
+        } else if (!mStartTheme == AppUtils.isDarkTheme()) {
+            mStartTheme = AppUtils.isDarkTheme();
+            AppUtils.reboot(MainActivity.this, mStartIntent);
+        }
+    }
 
     /**
      * This method is used to set the Toolbar and the buttons in the Activity.
@@ -174,61 +207,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         //mPullToRefreshView = findViewById(R.id.pull_to_refresh);
         //mPullToRefreshView.setOnRefreshListener(MainActivity.this);
+        AppUtils.setLocale(MainActivity.this);
 
-        /*
-        findViewById(R.id.zero_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (offlineDBAvailable())
-                    startActivity(new Intent(MainActivity.this, StudyPlanActivity.class));
-            }
-        });
-
-        findViewById(R.id.first_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (offlineDBAvailable())
-                    startActivity(new Intent(MainActivity.this, ListClassActivity.class));
-            }
-        });
-
-        findViewById(R.id.second_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (offlineDBAvailable())
-                    startActivity(new Intent(MainActivity.this, MapActivity.class));
-            }
-        });
-
-        findViewById(R.id.third_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, FaqActivity.class));
-            }
-        });
-
-        findViewById(R.id.fourth_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ContactUsActivity.class));
-            }
-        });
-
-        findViewById(R.id.fifth_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (offlineDBAvailable())
-                    startActivity(new Intent(MainActivity.this, HelpActivity.class));
-            }
-        });
-
-        findViewById(R.id.sixth_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            }
-        }); */
-
+        mStartIntent = getIntent();
+        mStartTheme = AppUtils.isDarkTheme();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -237,19 +219,26 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_previous);
 
+        mAdsContainer = findViewById(R.id.ad_container);
         fragmentContainer = findViewById(R.id.fragment_container);
-        homeFragment = new HomeFragment();
+        homeFragment = HomeFragment.newInstance(MainActivity.this);
         contactFragment = ContactFragment.newInstance(actionBar);
         homeFragment.setChangeFragmentListener(this);
         contactFragment.setChangeFragmentListener(this);
         showHomeFragment();
 
         // AdMob App ID: ca-app-pub-9817701892167034~2496155654
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView = new AdView(getApplicationContext());
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        mAdRequest = new AdRequest.Builder()
+                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice()
+                .build();
+        mAdView.loadAd(mAdRequest);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        mAdsContainer.addView(mAdView, params);
     }
-
 
     /**
      * This method is responsible for returning back to HomeFragment.
@@ -259,7 +248,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
         if (currentFragment != null && !currentFragment.isVisible()) {
             showHomeFragment();
-            currentFragment.onCreateAnimation(CubeAnimation.LEFT, true, 500);
+            if (AppUtils.areAnimationsAllowed()) {
+                currentFragment.onCreateAnimation(CubeAnimation.LEFT, true, 500);
+            }
         }
         return true;
     }
@@ -284,7 +275,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 }
             }
         };
-
     }
 
     @Override
@@ -292,11 +282,27 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
         if (currentFragment != null && !currentFragment.isVisible()) {
             showHomeFragment();
-            currentFragment.onCreateAnimation(CubeAnimation.LEFT, true, 500);
+            if (AppUtils.areAnimationsAllowed()) {
+                currentFragment.onCreateAnimation(CubeAnimation.LEFT, true, 500);
+            }
         } else {
-            super.onBackPressed();
-            MainActivity.this.finish();
-            System.exit(0);
+            if (AppUtils.isSecureExitAllowed()) {
+                new AlertDialog.Builder(this)
+                        .setMessage(AppUtils.getStringByLocal(this, R.string.confirm_exit))
+                        .setCancelable(false)
+                        .setPositiveButton(AppUtils.getStringByLocal(this, R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                MainActivity.this.finish();
+                                System.exit(0);
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+            } else {
+                MainActivity.this.finish();
+                System.exit(0);
+            }
         }
     }
 
@@ -313,8 +319,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 break;
         }
     }
-
-
 
     private void showContactFragment() {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
