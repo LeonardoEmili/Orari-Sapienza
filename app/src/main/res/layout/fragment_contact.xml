@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainGrid"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_below="@id/toolbar"
     android:alignmentMode="alignMargins"
-    android:layout_gravity="center_horizontal"
+    android:layout_gravity="center"
     android:columnCount="2"
     android:columnOrderPreserved="false"
-    android:padding="14dp"
+    android:padding="@dimen/_14sdp"
     android:rowCount="2"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -17,14 +17,13 @@
     <!-- Column 1 -->
 
     <androidx.cardview.widget.CardView
-        android:layout_width="136dp"
-        android:layout_height="136dp"
+        android:layout_width="@dimen/_108sdp"
+        android:layout_height="@dimen/_108sdp"
         android:id="@+id/feedback_btn"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="@dimen/_13sdp"
+        android:layout_marginRight="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         android:focusable="true"
         android:clickable="true"
         android:foreground="@drawable/ripple_effect">
@@ -33,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/_14sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -50,7 +49,7 @@
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"
-                android:textSize="18sp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -59,14 +58,13 @@
 
     <!-- Column 2 -->
     <androidx.cardview.widget.CardView
-        android:layout_width="136dp"
-        android:layout_height="136dp"
+        android:layout_width="@dimen/_108sdp"
+        android:layout_height="@dimen/_108sdp"
         android:id="@+id/bug_report_btn"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="@dimen/_13sdp"
+        android:layout_marginRight="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         android:focusable="true"
         android:clickable="true"
         android:foreground="@drawable/ripple_effect">
@@ -75,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/_14sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -92,7 +90,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textAlignment="center"
                 android:textColor="?attr/textStyle"
-                android:textSize="18sp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -104,13 +102,13 @@
 
     <!-- Column 1 -->
     <androidx.cardview.widget.CardView
-        android:layout_width="136dp"
-        android:layout_height="136dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="@dimen/_108sdp"
+        android:layout_height="@dimen/_108sdp"
+        android:layout_marginLeft="@dimen/_13sdp"
+        android:layout_marginRight="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
+        android:id="@+id/dev_btn"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         android:focusable="true"
         android:clickable="true"
         android:foreground="@drawable/ripple_effect">
@@ -119,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/_14sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -136,7 +134,7 @@
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"
-                android:textSize="18sp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -144,13 +142,12 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="136dp"
-        android:layout_height="136dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="@dimen/_108sdp"
+        android:layout_height="@dimen/_108sdp"
+        android:layout_marginLeft="@dimen/_13sdp"
+        android:layout_marginRight="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         android:focusable="true"
         android:clickable="true"
         android:foreground="@drawable/ripple_effect">
@@ -159,7 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/_14sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -176,7 +173,7 @@
                 android:textAlignment="center"
                 android:fontFamily="sans-serif-condensed"
                 android:textColor="?attr/textStyle"
-                android:textSize="18sp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>

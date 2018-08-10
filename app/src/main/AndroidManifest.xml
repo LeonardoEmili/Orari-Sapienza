@@ -44,8 +44,10 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/SettingsTheme" />
-        <activity android:name=".activities.FeedbackActivity"/>
-        <activity android:name=".activities.BugReportActivity"/>
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.BugReportActivity" />
+        <activity android:name=".activities.DevsActivity" />
+        <activity android:name=".activities.FaqActivity"></activity>
     </application>
 
 </manifest>

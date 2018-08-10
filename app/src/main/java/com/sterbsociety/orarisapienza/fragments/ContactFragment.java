@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
+import com.sterbsociety.orarisapienza.activities.DevsActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.BugReportActivity;
 import com.sterbsociety.orarisapienza.activities.FeedbackActivity;
-import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
@@ -79,6 +79,12 @@ public class ContactFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), BugReportActivity.class));
+            }
+        });
+        view.findViewById(R.id.dev_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), DevsActivity.class));
             }
         });
         return view;

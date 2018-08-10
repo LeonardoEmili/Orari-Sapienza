@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="@dimen/_10sdp"
     tools:context=".activities.FeedbackActivity">
 
     <LinearLayout
         android:id="@+id/main_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_9sdp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
@@ -23,35 +23,36 @@
             android:layout_height="wrap_content"
             android:text="@string/write_here_your_feedback"
             android:textColor="?attr/textStyle"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_14sdp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/_17sdp"
             android:text="@string/tell_us_what_you_think"
             android:textColor="#ca898585"
             android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_15sdp" />
 
         <EditText
             android:id="@+id/user_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/back_gray"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
             android:minLines="4"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_9sdp"
             android:text="@string/nome_optional"
             android:textColor="#ea898585"
             android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_15sdp" />
 
         <EditText
             android:id="@+id/user_name"
@@ -59,18 +60,19 @@
             android:layout_height="wrap_content"
             android:background="@drawable/back_gray"
             android:maxLines="1"
+            android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_9sdp"
             android:layout_marginEnd="5dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_9sdp"
             android:text="@string/email_optional"
             android:textColor="#ea898585"
             android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_15sdp" />
 
         <EditText
             android:id="@+id/user_email"
@@ -79,8 +81,9 @@
             android:background="@drawable/back_gray"
             android:textColor="@android:color/black"
             android:maxLines="1"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp" />
+            android:padding="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_9sdp"
+            android:layout_marginEnd="@dimen/_5sdp" />
 
 
     </LinearLayout>

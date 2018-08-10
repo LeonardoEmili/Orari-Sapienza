@@ -61,7 +61,7 @@
     <string name="report_not_sent">Report has not been sent</string>
     <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
     <string name="attachment_remove">Attachment removal</string>
-    <string name="class_timetables">Classrooms timetables</string>
+    <string name="class_timetables">Class timetables</string>
     <string name="faq" translatable="false">FAQ</string>
     <string name="study_plan_active">Active Study Plan</string>
     <string name="classrooms_list">Classroom list</string>

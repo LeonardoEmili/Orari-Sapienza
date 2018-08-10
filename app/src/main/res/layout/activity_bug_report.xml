@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="@dimen/_10sdp"
     tools:context=".activities.BugReportActivity">
 
     <!-- Start of content -->
@@ -14,8 +14,8 @@
         android:id="@+id/main_wrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
@@ -23,80 +23,80 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_18sdp"
             android:text="@string/tell_us_about_issue"
             android:textColor="?attr/textStyle"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_12sdp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_2sdp"
             android:text="@string/type_of_problem" />
 
         <Spinner
             android:id="@+id/spinner1"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:entries="@array/issue_type" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/frequency" />
 
         <Spinner
             android:id="@+id/spinner2"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:entries="@array/frequency_type" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
             android:text="@string/describe" />
 
         <EditText
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:textColor="@android:color/black"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/_16sdp"
             android:background="@drawable/back"
-            android:padding="5dp" />
+            android:padding="@dimen/_3sdp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:padding="@dimen/_4sdp"
             android:text="@string/add_attachments" />
 
         <HorizontalScrollView
             android:id="@+id/horizontal_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100dp">
+            android:minHeight="@dimen/_80sdp">
 
             <LinearLayout
                 android:id="@+id/linear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="8dp"
+                android:paddingStart="@dimen/_7sdp"
                 android:paddingEnd="0dp"
-                android:paddingTop="2dp" />
+                android:paddingTop="@dimen/_2sdp" />
 
         </HorizontalScrollView>
 

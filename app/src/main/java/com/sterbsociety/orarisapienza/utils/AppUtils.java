@@ -3,6 +3,7 @@ package com.sterbsociety.orarisapienza.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -296,8 +297,14 @@ public class AppUtils {
         }
     }
 
-    public static void applayThemeNoActionBar(Activity activity) {
+    public static void applyThemeNoActionBar(Activity activity) {
         if (AppUtils.isDarkTheme())
             activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
+    }
+
+    public static int convertDpToPixel(int dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }
