@@ -1,6 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Base Theme">
+    <PreferenceCategory android:title="@string/base_theme"
+        android:key="base_theme">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -10,7 +11,8 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:title="@string/general"
+        android:key="general">
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -38,7 +40,8 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Notifications">
+    <PreferenceCategory android:title="@string/notifications"
+        android:key="notifications">
 
         <SwitchPreference
             android:defaultValue="true"
@@ -60,7 +63,8 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="@string/about"
+        android:key="about">
 
         <Preference
             android:title="@string/app_version"

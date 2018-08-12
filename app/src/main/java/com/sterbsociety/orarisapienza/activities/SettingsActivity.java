@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
@@ -41,8 +42,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     public static final String KEY_PREF_THEME = "pref_theme";
     public static final String KEY_PREF_LANGUAGE = "lang_pref";
     private static final String KEY_PREF_APP_VERSION = "version";
+    private static final String KEY_BASE_THEME = "base_theme";
+    private static final String KEY_GENERAL = "general";
+    private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_ABOUT = "about";
     private static final int REQUEST_CODE_ALERT_RINGTONE = 142;
-    private static Preference ringtonePref, updatesPref, animationsPref, exitPref, notificationsPref, vibrationPref, appVersionPref;
+    private static Preference ringtonePref, updatesPref, animationsPref, exitPref, notificationsPref,
+                                vibrationPref, appVersionPref, baseTheme, general, notification, about;
     private static ActionBar mActionBar;
     private static SwitchPreference themePreference;
     private static ListPreference languagePreference;
@@ -94,6 +100,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             notificationsPref = findPreference(KEY_PREF_NOTIFICATION_SWITCH);
             vibrationPref = findPreference(KEY_PREF_VIBRATION_SWITCH);
             appVersionPref = findPreference(KEY_PREF_APP_VERSION);
+            baseTheme = findPreference(KEY_BASE_THEME);
+            general = findPreference(KEY_GENERAL);
+            notification = findPreference(KEY_NOTIFICATIONS);
+            about = findPreference(KEY_ABOUT);
 
             String userLang = AppUtils.getCurrentLanguage();
 
@@ -286,6 +296,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         appVersionPref.setTitle(AppUtils.getStringByLocal(this, R.string.app_version, targetLanguage));
 
         mActionBar.setTitle(AppUtils.getStringByLocal(this, R.string.title_activity_settings , targetLanguage));
+
+        baseTheme.setTitle(AppUtils.getStringByLocal(this, R.string.base_theme, targetLanguage));
+
+        general.setTitle(AppUtils.getStringByLocal(this, R.string.general, targetLanguage));
+
+        notification.setTitle(AppUtils.getStringByLocal(this, R.string.notifications, targetLanguage));
+
+        about.setTitle(AppUtils.getStringByLocal(this, R.string.about, targetLanguage));
 
     }
 

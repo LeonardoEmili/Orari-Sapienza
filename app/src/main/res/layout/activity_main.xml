@@ -4,20 +4,20 @@
     android:id="@+id/main_activity_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
+    android:background="?android:colorBackground"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:id="@+id/toolbar_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_110sdp"
+        android:layout_height="@dimen/_100sdp"
         android:background="@drawable/rounded_corner">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:layout_marginTop="@dimen/_26sdp">
+            android:layout_marginTop="@dimen/_16sdp">
 
             <TextView
                 android:id="@+id/toolbar_title"

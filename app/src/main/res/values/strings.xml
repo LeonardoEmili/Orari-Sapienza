@@ -132,6 +132,10 @@
     <string name="bug" translatable="false">Bug</string>
     <string name="authors">Authors</string>
     <string name="donations">Donations</string>
+    <string name="base_theme">Base Theme</string>
+    <string name="general">General</string>
+    <string name="notifications">Notifications</string>
+    <string name="about">About</string>
 
 
 </resources>

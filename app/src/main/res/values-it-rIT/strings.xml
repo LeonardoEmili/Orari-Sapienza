@@ -70,4 +70,8 @@
     <string name="low">Bassa</string>
     <string name="english">inglese</string>
     <string name="italian">italiano</string>
+    <string name="base_theme">Tema</string>
+    <string name="general">Generale</string>
+    <string name="notifications">Notifiche</string>
+    <string name="about">Info</string>
 </resources>
