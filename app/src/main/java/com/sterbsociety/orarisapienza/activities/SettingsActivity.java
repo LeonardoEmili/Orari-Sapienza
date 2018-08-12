@@ -43,6 +43,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     private static final String KEY_PREF_APP_VERSION = "version";
     private static final int REQUEST_CODE_ALERT_RINGTONE = 142;
     private static Preference ringtonePref, updatesPref, animationsPref, exitPref, notificationsPref, vibrationPref, appVersionPref;
+    private static ActionBar mActionBar;
     private static SwitchPreference themePreference;
     private static ListPreference languagePreference;
 
@@ -53,10 +54,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         super.onCreate(savedInstanceState);
 
         AppUtils.setLocale(SettingsActivity.this);
+        AppUtils.hideSystemUI(getWindow().getDecorView());
         setupActionBar();
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
+        findViewById(android.R.id.content).setFitsSystemWindows(true);
     }
 
     /**
@@ -282,6 +285,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
 
         appVersionPref.setTitle(AppUtils.getStringByLocal(this, R.string.app_version, targetLanguage));
 
+        mActionBar.setTitle(AppUtils.getStringByLocal(this, R.string.title_activity_settings , targetLanguage));
+
     }
 
     @Override
@@ -312,9 +317,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     }
 
     private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setTitle(AppUtils.getStringByLocal(this, R.string.title_activity_settings));
         }
     }
 

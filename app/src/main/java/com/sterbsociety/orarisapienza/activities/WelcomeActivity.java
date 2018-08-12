@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapter.SliderAdapter;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -40,6 +41,9 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void initActivity() {
+
+        // This is needed for hiding the bottom navigation bar.
+        AppUtils.hideSystemUI(getWindow().getDecorView());
 
         mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);

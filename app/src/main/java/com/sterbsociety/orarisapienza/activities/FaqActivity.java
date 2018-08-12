@@ -49,6 +49,9 @@ public class FaqActivity extends AppCompatActivity {
 
         AppUtils.setLocale(FaqActivity.this);
 
+        // This is needed for hiding the bottom navigation bar.
+        AppUtils.hideSystemUI(getWindow().getDecorView());
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

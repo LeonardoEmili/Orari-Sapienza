@@ -29,7 +29,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -87,45 +86,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         addCallbacks();
         callAuthTask();
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-
-        final View mDecorView = getWindow().getDecorView();
-        hideSystemUI(mDecorView);
-        mDecorView.setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        // Note that system bars will only be "visible" if none of the
-                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                            // The system bars are visible.
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideSystemUI(mDecorView);
-                                }
-                            }, 2000);
-                        } else {
-                            // The system bars are NOT visible.
-                        }
-                    }
-                });
     }
-
-    private void hideSystemUI(View decorView) {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,7 +203,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         //mPullToRefreshView = findViewById(R.id.pull_to_refresh);
         //mPullToRefreshView.setOnRefreshListener(MainActivity.this);
+
         AppUtils.setLocale(MainActivity.this);
+
+        // This is needed for hiding the bottom navigation bar.
+        AppUtils.hideSystemUI(getWindow().getDecorView());
 
         mStartIntent = getIntent();
         mStartTheme = AppUtils.isDarkTheme();
@@ -276,6 +241,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         mAdView.loadAd(mAdRequest);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         mAdsContainer.addView(mAdView, params);
+
+        Log.d("Distance" , AppUtils.distance(41.904472, 12.512889, 41.902917, 12.511694)+"");
     }
 
     /**

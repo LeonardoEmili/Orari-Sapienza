@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.ClassListActivity;
 import com.sterbsociety.orarisapienza.activities.FaqActivity;
 import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
@@ -89,6 +90,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, FaqActivity.class));
+            }
+        });
+        classListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, ClassListActivity.class));
             }
         });
 

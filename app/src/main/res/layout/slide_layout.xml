@@ -6,10 +6,10 @@
 
     <ImageView
         android:id="@+id/slide_image"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="@dimen/_116sdp"
+        android:layout_height="@dimen/_116sdp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="@dimen/_100sdp"
         android:contentDescription="image" />
 
 
@@ -18,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/slide_image"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/_25sdp"
         android:textStyle="bold"
-        android:textSize="24sp"
+        android:textSize="@dimen/_18sdp"
         android:textAlignment="center"
         android:textColor="#111" />
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tempor, est sed pulvinar tincidunt, risus orci iaculis massa, nec gravida magna orci id nulla."
         android:textAlignment="center"
-        android:layout_margin="30dp"
+        android:layout_margin="@dimen/_25sdp"
         android:textColor="#646464"
         android:layout_below="@id/slide_heading"/>
 

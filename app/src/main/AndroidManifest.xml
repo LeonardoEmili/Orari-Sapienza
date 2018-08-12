@@ -47,7 +47,9 @@
         <activity android:name=".activities.FeedbackActivity" />
         <activity android:name=".activities.BugReportActivity" />
         <activity android:name=".activities.DevsActivity" />
-        <activity android:name=".activities.FaqActivity"></activity>
+        <activity android:name=".activities.FaqActivity" />
+        <activity android:name=".activities.ClassListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

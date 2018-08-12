@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/skip_button"
-        android:layout_width="280dp"
+        android:layout_width="@dimen/_240sdp"
         android:textAlignment="center"
         android:text="@string/skip_tutorial"
         android:onClick="startMainActivity"
@@ -34,7 +34,7 @@
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="@dimen/_27sdp"
         android:elevation="4dp"
         android:background="@color/colorSecondary"/>
 
