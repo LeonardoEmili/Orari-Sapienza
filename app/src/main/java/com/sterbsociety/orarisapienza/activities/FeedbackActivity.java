@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -16,7 +15,7 @@ import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
-import static com.sterbsociety.orarisapienza.utils.AppUtils.hideKeyboard;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.hideSoftKeyboard;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
@@ -35,6 +34,9 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnFocusC
     private void initActivity() {
 
         AppUtils.setLocale(FeedbackActivity.this);
+
+        // This is needed for hiding the bottom navigation bar.
+        AppUtils.hideSystemUI(getWindow().getDecorView());
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -60,7 +62,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnFocusC
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b)
-                    hideKeyboard(FeedbackActivity.this, view);
+                    hideSoftKeyboard(FeedbackActivity.this, view);
             }
         };
 
@@ -120,6 +122,6 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnFocusC
     public void onFocusChange(View view, boolean b) {
 
         if ((view == userText || view == userName || view == userEmail) && !b)
-            hideKeyboard(FeedbackActivity.this, view);
+            hideSoftKeyboard(FeedbackActivity.this, view);
     }
 }

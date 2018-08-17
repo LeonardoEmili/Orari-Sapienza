@@ -136,6 +136,7 @@
     <string name="general">General</string>
     <string name="notifications">Notifications</string>
     <string name="about">About</string>
+    <string name="infinity">&#8734;</string>
 
 
 </resources>

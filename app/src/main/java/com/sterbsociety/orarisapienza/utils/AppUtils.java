@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -17,10 +18,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -47,12 +50,40 @@ public class AppUtils {
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
      */
-    public static void hideKeyboard(Activity activity, View view) {
+    public static void hideSoftKeyboard(Activity activity, View view) {
 
         if (view != null) {
             InputMethodManager imm;
             if ((imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE)) != null)
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Resource and explanations found at:
+     * https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+     */
+    public static void setupUIElements(Activity activity, View view) {
+
+        final Activity mActivity = activity;
+        final View mView = view;
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    AppUtils.hideSoftKeyboard(mActivity, mView);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUIElements(activity, innerView);
+            }
         }
     }
 
@@ -362,4 +393,24 @@ public class AppUtils {
     private static double haversin(double val) {
         return Math.pow(Math.sin(val / 2), 2);
     }
+
+    public static final int GPS_ACCESS = 42;
+
+    public static void askForGPSPermission(Activity activity) {
+
+        if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[] {android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    , android.Manifest.permission.ACCESS_FINE_LOCATION}, GPS_ACCESS);
+        }
+    }
+
+    public static final int GPS_RESULT = 77;
+
+    public static boolean isGPSEnabled(Activity activity, LocationManager locationManager) {
+        if (locationManager == null)
+            return ((LocationManager) activity.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
+        else
+            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
 }

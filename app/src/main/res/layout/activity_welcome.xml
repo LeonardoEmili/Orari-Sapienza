@@ -29,7 +29,7 @@
         android:textAlignment="center"
         android:text="@string/skip_tutorial"
         android:onClick="startMainActivity"
-        android:foreground="@drawable/ripple_effect"
+        android:foreground="@drawable/ripple_effect_primary"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"

@@ -84,12 +84,13 @@ public class BugReportActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.wrapper_main);
         editText = findViewById(R.id.edit_text);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    AppUtils.hideKeyboard(BugReportActivity.this, view);
+                    AppUtils.hideSoftKeyboard(BugReportActivity.this, view);
                     if (editText.getText().toString().trim().length() < MINIMUM_DESCRIPTION_LENGTH) {
                         editText.setError(getResources().getString(R.string.error));
                     }

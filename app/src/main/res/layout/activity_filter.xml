@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#16000000"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".activities.FilterActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorSecondary"
+        android:elevation="6dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="killAll"
+            android:text="Cancel"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Filters"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/date_and_time"
+        android:layout_below="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_15sdp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:text="DATE AND TIME"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:id="@+id/date"
+        android:layout_below="@+id/date_and_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="#fff">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:drawableStart="@drawable/ic_date"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:text="Date"
+                android:textColor="#c8000000" />
+
+            <TextView
+                android:id="@+id/current_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:gravity="center"
+                android:paddingTop="@dimen/_5sdp"
+                android:text="Thu"
+                android:textColor="@color/gray" />
+
+            <TextView
+                android:id="@+id/current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="1dp"
+                android:gravity="center"
+                android:paddingTop="@dimen/_5sdp"
+                android:text="16/08/18"
+                android:textColor="#9a000000" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Change"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+
+
+    <!-- END OF FIRST ROW-->
+
+    <LinearLayout
+        android:id="@+id/time"
+        android:layout_below="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:drawableStart="@drawable/ic_access_time"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:text="Time"
+            android:textColor="#c8000000" />
+
+        <TextView
+            android:id="@+id/left_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="00"
+            android:textColor="#9a000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text=":00"
+            android:textColor="#9a000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="-"
+            android:textColor="#9a000000" />
+
+        <TextView
+            android:id="@+id/right_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="24"
+            android:textColor="#9a000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text=":00"
+            android:textColor="#9a000000" />
+
+
+    </LinearLayout>
+
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/range_seek_bar"
+        android:layout_below="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:padding="@dimen/_2sdp"
+        android:paddingStart="@dimen/_15sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        app:rsb_max="24"
+        app:rsb_min="0"
+        app:rsb_mode="range"
+        app:rsb_progress_color="@color/colorSecondary"
+        app:rsb_range_interval="1" />
+
+    <TextView
+        android:id="@+id/availability"
+        android:layout_below="@+id/range_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_15sdp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:text="AVAILABILITY"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/buttons_bar"
+        android:layout_below="@+id/availability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_light_gray"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="9">
+
+        <LinearLayout
+            android:id="@+id/vacant"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_weight="3"
+            android:background="@drawable/ripple_effect_secondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/ic_fish_eye_vacant" />
+
+            <TextView
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Vacant only"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_weight="3"
+            android:background="@drawable/ripple_effect_secondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/ic_fish_eye_busy" />
+
+            <TextView
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Busy only"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_weight="3"
+            android:background="@drawable/ripple_effect_secondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/ic_fish_eye_all" />
+
+            <TextView
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="All"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/location_bar"
+        android:layout_below="@+id/buttons_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp">
+
+        <TextView
+            android:id="@+id/location_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_15sdp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="LOCATION"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/allow_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Allow"
+            android:onClick="askForGPSPermission"
+            android:visibility="gone"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/active_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="Active"
+            android:onClick="activeGPS"
+            android:visibility="gone"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/distance_bar"
+        android:layout_below="@+id/location_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingEnd="0dp">
+
+        <TextView
+            android:id="@+id/distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:drawableStart="@drawable/ic_access_time"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:text="Distance"
+            android:textColor="#c8000000" />
+
+        <TextView
+            android:id="@+id/up_to_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="up to"
+            android:textColor="#9a000000" />
+
+        <TextView
+            android:id="@+id/distance_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_5sdp"
+            android:text="@string/infinity"
+            android:textColor="#9a000000" />
+
+    </LinearLayout>
+
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/range_seek_bar_2"
+        android:layout_below="@+id/distance_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingStart="@dimen/_15sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        app:rsb_max="22"
+        app:rsb_min="1"
+        app:rsb_mode="single"
+        app:rsb_progress_color="@color/colorSecondary"
+        app:rsb_range_interval="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="#fff">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:elevation="4dp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:background="@color/colorSecondary"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:text="apply"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
