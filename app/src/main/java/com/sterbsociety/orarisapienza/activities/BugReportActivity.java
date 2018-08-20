@@ -32,6 +32,7 @@ import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class BugReportActivity extends AppCompatActivity {
 
     private static final int PICK_FROM_GALLERY = 1;

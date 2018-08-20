@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 }
             }, 500);
         } else {
-            boolean outcome = DatabaseHelper.getInstance(MainActivity.this).createDB(currentDataSnapshot);
+            boolean outcome = DatabaseHelper.getInstance(MainActivity.this).createDB(MainActivity.this, currentDataSnapshot);
 //            mPullToRefreshView.setRefreshing(false);
             if (outcome)
                 StyleableToast.makeText(MainActivity.this, "Dati aule aggiornati!",
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
      */
     private void getAuthentication() {
 
-        if (NetworkStatus.getInstance(this).isOnline()) {
+        if (NetworkStatus.getInstance().isOnline(this)) {
             mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 currentDataSnapshot = dataSnapshot;
                 if (!MainActivity.this.getDatabasePath(DatabaseHelper.DATABASE_NAME).exists() &&
                         AppUtils.areUpdatesAllowed()) {
-                    DatabaseHelper.getInstance(MainActivity.this).createDB(currentDataSnapshot);
+                    DatabaseHelper.getInstance(MainActivity.this).createDB(MainActivity.this, currentDataSnapshot);
                 }
             }
 

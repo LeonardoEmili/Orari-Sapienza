@@ -41,11 +41,14 @@ public class MailTask extends AsyncTask<Object, Void, Boolean> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        pd = new ProgressDialog(mContext);
-        pd.setTitle(pdTitle);
-        pd.setMessage(pdMessage);
-        pd.setCancelable(false);
-        pd.show();
+        // If PdTitle is null it means we send us a report in background for a crash.
+        if (pdTitle != null) {
+            pd = new ProgressDialog(mContext);
+            pd.setTitle(pdTitle);
+            pd.setMessage(pdMessage);
+            pd.setCancelable(false);
+            pd.show();
+        }
     }
 
     @Override
@@ -68,6 +71,12 @@ public class MailTask extends AsyncTask<Object, Void, Boolean> {
      * @param result is the the mail sending's outcome
      */
     protected void onPostExecute(Boolean result) {
+
+        if (pdTitle == null) {
+            // Nothing to do here ...
+            return;
+        }
+
         pd.dismiss();
         if (result) {
             StyleableToast.makeText(mContext,
@@ -92,6 +101,14 @@ public class MailTask extends AsyncTask<Object, Void, Boolean> {
 
         String subject = (String) params[0];
         String body = (String) params[1];
+
+        if (params[2] == null) {
+            // Then we are sending a report in silent mode. No attachments are present.
+            sender.sendMail(subject, body);
+            return true;
+        }
+
+        @SuppressWarnings("unchecked")
         ArrayList<String> mAttachmentList = (ArrayList<String>) params[2];
 
         try {

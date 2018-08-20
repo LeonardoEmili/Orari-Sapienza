@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment {
     private ChangeFragmentListener changeFragmentListener;
     public final static String TAG = "HOME_FRAGMENT";
     private CardView studyPlanBtn, timeTablesBtn, currentPlanBtn, classListBtn, faqBtn, contactBtn;
+    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
 
     public HomeFragment() {
@@ -103,7 +105,6 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -138,7 +139,6 @@ public class HomeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

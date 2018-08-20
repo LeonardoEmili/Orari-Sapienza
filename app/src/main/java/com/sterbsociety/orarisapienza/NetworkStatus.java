@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,7 +15,6 @@ import java.util.List;
  */
 public class NetworkStatus {
 
-    private static Context context;
     /**
      * We use this class to determine if the application has been connected to either WIFI Or Mobile
      * Network, before we make any network request to the server.
@@ -22,18 +22,20 @@ public class NetworkStatus {
      * connection stats.
      */
 
-    private static final NetworkStatus instance = new NetworkStatus();
+    private static NetworkStatus instance;
     private static final String defaultMACAddress = "02:00:00:00:00:00";
     private boolean connected = false;
 
-    public static NetworkStatus getInstance(Context ctx) {
-        context = ctx.getApplicationContext();
+    public static NetworkStatus getInstance() {
+        if (instance == null)
+             instance = new NetworkStatus();
         return instance;
     }
 
-    public boolean isOnline() {
+    @SuppressWarnings("deprecation")
+    public boolean isOnline(Activity activity) {
         try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
             assert connectivityManager != null;
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             connected = networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();

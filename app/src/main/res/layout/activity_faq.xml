@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/_5sdp"
     android:background="?android:colorBackground"
+    tools:ignore="ContentDescription"
     tools:context=".activities.FaqActivity">
 
     <LinearLayout

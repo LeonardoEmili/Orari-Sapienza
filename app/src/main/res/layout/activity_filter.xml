@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,6 +7,7 @@
     android:background="#16000000"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    tools:ignore="ContentDescription"
     tools:context=".activities.FilterActivity">
 
     <RelativeLayout
@@ -26,7 +26,7 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="killAll"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@android:color/white"
             android:textSize="17sp" />
 
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Filters"
+            android:text="@string/filters"
             android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -42,87 +42,258 @@
 
     <TextView
         android:id="@+id/date_and_time"
-        android:layout_below="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/top_bar"
         android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_15sdp"
+        android:paddingTop="@dimen/_12sdp"
         android:paddingEnd="0dp"
         android:paddingBottom="@dimen/_5sdp"
-        android:text="DATE AND TIME"
+        android:text="@string/day"
         android:textColor="@color/gray"
         android:textSize="16sp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/date"
-        android:layout_below="@+id/date_and_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="#fff">
+        android:layout_below="@+id/date_and_time"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp">
 
+        <TextView
+            android:id="@+id/mon"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/back_gray_rounded"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:text="@string/mon"
+            android:textColor="@color/gray" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp">
+        <TextView
+            android:id="@+id/tue"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/back_gray_rounded"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:text="@string/tue"
+            android:textColor="@color/gray" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:drawableStart="@drawable/ic_date"
-                android:drawablePadding="10dp"
-                android:gravity="center"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingTop="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_10sdp"
-                android:text="Date"
-                android:textColor="#c8000000" />
+        <TextView
+            android:id="@+id/wed"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/back_gray_rounded"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:text="@string/wed"
+            android:textColor="@color/gray" />
 
-            <TextView
-                android:id="@+id/current_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="1dp"
-                android:gravity="center"
-                android:paddingTop="@dimen/_5sdp"
-                android:text="Thu"
-                android:textColor="@color/gray" />
+        <TextView
+            android:id="@+id/thu"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/back_gray_rounded"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:text="@string/thu"
+            android:textColor="@color/gray" />
 
-            <TextView
-                android:id="@+id/current_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="1dp"
-                android:gravity="center"
-                android:paddingTop="@dimen/_5sdp"
-                android:text="16/08/18"
-                android:textColor="#9a000000" />
+        <TextView
+            android:id="@+id/fri"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/back_gray_rounded"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:text="@string/fri"
+            android:textColor="@color/gray" />
 
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Change"
-            android:textSize="13sp" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <!-- END OF FIRST ROW-->
 
-    <LinearLayout
-        android:id="@+id/time"
-        android:layout_below="@+id/date"
+
+    <TextView
+        android:id="@+id/availability"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff">
+        android:layout_below="@+id/date"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:text="@string/availability"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/buttons_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/availability"
+        android:background="@drawable/back_light_gray"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="9"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/vacant"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_66sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:layout_weight="3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/circle_to_check_static" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vacant_only"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/busy"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_66sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:layout_weight="3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/circle_to_check_static" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/busy_only"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/all"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_66sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:layout_weight="3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_secondary"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/circle_to_check_static" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/location_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttons_bar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_13sdp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="@string/time_and_location"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/allow_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:onClick="askForGPSPermission"
+            android:text="@string/allow"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/active_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:onClick="activeGPS"
+            android:text="@string/active"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+    <!-- -->
+
+    <LinearLayout
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_bar"
+        android:background="#fff"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingEnd="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -131,10 +302,10 @@
             android:drawableStart="@drawable/ic_access_time"
             android:drawablePadding="10dp"
             android:gravity="center"
-            android:paddingStart="@dimen/_10sdp"
+            android:paddingStart="@dimen/_5sdp"
             android:paddingEnd="@dimen/_10sdp"
-            android:text="Time"
-            android:textColor="#c8000000" />
+            android:text="@string/time"
+            android:textColor="@color/coolBlack" />
 
         <TextView
             android:id="@+id/left_time"
@@ -143,7 +314,6 @@
             android:layout_marginEnd="1dp"
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
-            android:text="00"
             android:textColor="#9a000000" />
 
         <TextView
@@ -152,7 +322,8 @@
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
             android:text=":00"
-            android:textColor="#9a000000" />
+            android:textColor="@color/darkGray"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -162,7 +333,8 @@
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
             android:text="-"
-            android:textColor="#9a000000" />
+            android:textColor="@color/darkGray"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/right_time"
@@ -171,8 +343,7 @@
             android:layout_marginEnd="1dp"
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
-            android:text="24"
-            android:textColor="#9a000000" />
+            android:textColor="@color/darkGray" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,182 +352,41 @@
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
             android:text=":00"
-            android:textColor="#9a000000" />
+            android:textColor="@color/darkGray"
+            tools:ignore="HardcodedText" />
 
 
     </LinearLayout>
 
     <com.jaygoo.widget.RangeSeekBar
         android:id="@+id/range_seek_bar"
-        android:layout_below="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/time"
         android:background="#fff"
-        android:padding="@dimen/_2sdp"
         android:paddingStart="@dimen/_15sdp"
         android:paddingEnd="@dimen/_10sdp"
-        app:rsb_max="24"
-        app:rsb_min="0"
+        app:rsb_max="22"
+        app:rsb_min="7"
         app:rsb_mode="range"
         app:rsb_progress_color="@color/colorSecondary"
         app:rsb_range_interval="1" />
 
-    <TextView
-        android:id="@+id/availability"
-        android:layout_below="@+id/range_seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_15sdp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="@dimen/_5sdp"
-        android:text="AVAILABILITY"
-        android:textColor="@color/gray"
-        android:textSize="16sp" />
-
-    <LinearLayout
-        android:id="@+id/buttons_bar"
-        android:layout_below="@+id/availability"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/back_light_gray"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="9">
-
-        <LinearLayout
-            android:id="@+id/vacant"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_70sdp"
-            android:layout_weight="3"
-            android:background="@drawable/ripple_effect_secondary"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_marginTop="@dimen/_1sdp"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:padding="@dimen/_1sdp"
-                android:src="@drawable/ic_fish_eye_vacant" />
-
-            <TextView
-                android:layout_marginBottom="@dimen/_1sdp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Vacant only"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_70sdp"
-            android:layout_weight="3"
-            android:background="@drawable/ripple_effect_secondary"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_marginTop="@dimen/_1sdp"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:padding="@dimen/_1sdp"
-                android:src="@drawable/ic_fish_eye_busy" />
-
-            <TextView
-                android:layout_marginBottom="@dimen/_1sdp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Busy only"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_70sdp"
-            android:layout_weight="3"
-            android:background="@drawable/ripple_effect_secondary"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_marginTop="@dimen/_1sdp"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:padding="@dimen/_1sdp"
-                android:src="@drawable/ic_fish_eye_all" />
-
-            <TextView
-                android:layout_marginBottom="@dimen/_1sdp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="All"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-    </LinearLayout>
-
     <RelativeLayout
-        android:id="@+id/location_bar"
-        android:layout_below="@+id/buttons_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_44sdp">
-
-        <TextView
-            android:id="@+id/location_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingTop="@dimen/_15sdp"
-            android:paddingEnd="0dp"
-            android:paddingBottom="@dimen/_5sdp"
-            android:text="LOCATION"
-            android:textColor="@color/gray"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/allow_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Allow"
-            android:onClick="askForGPSPermission"
-            android:visibility="gone"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/active_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Active"
-            android:onClick="activeGPS"
-            android:visibility="gone"
-            android:textSize="13sp" />
-
-    </RelativeLayout>
+        android:id="@+id/gray_bar"
+        android:layout_width="@dimen/_16sdp"
+        android:layout_height="2dp"
+        android:layout_below="@id/range_seek_bar"
+        android:background="@android:color/white" />
 
     <LinearLayout
         android:id="@+id/distance_bar"
-        android:layout_below="@+id/location_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/gray_bar"
         android:background="#fff"
         android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
         android:paddingEnd="0dp">
 
         <TextView
@@ -364,13 +394,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:drawableStart="@drawable/ic_access_time"
+            android:drawableStart="@drawable/ic_gps_fixed"
             android:drawablePadding="10dp"
             android:gravity="center"
-            android:paddingStart="@dimen/_10sdp"
+            android:paddingStart="@dimen/_5sdp"
             android:paddingEnd="@dimen/_10sdp"
-            android:text="Distance"
-            android:textColor="#c8000000" />
+            android:text="@string/distance"
+            android:textColor="@color/coolBlack" />
 
         <TextView
             android:id="@+id/up_to_text"
@@ -379,7 +409,7 @@
             android:layout_marginEnd="@dimen/_2sdp"
             android:gravity="center"
             android:paddingTop="@dimen/_5sdp"
-            android:text="up to"
+            android:text="@string/up_to"
             android:textColor="#9a000000" />
 
         <TextView
@@ -395,9 +425,9 @@
 
     <com.jaygoo.widget.RangeSeekBar
         android:id="@+id/range_seek_bar_2"
-        android:layout_below="@+id/distance_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/distance_bar"
         android:background="#fff"
         android:paddingStart="@dimen/_15sdp"
         android:paddingTop="@dimen/_2sdp"
@@ -407,25 +437,27 @@
         app:rsb_mode="single"
         app:rsb_progress_color="@color/colorSecondary"
         app:rsb_range_interval="1" />
+    <!-- -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:background="#fff">
+        android:background="#fff"
+        android:gravity="center">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
-            android:elevation="4dp"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_20sdp"
             android:background="@color/colorSecondary"
-            android:textSize="15sp"
+            android:elevation="4dp"
+            android:text="@string/apply"
             android:textAllCaps="false"
             android:textColor="#fff"
-            android:text="apply"/>
+            android:onClick="applyFilters"
+            android:textSize="15sp" />
 
     </LinearLayout>
 

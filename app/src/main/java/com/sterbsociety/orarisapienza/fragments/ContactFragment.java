@@ -30,6 +30,7 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
  * Use the {@link ContactFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class ContactFragment extends Fragment {
 
 
@@ -49,7 +50,6 @@ public class ContactFragment extends Fragment {
      *
      * @return A new instance of fragment ContactFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ContactFragment newInstance(ActionBar actionbar) {
         mActionbar = actionbar;
         ContactFragment fragment = new ContactFragment();
@@ -90,7 +90,6 @@ public class ContactFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -143,7 +142,6 @@ public class ContactFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

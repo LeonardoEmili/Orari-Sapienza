@@ -27,14 +27,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -122,7 +126,7 @@ public class AppUtils {
             }
 
             @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
 
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
@@ -163,7 +167,7 @@ public class AppUtils {
             byte[] resultByte = md.digest(bytesOfMessage);
             StringBuilder sb = new StringBuilder();
             for (byte aResultByte : resultByte) {
-                sb.append(Integer.toHexString((aResultByte & 0xFF) | 0x100).substring(1, 3));
+                sb.append(Integer.toHexString((aResultByte & 0xFF) | 0x100), 1, 3);
             }
             return sb.toString();
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
@@ -176,8 +180,7 @@ public class AppUtils {
      * Method from Warpzit, DOCs here: https://stackoverflow.com/questions/9248930/android-animate-drop-down-up-view-proper/9290723#9290723
      * This method can be used to calculate the height and set it for views with wrap_content as height.
      * This should be done before ExpandCollapseAnimation is created.
-     * @param activity
-     * @param view
+     *
      */
     public static void setHeightForWrapContent(Activity activity, View view) {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -189,8 +192,7 @@ public class AppUtils {
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(screenWidth, View.MeasureSpec.EXACTLY);
 
         view.measure(widthMeasureSpec, heightMeasureSpec);
-        int height = view.getMeasuredHeight();
-        view.getLayoutParams().height = height;
+        view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
@@ -289,7 +291,7 @@ public class AppUtils {
     private static boolean isUserLanguageSupported(Activity activity) {
         String[] supportedLanguages = activity.getResources().getStringArray(R.array.languagesValues);
         String usrLang = Locale.getDefault().getLanguage();
-        for (String lang: supportedLanguages) {
+        for (String lang : supportedLanguages) {
             if (usrLang.equals(lang))
                 return true;
         }
@@ -334,7 +336,7 @@ public class AppUtils {
             activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
     }
 
-    public static int convertDpToPixel(int dp, Context context){
+    public static int convertDpToPixel(int dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
@@ -378,11 +380,11 @@ public class AppUtils {
     public static double distance(double startLat, double startLong,
                                   double endLat, double endLong) {
 
-        double dLat  = Math.toRadians((endLat - startLat));
+        double dLat = Math.toRadians((endLat - startLat));
         double dLong = Math.toRadians((endLong - startLong));
 
         startLat = Math.toRadians(startLat);
-        endLat   = Math.toRadians(endLat);
+        endLat = Math.toRadians(endLat);
 
         double a = haversin(dLat) + Math.cos(startLat) * Math.cos(endLat) * haversin(dLong);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -399,18 +401,112 @@ public class AppUtils {
     public static void askForGPSPermission(Activity activity) {
 
         if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[] {android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION
                     , android.Manifest.permission.ACCESS_FINE_LOCATION}, GPS_ACCESS);
         }
     }
 
     public static final int GPS_RESULT = 77;
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean isGPSEnabled(Activity activity, LocationManager locationManager) {
-        if (locationManager == null)
-            return ((LocationManager) activity.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
-        else
-            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        try {
+            if (locationManager == null)
+                return ((LocationManager) activity.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
+            else
+                return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
+    private static final String CRASH_REPORT_TITLE = "Crash Report";
+    private static final String CRASH_REPORT_BODY_HEADER = "This is an automatic message. Our App crashed due to some reason.\nPlease look at line: ";
+    private static final String CRASH_REPORT_BODY_WHERE = " in ";
+    private static final String CRASH_REPORT_ERROR_STACKTRACE = ".\n\nError stacktrace:\n";
+
+    private static String getStackTraceAsString(Exception ex) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        return sw.toString();
+    }
+
+    public static void sendSilentReport(Activity activity, int errorLine, Exception ex, String className) {
+        new MailTask(activity, null, null, null, null).
+                execute(CRASH_REPORT_TITLE                          // Crash report title
+                        , CRASH_REPORT_BODY_HEADER                  // The header
+                                + errorLine                                 // Line of the begin of try-catch block
+                                + CRASH_REPORT_BODY_WHERE                   // Where the error is occurred
+                                + CRASH_REPORT_ERROR_STACKTRACE             // Default stacktrace message
+                                + getStackTraceAsString(ex)                 // Utility method
+                                + className                                 // Where the error occurred.
+                        , null);                                    // Not required param.
+    }
+
+    private static int SELECTED_CLASS_BTN_INDEX = 0;
+
+    public static int getSelectedClassBtnIndex() {
+        return SELECTED_CLASS_BTN_INDEX;
+    }
+
+    private static boolean[] SELECTED_DAY_BTN_INDEX;
+
+    private static void initDate() {
+
+        SELECTED_DAY_BTN_INDEX = new boolean[5];
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        int index;
+
+        if (day == Calendar.SATURDAY || day == Calendar.SUNDAY || day == Calendar.MONDAY)
+            index = 0;
+        else
+            index = day - 2;
+        SELECTED_DAY_BTN_INDEX[index] = true;
+    }
+
+    public static boolean[] getSelectedDayBtnIndex() {
+        if (SELECTED_DAY_BTN_INDEX == null)
+            initDate();
+        return SELECTED_DAY_BTN_INDEX;
+    }
+
+    private static int MIN_HOUR = 7;
+    private static int MAX_HOUR = 22;
+
+    public static int getMinHour() {
+        return MIN_HOUR;
+    }
+
+
+    public static int getMaxHour() {
+        return MAX_HOUR;
+    }
+
+    // This value is just a custom bizarre value that means 'no distance limit' (half of 42 eheheh).
+    private static int DISTANCE_FROM_CURRENT_POSITION = 21;
+
+    public static int getDistanceFromCurrentPosition() {
+        return DISTANCE_FROM_CURRENT_POSITION;
+    }
+
+
+    public static final String KEY_FILTER_DAY = "key_day";
+    public static final String KEY_FILTER_AVAILABILITY = "key_availability";
+    public static final String KEY_FILTER_MIN_HOUR = "key_min_hour";
+    public static final String KEY_FILTER_MAX_HOUR = "key_max_hour";
+    public static final String KEY_FILTER_DISTANCE = "key_distance";
+
+    public final static int FILTER_ACTIVITY = 111;
+
+    public static void updateFilters(Intent data) {
+
+        SELECTED_DAY_BTN_INDEX = data.getBooleanArrayExtra(KEY_FILTER_DAY);
+        SELECTED_CLASS_BTN_INDEX = data.getIntExtra(KEY_FILTER_AVAILABILITY, SELECTED_CLASS_BTN_INDEX);
+        MIN_HOUR = data.getIntExtra(KEY_FILTER_MIN_HOUR, MIN_HOUR);
+        MAX_HOUR = data.getIntExtra(KEY_FILTER_MAX_HOUR, MAX_HOUR);
+        DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
+    }
 }

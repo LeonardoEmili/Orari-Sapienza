@@ -10,7 +10,7 @@
         android:layout_height="@dimen/_116sdp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_100sdp"
-        android:contentDescription="image" />
+        android:contentDescription="@string/image" />
 
 
     <TextView

@@ -95,7 +95,7 @@
     <string name="animations_desc">Show animations during transitions</string>
     <string name="write_here_feedback">Write your feedback here</string>
     <string name="feedback" translatable="false">Feedback</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="english">english</string>
     <string name="italian">italian</string>
 
@@ -136,7 +136,32 @@
     <string name="general">General</string>
     <string name="notifications">Notifications</string>
     <string name="about">About</string>
-    <string name="infinity">&#8734;</string>
+    <string name="infinity" translatable="false">&#8734;</string>
+    <string name="location_not_allowed">(GPS not allowed)</string>
+    <string name="location_not_active">(GPS not active)</string>
+    <string name="location">LOCATION</string>
+    <string name="some_errors_occured">Some errors occurred.</string>
+    <string name="gps_service_inactive">GPS service is not active</string>
+    <string name="open_settings">Open in Settings</string>
+    <string name="time_and_location">TIME + LOCATION</string>
+    <string name="allow">Allow</string>
+    <string name="active">Active</string>
+    <string name="all">All</string>
+    <string name="busy_only">Busy only</string>
+    <string name="vacant_only">Vacant only</string>
+    <string name="availability">AVAILABILITY</string>
+    <string name="fri">Fri</string>
+    <string name="thu">Thu</string>
+    <string name="wed">Wed</string>
+    <string name="tue">Tue</string>
+    <string name="mon">Mon</string>
+    <string name="day">DAY</string>
+    <string name="filters">Filters</string>
+    <string name="time">Time</string>
+    <string name="distance">Distance</string>
+    <string name="up_to">up to</string>
+    <string name="apply">apply</string>
+    <string name="image">image</string>
 
 
 </resources>

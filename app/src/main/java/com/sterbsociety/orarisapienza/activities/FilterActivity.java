@@ -5,19 +5,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +29,19 @@ import com.sterbsociety.orarisapienza.MyLocationListener;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class FilterActivity extends AppCompatActivity {
 
     private RangeSeekBar rangeSeekBar, rangeSeekBar2;
-    private TextView leftTime, rightTime, distanceText, distanceFrom, locationTitle, upToText;
+    private TextView leftTime, rightTime, distanceText, distanceFrom, upToText;
     private Button allowBtn, activeBtn;
     private LocationListener mLocationListener = null;
     private LocationManager mLocationManager = null;
     boolean isGPSEnabled, needToObfuscateView, needAllowBtn, needActiveBtn;
-    private LinearLayout vacantToggle;
+    private LinearLayout[] toggleArray;
+    boolean[] activeToggleBtn, cachedDayIndex;
+    private TextView[] dayButtonArray;
+    private int cachedAvailabilityIndex, cachedMinHour, cachedMaxHour, cachedDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,18 @@ public class FilterActivity extends AppCompatActivity {
         AppUtils.applyThemeNoActionBar(FilterActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        boolean[] tempArray = AppUtils.getSelectedDayBtnIndex();
+        cachedDayIndex = new boolean[tempArray.length];
+
+        // Iterative for vs native System.arraycopy performances here:
+        // https://stackoverflow.com/questions/2772152/why-is-system-arraycopy-native-in-java
+        System.arraycopy(tempArray, 0, cachedDayIndex, 0, tempArray.length);
+
+        cachedAvailabilityIndex = AppUtils.getSelectedClassBtnIndex();
+        cachedMinHour = AppUtils.getMinHour();
+        cachedMaxHour = AppUtils.getMaxHour();
+        cachedDistance = AppUtils.getDistanceFromCurrentPosition();
 
         initGPS();
         initActivity();
@@ -55,7 +71,6 @@ public class FilterActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // User has explicitly denied the permission.
-            // todo obfuscate the view and show allow gps
             needToObfuscateView = true;
             needAllowBtn = true;
             return;
@@ -77,11 +92,9 @@ public class FilterActivity extends AppCompatActivity {
                 needActiveBtn = true;
             }
 
-
         } catch (Exception ex) {
-            StyleableToast.makeText(this, "Some error occurred.",
-                    Toast.LENGTH_LONG, R.style.errorToast).show();
-            // todo send a report with the exception, probably a SecurityException.
+            StyleableToast.makeText(this, getString(R.string.some_errors_occured), Toast.LENGTH_LONG, R.style.errorToast).show();
+            AppUtils.sendSilentReport(this, 63, ex, FilterActivity.class.toString());
             finish();
         }
     }
@@ -100,16 +113,16 @@ public class FilterActivity extends AppCompatActivity {
         distanceFrom = findViewById(R.id.distance_from);
         rangeSeekBar = findViewById(R.id.range_seek_bar);
         rangeSeekBar2 = findViewById(R.id.range_seek_bar_2);
-        locationTitle = findViewById(R.id.location_title);
         allowBtn = findViewById(R.id.allow_btn);
         activeBtn = findViewById(R.id.active_btn);
-        vacantToggle = findViewById(R.id.vacant);
+        toggleArray = new LinearLayout[] {findViewById(R.id.vacant), findViewById(R.id.busy), findViewById(R.id.all)};
+        dayButtonArray = new TextView[] {findViewById(R.id.mon), findViewById(R.id.tue), findViewById(R.id.wed)
+                , findViewById(R.id.thu), findViewById(R.id.fri)};
 
         initSeekBars();
+        setToggleButtons();
+        setDayButtons();
 
-        // Set as default
-        // todo implements flags for toggling 'em all
-        vacantToggle.setBackgroundColor(Color.parseColor("#AAf44336"));
 
         if (needToObfuscateView) {
 
@@ -117,43 +130,140 @@ public class FilterActivity extends AppCompatActivity {
 
             if (needAllowBtn) {
                 allowBtn.setVisibility(View.VISIBLE);
-                locationTitle.setText("LOCATION (not allowed)");
+                upToText.setText(R.string.location_not_allowed);
             } else {
                 activeBtn.setVisibility(View.VISIBLE);
-                locationTitle.setText("LOCATION (not active)");
+                upToText.setText(R.string.location_not_active);
             }
+        }
+    }
+
+    private boolean isTheOnlyActiveLeft(int index) {
+        if (!cachedDayIndex[index])
+            return false;
+
+        int cnt = 0;
+        for (boolean anActiveDayBtn : cachedDayIndex) {
+            if (anActiveDayBtn)
+                cnt++;
+        }
+        return cnt == 1 && cachedDayIndex[index];
+        // todo maybe add some alert
+    }
+
+    private void setDayButtons() {
+
+        for (int i = 0; i < cachedDayIndex.length; i++) {
+            if (cachedDayIndex[i]) {
+                TextView currentDefaultDay = dayButtonArray[i];
+                currentDefaultDay.setBackgroundResource(R.drawable.back_secondary_col_rounded);
+                currentDefaultDay.setTextColor(getResources().getColor(android.R.color.white));
+            }
+        }
+
+        for (int i = 0; i < dayButtonArray.length; i++) {
+            final int index = i;
+            dayButtonArray[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (isTheOnlyActiveLeft(index)) {
+                        return;
+                    }
+
+                    if (cachedDayIndex[index]) {
+                        view.setBackgroundResource(R.drawable.back_gray_rounded);
+                        ((TextView)view).setTextColor(getResources().getColor(android.R.color.black));
+                    } else {
+                        view.setBackgroundResource(R.drawable.back_secondary_col_rounded);
+                        ((TextView)view).setTextColor(getResources().getColor(android.R.color.white));
+                    }
+
+                    cachedDayIndex[index] = !cachedDayIndex[index];
+                }
+            });
+        }
+    }
+
+    private void setToggleButtons() {
+
+        // Set the first button (only vacant) as default
+        activeToggleBtn = new boolean[3];
+
+        activeToggleBtn[cachedAvailabilityIndex] = true;
+        ImageView mDefaultImage = (ImageView)toggleArray[cachedAvailabilityIndex].getChildAt(0);
+        mDefaultImage.setImageDrawable(getDrawable(R.drawable.animated_check));
+        ((Animatable) mDefaultImage.getDrawable()).start();
+
+        for (int i = 0; i < toggleArray.length; i++) {
+            final int index = i;
+            toggleArray[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    for (int j = 0; j < toggleArray.length; j++) {
+                        if (j != index) {
+                            ((ImageView)toggleArray[j].getChildAt(0)).setImageDrawable(getDrawable(R.drawable.circle_to_check_static));
+                            activeToggleBtn[j] = false;
+                        }
+                    }
+
+                    final ImageView mImageView = ((ImageView)((LinearLayout)view).getChildAt(0));
+
+                    if (!activeToggleBtn[index]) {
+                        //view.setBackgroundColor(getResources().getColor(R.color.colorSecondaryFaded));
+                        mImageView.setImageDrawable(getDrawable(R.drawable.animated_check));
+                        ((Animatable) mImageView.getDrawable()).start();
+                        activeToggleBtn[index] = true;
+                    }
+                    cachedAvailabilityIndex = index;
+                }
+            });
         }
     }
 
     private void obfuscateView() {
         int inactiveColor = getResources().getColor(android.R.color.darker_gray);
         distanceText.setTextColor(inactiveColor);
-        upToText.setVisibility(View.GONE);
         distanceFrom.setVisibility(View.GONE);
         rangeSeekBar2.setProgressColor(inactiveColor);
         rangeSeekBar2.setEnabled(false);
     }
 
     private void clearView() {
-        distanceText.setTextColor(Color.parseColor("#c8000000"));
-        upToText.setVisibility(View.VISIBLE);
+        distanceText.setTextColor(getResources().getColor(R.color.coolBlack));
         distanceFrom.setVisibility(View.VISIBLE);
         rangeSeekBar2.setProgressColor(getResources().getColor(R.color.colorSecondary));
         rangeSeekBar2.setEnabled(true);
-        locationTitle.setText("LOCATION");
+    }
+
+    private void updateTime(float leftValue, float rightValue) {
+        String lValue = (String.valueOf((int) leftValue).length() > 1) ? String.valueOf((int) leftValue) : "0" + (int) leftValue;
+        String rValue = (String.valueOf((int) rightValue).length() > 1) ? String.valueOf((int) rightValue) : "0" + (int) rightValue;
+        leftTime.setText(lValue);
+        rightTime.setText(rValue);
+        cachedMinHour = (int)leftValue;
+        cachedMaxHour = (int)rightValue;
+    }
+
+    private void updateDistance(float leftValue) {
+        float currentValue = (float) (Math.round(leftValue * 10)) / 100;
+        String stringValue = currentValue + " km";
+        cachedDistance = (int)leftValue;
+        if (currentValue == (float) 2.1)
+            distanceFrom.setText(getResources().getString(R.string.infinity));
+        else
+            distanceFrom.setText(stringValue);
     }
 
 
     private void initSeekBars() {
 
-        rangeSeekBar.setValue(0, 24);
+        rangeSeekBar.setValue(cachedMinHour, cachedMaxHour);
+        updateTime(cachedMinHour, cachedMaxHour);
         rangeSeekBar.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
-                String lValue = (String.valueOf((int) leftValue).length() > 1) ? String.valueOf((int) leftValue) : "0" + (int) leftValue;
-                String rValue = (String.valueOf((int) rightValue).length() > 1) ? String.valueOf((int) rightValue) : "0" + (int) rightValue;
-                leftTime.setText(lValue);
-                rightTime.setText(rValue);
+                updateTime(leftValue, rightValue);
             }
 
             @Override
@@ -165,17 +275,12 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
-        rangeSeekBar2.setValue(21);
+        rangeSeekBar2.setValue(cachedDistance);
+        updateDistance(cachedDistance);
         rangeSeekBar2.setOnRangeChangedListener(new OnRangeChangedListener() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
-                float currentValue = (float) (Math.round(leftValue * 10)) / 100;
-
-                if (currentValue == (float) 2.1)
-                    distanceFrom.setText(getResources().getString(R.string.infinity));
-                else
-                    distanceFrom.setText(currentValue + " km");
+                updateDistance(leftValue);
             }
 
             @Override
@@ -206,8 +311,8 @@ public class FilterActivity extends AppCompatActivity {
 
     private void showAlertDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("GPS service is not active");
-        dialog.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+        dialog.setMessage(getString(R.string.gps_service_inactive));
+        dialog.setPositiveButton(getString(R.string.open_settings), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -217,7 +322,7 @@ public class FilterActivity extends AppCompatActivity {
                 isGPSEnabled = AppUtils.isGPSEnabled(FilterActivity.this, mLocationManager);
             }
         });
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                 // Nothing to do here
@@ -267,15 +372,24 @@ public class FilterActivity extends AppCompatActivity {
                     clearView();
                 } else {
                     activeBtn.setVisibility(View.VISIBLE);
-                    locationTitle.setText("LOCATION (not active)");
+                    upToText.setText(R.string.location_not_active);
                 }
             }
         }
     }
 
     public void killAll(View v) {
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
+
+    public void applyFilters(View view) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", "wow");
+        returnIntent.putExtra(AppUtils.KEY_FILTER_DAY, cachedDayIndex);
+        returnIntent.putExtra(AppUtils.KEY_FILTER_AVAILABILITY, cachedAvailabilityIndex);
+        returnIntent.putExtra(AppUtils.KEY_FILTER_MIN_HOUR, cachedMinHour);
+        returnIntent.putExtra(AppUtils.KEY_FILTER_MAX_HOUR, cachedMaxHour);
+        returnIntent.putExtra(AppUtils.KEY_FILTER_DISTANCE, cachedDistance);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }

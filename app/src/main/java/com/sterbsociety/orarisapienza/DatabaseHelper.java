@@ -1,6 +1,6 @@
 package com.sterbsociety.orarisapienza;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -28,9 +28,7 @@ import java.util.ArrayList;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    @SuppressLint("StaticFieldLeak")
     private static DatabaseHelper instance;
-    private static Context mContext;
     private static DataSnapshot mCurrentDataSnapshot;
 
     private static final int DATABASE_VERSION = 1;
@@ -76,7 +74,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static synchronized DatabaseHelper getInstance(Context context) {
-        mContext = context;
         if (instance == null)
             instance = new DatabaseHelper(context);
         return instance;
@@ -89,13 +86,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * more info at:
      * https://medium.com/@JasonWyatt/squeezing-performance-from-sqlite-insertions-971aff98eef2
      */
-    public boolean createDB(DataSnapshot currentDataSnapshot) {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public boolean createDB(Activity activity, DataSnapshot currentDataSnapshot) {
 
         // Just updates its currentDataSnapshot whenever gets called.
         mCurrentDataSnapshot = currentDataSnapshot;
 
         // This will create the DB File
-        File databaseFile = mContext.getDatabasePath(DATABASE_NAME);
+        File databaseFile = activity.getDatabasePath(DATABASE_NAME);
         databaseFile.mkdirs();
         databaseFile.delete();
 
@@ -140,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public ArrayList<Course> getAllCourses() {
+    public ArrayList<Course> getAllCourses(Activity activity) {
 
         ArrayList<Course> courseList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_NAME;
@@ -151,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (SQLiteException ex) {
             if (mCurrentDataSnapshot != null) {
                 // If the password is wrong, then a new attempt is done.
-                createDB(mCurrentDataSnapshot);
+                createDB(activity, mCurrentDataSnapshot);
                 mSQLiteDB = this.getWritableDatabase(AppUtils.hash(NetworkStatus.getMACAddress(null)));
             } else
                 return null;
@@ -188,15 +186,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return courseList;
     }
 
-    public boolean offlineDBAvailable(Context context) {
-        boolean outCome = context.getDatabasePath(DATABASE_NAME).exists();
+    public boolean offlineDBAvailable(Activity activity) {
+        boolean outCome = activity.getDatabasePath(DATABASE_NAME).exists();
         if (outCome)
             return true;
         if (mCurrentDataSnapshot != null) {
-            DatabaseHelper.getInstance(context).createDB(mCurrentDataSnapshot);
+            DatabaseHelper.getInstance(activity).createDB(activity, mCurrentDataSnapshot);
             return true;
         }
-        StyleableToast.makeText(context, "Dati aulee non sincronizzati.\nAttendere prego",
+        StyleableToast.makeText(activity, "Dati aulee non sincronizzati.\nAttendere prego",
                 Toast.LENGTH_LONG, R.style.errorToast).show();
         return false;
     }

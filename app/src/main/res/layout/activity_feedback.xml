@@ -43,7 +43,9 @@
             android:layout_marginEnd="@dimen/_5sdp"
             android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
-            android:minLines="4"/>
+            android:minLines="4"
+            android:inputType="text"
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:layout_width="match_parent"
@@ -63,7 +65,9 @@
             android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
             android:layout_marginTop="@dimen/_9sdp"
-            android:layout_marginEnd="5dp" />
+            android:layout_marginEnd="5dp"
+            android:inputType="text"
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:layout_width="match_parent"
@@ -83,7 +87,9 @@
             android:maxLines="1"
             android:padding="@dimen/_3sdp"
             android:layout_marginTop="@dimen/_9sdp"
-            android:layout_marginEnd="@dimen/_5sdp" />
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:inputType="text"
+            tools:ignore="Autofill,LabelFor" />
 
 
     </LinearLayout>

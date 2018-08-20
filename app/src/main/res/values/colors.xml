@@ -4,8 +4,12 @@
     <color name="colorPrimary">#95022F</color>
     <color name="colorPrimaryDark">#6f0123</color>
     <color name="colorSecondary">#f44336</color>
+    <color name="colorSecondaryFaded">#aaf44336</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="coolBlack">#c8000000</color>
     <color name="white">#FFF</color>
     <color name="gray">#ef404040</color>
+    <color name="lightGray">#d7b9b9b9</color>
+    <color name="darkGray">#9a000000</color>
     <color name="colorCards">#222</color>
 </resources>

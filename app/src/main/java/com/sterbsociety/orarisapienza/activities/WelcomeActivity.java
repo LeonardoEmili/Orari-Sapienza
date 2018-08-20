@@ -20,7 +20,6 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private ViewPager mSlideViewPager;
     private LinearLayout mDotLayout;
     private SliderAdapter sliderAdapter;
     private TextView[] mDots;
@@ -45,7 +44,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
-        mSlideViewPager = findViewById(R.id.slideViewPager);
+        ViewPager mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
         mButton = findViewById(R.id.skip_button);
 

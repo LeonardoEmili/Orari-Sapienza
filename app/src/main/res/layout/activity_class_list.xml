@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -56,7 +57,8 @@
                 android:padding="@dimen/_10sdp"
                 android:onClick="openFilterActivity"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_filter"/>
+                android:src="@drawable/ic_filter"
+                tools:ignore="ContentDescription" />
 
         </RelativeLayout>
 

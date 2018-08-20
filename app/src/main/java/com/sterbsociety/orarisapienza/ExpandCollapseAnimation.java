@@ -18,7 +18,7 @@ public class ExpandCollapseAnimation extends Animation {
     /**
      * Initializes expand collapse animation, has two types, collapse (1) and expand (0).
      * @param view The view to animate
-     * @param duration
+     * @param duration How much the animation should last
      * @param type The type of animation: 0 will expand from gone and 0 size to visible and layout size defined in xml.
      * 1 will collapse view and set to gone
      */

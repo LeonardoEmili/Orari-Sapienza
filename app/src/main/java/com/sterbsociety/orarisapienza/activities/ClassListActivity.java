@@ -36,13 +36,19 @@ public class ClassListActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == AppUtils.GPS_ACCESS) {
+        switch (requestCode) {
+            case AppUtils.GPS_ACCESS:
+                if (resultCode == RESULT_OK)
+                    Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "NOT GRANTED", Toast.LENGTH_SHORT).show();
+                break;
 
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "NOT GRANTED", Toast.LENGTH_SHORT).show();
-            }
+            case AppUtils.FILTER_ACTIVITY:
+                if (resultCode == RESULT_OK) {
+                    AppUtils.updateFilters(data);
+                }
+                break;
         }
     }
 
@@ -75,7 +81,7 @@ public class ClassListActivity extends AppCompatActivity {
 
     public void openFilterActivity(View view) {
         Intent i = new Intent(this, FilterActivity.class);
-        startActivityForResult(i, 1);
+        startActivityForResult(i, AppUtils.FILTER_ACTIVITY);
         overridePendingTransition(R.anim.slide_in_up, R.anim.stay_still);
     }
 }

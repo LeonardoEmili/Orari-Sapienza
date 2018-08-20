@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
  * "http://developer.android.com/guide/topics/ui/settings.html"
  * API Guide for more information on developing a Settings UI.
  */
+@SuppressWarnings("deprecation")
 public class SettingsActivity extends AppCompatPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_PREF_ANIMATION_SWITCH = "allow_animations";
