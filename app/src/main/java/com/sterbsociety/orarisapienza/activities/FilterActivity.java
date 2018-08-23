@@ -29,7 +29,6 @@ import com.sterbsociety.orarisapienza.MyLocationListener;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class FilterActivity extends AppCompatActivity {
 
     private RangeSeekBar rangeSeekBar, rangeSeekBar2;
@@ -66,8 +65,13 @@ public class FilterActivity extends AppCompatActivity {
         initActivity();
     }
 
+
+    /**
+     * This method handles the GPS in this Activity.
+     */
     private void initGPS() {
 
+        // From Lollipop we have to check at runtime for Android's permissions.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // User has explicitly denied the permission.
@@ -138,7 +142,14 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is an utility method to block the user from unchecking all the days.
+     * @param index is the current clicked day
+     * @return is the relative outcome
+     */
     private boolean isTheOnlyActiveLeft(int index) {
+
+        // If the current button is going to be activated then no problems here.
         if (!cachedDayIndex[index])
             return false;
 
@@ -147,12 +158,17 @@ public class FilterActivity extends AppCompatActivity {
             if (anActiveDayBtn)
                 cnt++;
         }
+
         return cnt == 1 && cachedDayIndex[index];
         // todo maybe add some alert
     }
 
+    /**
+     * Another utility method for easily setting up the "day's buttons"
+     */
     private void setDayButtons() {
 
+        // Here we mark the choosen days as active
         for (int i = 0; i < cachedDayIndex.length; i++) {
             if (cachedDayIndex[i]) {
                 TextView currentDefaultDay = dayButtonArray[i];
@@ -161,6 +177,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
 
+        // Here we set up the behaviour for these buttons
         for (int i = 0; i < dayButtonArray.length; i++) {
             final int index = i;
             dayButtonArray[i].setOnClickListener(new View.OnClickListener() {
@@ -179,17 +196,21 @@ public class FilterActivity extends AppCompatActivity {
                         ((TextView)view).setTextColor(getResources().getColor(android.R.color.white));
                     }
 
+                    // If we arrive here then the button has been toggled
                     cachedDayIndex[index] = !cachedDayIndex[index];
                 }
             });
         }
     }
 
+    /**
+     * Another utility method for easily setting up the "availability's buttons"
+     */
     private void setToggleButtons() {
 
-        // Set the first button (only vacant) as default
         activeToggleBtn = new boolean[3];
 
+        // Here we mark as active the selected button
         activeToggleBtn[cachedAvailabilityIndex] = true;
         ImageView mDefaultImage = (ImageView)toggleArray[cachedAvailabilityIndex].getChildAt(0);
         mDefaultImage.setImageDrawable(getDrawable(R.drawable.animated_check));
@@ -207,6 +228,7 @@ public class FilterActivity extends AppCompatActivity {
                         }
                     }
 
+                    // For each toggleButton we work on LinearLayout(father) and on it's ImageView(child) which is always the first child.
                     final ImageView mImageView = ((ImageView)((LinearLayout)view).getChildAt(0));
 
                     if (!activeToggleBtn[index]) {
@@ -215,12 +237,16 @@ public class FilterActivity extends AppCompatActivity {
                         ((Animatable) mImageView.getDrawable()).start();
                         activeToggleBtn[index] = true;
                     }
+                    // We update the current availability button.
                     cachedAvailabilityIndex = index;
                 }
             });
         }
     }
 
+    /**
+     * Utility method that marks as inactive the GPS SeekBar.
+     */
     private void obfuscateView() {
         int inactiveColor = getResources().getColor(android.R.color.darker_gray);
         distanceText.setTextColor(inactiveColor);
@@ -229,6 +255,9 @@ public class FilterActivity extends AppCompatActivity {
         rangeSeekBar2.setEnabled(false);
     }
 
+    /**
+     * Utility method that marks as active the GPS SeekBar.
+     */
     private void clearView() {
         distanceText.setTextColor(getResources().getColor(R.color.coolBlack));
         distanceFrom.setVisibility(View.VISIBLE);
@@ -236,6 +265,10 @@ public class FilterActivity extends AppCompatActivity {
         rangeSeekBar2.setEnabled(true);
     }
 
+    /**
+     * @param leftValue is the minHour
+     * @param rightValue is the MaxHour
+     */
     private void updateTime(float leftValue, float rightValue) {
         String lValue = (String.valueOf((int) leftValue).length() > 1) ? String.valueOf((int) leftValue) : "0" + (int) leftValue;
         String rValue = (String.valueOf((int) rightValue).length() > 1) ? String.valueOf((int) rightValue) : "0" + (int) rightValue;
@@ -245,6 +278,9 @@ public class FilterActivity extends AppCompatActivity {
         cachedMaxHour = (int)rightValue;
     }
 
+    /**
+     * @param leftValue is the current distance multiplied by 10 (UI stuff)
+     */
     private void updateDistance(float leftValue) {
         float currentValue = (float) (Math.round(leftValue * 10)) / 100;
         String stringValue = currentValue + " km";
@@ -256,6 +292,9 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Utility method for properly setting up both the SeekBars.
+     */
     private void initSeekBars() {
 
         rangeSeekBar.setValue(cachedMinHour, cachedMaxHour);
@@ -309,6 +348,9 @@ public class FilterActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * We let the user know if they've allowed to use GPS but it's currently not active.
+     */
     private void showAlertDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(getString(R.string.gps_service_inactive));
@@ -356,6 +398,7 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

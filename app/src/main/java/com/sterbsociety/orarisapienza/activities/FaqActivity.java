@@ -4,11 +4,15 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.ExpandCollapseAnimation;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
@@ -22,6 +26,9 @@ public class FaqActivity extends AppCompatActivity {
     private static final int ANIMATION_DURATION = 200;
     private static final int COLLAPSE_ACTION = 1;
     private static final int EXPAND_ACTION = 0;
+    private LinearLayout mAdsContainer;
+    private AdView mAdView;
+    private AdRequest mAdRequest;
     private boolean[] flags;
 
     @Override
@@ -57,6 +64,8 @@ public class FaqActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(getResources().getString(R.string.faq));
         }
+
+        mAdsContainer = findViewById(R.id.ad_container);
 
         // This avoids the user to break the layout
         flags = new boolean[FAQ_ENTRIES];
@@ -120,5 +129,20 @@ public class FaqActivity extends AppCompatActivity {
             });
             // End of Q&A list setup
         }
+
+        // AdMob App ID: ca-app-pub-9817701892167034~2496155654
+        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = AppUtils.hash(androidId).toUpperCase();
+
+        mAdView = new AdView(getApplicationContext());
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        mAdRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(deviceId)
+                .build();
+        mAdView.loadAd(mAdRequest);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        mAdsContainer.addView(mAdView, params);
     }
 }

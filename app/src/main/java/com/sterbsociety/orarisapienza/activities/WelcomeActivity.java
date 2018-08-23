@@ -114,22 +114,22 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     private boolean isFirstTimeStartApp() {
-        SharedPreferences ref = getSharedPreferences("IntroSliderApp", Context.MODE_PRIVATE);
-        return ref.getBoolean("FirstTimeStartFlag", true);
+        SharedPreferences ref = getSharedPreferences(AppUtils.INTRO_SLIDER_APP, Context.MODE_PRIVATE);
+        return ref.getBoolean(AppUtils.FIRST_TIME_FLAG, true);
     }
 
 
-    private void setFirstTimeStartStatus(boolean stt) {
-        SharedPreferences ref = getSharedPreferences("IntroSliderApp", Context.MODE_PRIVATE);
+    private void setFirstTimeStartStatus() {
+        SharedPreferences ref = getSharedPreferences(AppUtils.INTRO_SLIDER_APP, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = ref.edit();
-        editor.putBoolean("FirstTimeStartFlag", stt);
+        editor.putBoolean(AppUtils.FIRST_TIME_FLAG, false);
         editor.apply();
     }
 
 
     public void startMainActivity(View v) {
 
-        setFirstTimeStartStatus(false);
+        setFirstTimeStartStatus();
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
         finish();
     }

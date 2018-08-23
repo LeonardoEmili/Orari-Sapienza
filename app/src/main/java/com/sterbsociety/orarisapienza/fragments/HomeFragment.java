@@ -1,7 +1,6 @@
 package com.sterbsociety.orarisapienza.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,27 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.ClassListActivity;
 import com.sterbsociety.orarisapienza.activities.FaqActivity;
-import com.sterbsociety.orarisapienza.activities.MainActivity;
-import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -61,12 +52,6 @@ public class HomeFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -142,8 +127,7 @@ public class HomeFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public HomeFragment setChangeFragmentListener(ChangeFragmentListener changeFragmentListener) {
+    public void setChangeFragmentListener(ChangeFragmentListener changeFragmentListener) {
         this.changeFragmentListener = changeFragmentListener;
-        return this;
     }
 }

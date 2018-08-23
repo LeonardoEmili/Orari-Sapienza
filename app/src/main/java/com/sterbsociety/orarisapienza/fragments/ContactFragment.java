@@ -19,13 +19,14 @@ import com.sterbsociety.orarisapienza.activities.DevsActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.BugReportActivity;
 import com.sterbsociety.orarisapienza.activities.FeedbackActivity;
+import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ContactFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link ContactFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -56,11 +57,6 @@ public class ContactFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -100,6 +96,7 @@ public class ContactFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (this.isVisible()) {
+            ((MainActivity)mActionbar.getThemedContext()).favouritesImg.setVisibility(View.GONE);
             mActionbar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -107,10 +104,13 @@ public class ContactFragment extends Fragment {
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (hidden)
+        if (hidden) {
             mActionbar.setDisplayHomeAsUpEnabled(false);
-        else
+            ((MainActivity)mActionbar.getThemedContext()).mutateFavouriteImg();
+        } else {
             mActionbar.setDisplayHomeAsUpEnabled(true);
+            ((MainActivity)mActionbar.getThemedContext()).favouritesImg.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -145,9 +145,8 @@ public class ContactFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public ContactFragment setChangeFragmentListener(ChangeFragmentListener changeFragmentListener) {
+    public void setChangeFragmentListener(ChangeFragmentListener changeFragmentListener) {
         this.changeFragmentListener = changeFragmentListener;
-        return this;
     }
 
     @Override

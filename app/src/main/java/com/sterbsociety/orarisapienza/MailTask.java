@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class MailTask extends AsyncTask<Object, Void, Boolean> {
 
-    private static final int BUGREPORT_PARAMS = 3;
+    private static final int BUG_REPORT_PARAMS = 3;
     private ProgressDialog pd;
     private String pdTitle, pdMessage;
     private String positiveMsg, negativeMsg;
@@ -57,7 +57,7 @@ public class MailTask extends AsyncTask<Object, Void, Boolean> {
         sender = new GMailSender();
         boolean outCome;
 
-        if (params.length == BUGREPORT_PARAMS) {
+        if (params.length == BUG_REPORT_PARAMS) {
             outCome = sendReport(params);
         } else {
             outCome = sendMail(params);

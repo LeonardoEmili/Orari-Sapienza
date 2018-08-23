@@ -161,7 +161,11 @@
     <string name="distance">Distance</string>
     <string name="up_to">up to</string>
     <string name="apply">apply</string>
-    <string name="image">image</string>
+    <string name="image">Image</string>
+    <string name="favourites">Favourites</string>
+    <string name="class_status">class_status</string>
+    <string name="leonardo_emili">Leonardo Emili</string>
+    <string name="fabio_capirchio">Fabio Capirchio</string>
 
 
 </resources>

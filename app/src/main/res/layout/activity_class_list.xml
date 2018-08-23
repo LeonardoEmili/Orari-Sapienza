@@ -1,79 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="10dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:title="@string/classrooms_list"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-        <RelativeLayout
-            android:id="@+id/search_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:layout_below="@+id/toolbar">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_3sdp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="-3dp"
-                android:background="#c6dddddd"/>
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_view"
-                android:layout_width="@dimen/_240sdp"
-                android:layout_height="?attr/actionBarSize"
-                android:focusable="false"
-                app:iconifiedByDefault="false"
-                app:queryHint="Search classroom"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:clickable="true"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:focusable="true"
-                android:padding="@dimen/_10sdp"
-                android:onClick="openFilterActivity"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_filter"
-                tools:ignore="ContentDescription" />
-
-        </RelativeLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:fitsSystemWindows="true"
+        android:focusableInTouchMode="true">
 
-        <TextView
+        <include layout="@layout/toolbar_scroll" />
+
+        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Donec dapibus aliquam lectus id iaculis. Pellentesque ac congue nunc. Vestibulum arcu risus, convallis at fermentum a, tempus et nibh. Morbi dui felis, mollis in imperdiet vel, porta scelerisque lectus. Sed suscipit metus ac nisi ultricies, vitae dapibus magna mattis. Nunc efficitur dui velit, fringilla gravida ex ultricies sed. Nullam et dolor suscipit, vehicula erat nec, pellentesque lacus. Nam aliquet ante id congue vehicula. Sed vitae metus tristique, tincidunt tortor quis, mollis lectus. Sed volutpat augue nec libero ultrices, vel scelerisque magna vestibulum. Vestibulum sed ipsum arcu. Proin porta dui ligula. Pellentesque a tempor quam, porttitor accumsan nulla. Pellentesque porta dictum tellus, vel feugiat mi condimentum sit amet..
-Proin sed nisi interdum, cursus orci et, convallis mi. Vestibulum pulvinar neque nulla, sit amet euismod nisi faucibus eget. Nunc posuere metus ut posuere suscipit. Duis non justo in massa congue accumsan vitae egestas quam. Suspendisse metus felis, posuere nec facilisis in, luctus id sapien. Etiam consectetur diam quis felis ultricies mollis. Integer massa metus, consectetur quis libero sed, eleifend tempus massa. Sed feugiat luctus feugiat. Phasellus tempus finibus pharetra. Nam at lacus id nisi molestie condimentum. Vestibulum lacinia lacus finibus nisi aliquet, ut tempor mauris feugiat. Praesent cursus, libero in auctor convallis, eros ligula consectetur eros, ullamcorper commodo lacus elit ac est. Nulla gravida ac nisi sed varius." />
-    </androidx.core.widget.NestedScrollView>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/ad_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" />
+
+</RelativeLayout>

@@ -12,4 +12,11 @@
     <color name="lightGray">#d7b9b9b9</color>
     <color name="darkGray">#9a000000</color>
     <color name="colorCards">#222</color>
+    <color name="divider_color">#FFB7B2B2</color>
+    <color name="red_normal">#FF0000</color>
+    <color name="red_pressed">#FF6666</color>
+    <color name="green_normal">#37C000</color>
+    <color name="green_pressed">#30A070</color>
+    <color name="yellow_normal">#ffe033</color>
+    <color name="yellow_pressed">#dec120</color>
 </resources>

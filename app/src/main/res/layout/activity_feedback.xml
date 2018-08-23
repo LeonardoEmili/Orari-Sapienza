@@ -44,8 +44,7 @@
             android:padding="@dimen/_3sdp"
             android:textColor="@android:color/black"
             android:minLines="4"
-            android:inputType="text"
-            tools:ignore="Autofill,LabelFor" />
+            tools:ignore="Autofill,LabelFor,TextFields" />
 
         <TextView
             android:layout_width="match_parent"
@@ -89,7 +88,7 @@
             android:layout_marginTop="@dimen/_9sdp"
             android:layout_marginEnd="@dimen/_5sdp"
             android:inputType="text"
-            tools:ignore="Autofill,LabelFor" />
+            tools:ignore="Autofill,LabelFor,TextFields" />
 
 
     </LinearLayout>

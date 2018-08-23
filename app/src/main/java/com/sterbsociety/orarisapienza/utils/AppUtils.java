@@ -1,6 +1,7 @@
 package com.sterbsociety.orarisapienza.utils;
 
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
+import com.sterbsociety.orarisapienza.model.Classroom;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,8 +41,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -75,6 +79,7 @@ public class AppUtils {
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 public boolean onTouch(View v, MotionEvent event) {
                     AppUtils.hideSoftKeyboard(mActivity, mView);
                     return false;
@@ -90,6 +95,9 @@ public class AppUtils {
             }
         }
     }
+
+    public static final String INTRO_SLIDER_APP = "IntroSliderApp";
+    public static final String FIRST_TIME_FLAG = "FirstTimeStartFlag";
 
 
     /**
@@ -180,7 +188,6 @@ public class AppUtils {
      * Method from Warpzit, DOCs here: https://stackoverflow.com/questions/9248930/android-animate-drop-down-up-view-proper/9290723#9290723
      * This method can be used to calculate the height and set it for views with wrap_content as height.
      * This should be done before ExpandCollapseAnimation is created.
-     *
      */
     public static void setHeightForWrapContent(Activity activity, View view) {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -195,8 +202,11 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
+    public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.favourites";
+
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
     private static String sCurrentRingtone, currentLanguage;
+    private static Set<String> mFavouriteClassSet;
 
     public static void loadSettings(Activity activity) {
 
@@ -223,6 +233,40 @@ public class AppUtils {
             editor.putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage);
             editor.apply();
         }
+
+        readClassPreferences(activity);
+    }
+
+    public static final String KEY_PREF_FAVOURITES = "fav_class";
+
+
+    /**
+     * @param activity reference to the activity
+     *                 Details about the weird behaviour of SharedPreferences with StringSet can be find here:
+     *                 https://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences
+     *                 and here
+     *                 https://developer.android.com/reference/android/content/SharedPreferences
+     */
+    public static void readClassPreferences(Activity activity) {
+
+        // Here we create another HashSet from the one stored in SharedPreferences
+        mFavouriteClassSet = new HashSet<>(activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_FAVOURITES, new HashSet<String>()));
+    }
+
+    public static void addClassToFavourites(Activity activity, String classId) {
+
+        mFavouriteClassSet.add(classId);
+        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_FAVOURITES, mFavouriteClassSet).apply();
+    }
+
+    public static void removeClassToFavourites(Activity activity, String classId) {
+
+        mFavouriteClassSet.remove(classId);
+        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_FAVOURITES, mFavouriteClassSet).apply();
+    }
+
+    public static Set<String> getFavouriteClassSet() {
+        return mFavouriteClassSet;
     }
 
     public static boolean areAnimationsAllowed() {
@@ -492,7 +536,6 @@ public class AppUtils {
         return DISTANCE_FROM_CURRENT_POSITION;
     }
 
-
     public static final String KEY_FILTER_DAY = "key_day";
     public static final String KEY_FILTER_AVAILABILITY = "key_availability";
     public static final String KEY_FILTER_MIN_HOUR = "key_min_hour";
@@ -508,5 +551,20 @@ public class AppUtils {
         MIN_HOUR = data.getIntExtra(KEY_FILTER_MIN_HOUR, MIN_HOUR);
         MAX_HOUR = data.getIntExtra(KEY_FILTER_MAX_HOUR, MAX_HOUR);
         DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
+    }
+
+    private static List<Classroom> mDataList;
+
+    public static ArrayList<Classroom> createDataList() {
+        ArrayList<Classroom> dataList = new ArrayList<>();
+        for (int i = 1; i < 100; i++) {
+            dataList.add(new Classroom("Aula P"+i, i+""+(i*42+79/2),42));
+        }
+        mDataList = new ArrayList<>(dataList);
+        return dataList;
+    }
+
+    public static List<Classroom> getDataList() {
+        return mDataList;
     }
 }

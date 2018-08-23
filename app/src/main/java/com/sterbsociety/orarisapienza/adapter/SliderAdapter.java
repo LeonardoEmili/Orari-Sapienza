@@ -21,11 +21,11 @@ public class SliderAdapter extends PagerAdapter {
     private int[] slideImages = new int[] {
 
             R.drawable.stopwatch,
-            R.drawable.book,
+            R.drawable.oval,
             R.drawable.desk
     };
 
-    private String[] slideHeadings = new String[] {
+    private final String[] slideHeadings = new String[] {
 
             "Orari aggiornati",
             "Piani di studio",

@@ -10,7 +10,7 @@ import android.os.Bundle;
 public class MyLocationListener implements LocationListener {
 
     private Location currentBestLocation = null;
-    private LocationManager mLocationManager;
+    private final LocationManager mLocationManager;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 

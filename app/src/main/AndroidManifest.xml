@@ -56,6 +56,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.FavouritesActivity" />
     </application>
 
 </manifest>

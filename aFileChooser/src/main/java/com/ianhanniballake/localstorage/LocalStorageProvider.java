@@ -110,7 +110,7 @@ public class LocalStorageProvider extends DocumentsProvider {
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(documentId, options);
         // Write out the thumbnail to a temporary file
-        File tempFile = null;
+        File tempFile;
         FileOutputStream out = null;
         try {
             tempFile = File.createTempFile("thumbnail", null, getContext().getCacheDir());

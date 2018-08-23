@@ -29,7 +29,9 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -64,16 +66,18 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     private HomeFragment homeFragment;
     private ContactFragment contactFragment;
     private FragmentTransaction fragmentTransaction;
-    private LinearLayout mAdsContainer;
     private boolean mStartTheme;
     public Intent mStartIntent;
+    private LinearLayout mAdsContainer;
     private AdView mAdView;
     private AdRequest mAdRequest;
+    public ImageView favouritesImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         AppUtils.loadSettings(MainActivity.this);
+
         AppUtils.applyThemeNoActionBar(MainActivity.this);
 
         super.onCreate(savedInstanceState);
@@ -187,13 +191,15 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     @Override
     public void onResume() {
         super.onResume();
-        //AppUtils.loadSettings(MainActivity.this);
+
         if (AppUtils.isRebootScheduled()) {
             AppUtils.reboot(MainActivity.this, mStartIntent);
         } else if (!mStartTheme == AppUtils.isDarkTheme()) {
             mStartTheme = AppUtils.isDarkTheme();
             AppUtils.reboot(MainActivity.this, mStartIntent);
         }
+        mutateFavouriteImg();
+
     }
 
     /**
@@ -215,10 +221,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        assert  actionBar != null;
+        assert actionBar != null;
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_previous);
 
+        favouritesImg = findViewById(R.id.show_favourites);
         mAdsContainer = findViewById(R.id.ad_container);
         fragmentContainer = findViewById(R.id.fragment_container);
         homeFragment = HomeFragment.newInstance(MainActivity.this);
@@ -242,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         mAdsContainer.addView(mAdView, params);
 
-        Log.d("Distance" , AppUtils.distance(41.904472, 12.512889, 41.902917, 12.511694)+"");
+        Log.d("Distance", AppUtils.distance(41.904472, 12.512889, 41.902917, 12.511694) + "");
     }
 
     /**
@@ -283,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
         if (currentFragment != null && !currentFragment.isVisible()) {
             showHomeFragment();
@@ -318,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     @Override
     public void onChangeFragmentLicked(String fragment) {
-        switch (fragment){
+        switch (fragment) {
             case ContactFragment.TAG:
                 showContactFragment();
                 break;
@@ -349,5 +356,18 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
             fragmentTransaction.hide(contactFragment);
 
         fragmentTransaction.commit();
+    }
+
+    public void mutateFavouriteImg() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+        assert  fragment != null;
+        if (!AppUtils.getFavouriteClassSet().isEmpty() && (getSupportFragmentManager().getBackStackEntryCount() == 0 || fragment.isVisible()))
+            favouritesImg.setVisibility(View.VISIBLE);
+        else
+            favouritesImg.setVisibility(View.GONE);
+    }
+
+    public void showFavouritesActivity(View view) {
+        startActivity(new Intent(MainActivity.this, FavouritesActivity.class));
     }
 }

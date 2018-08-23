@@ -17,7 +17,21 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:layout_marginTop="@dimen/_16sdp">
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp">
+
+            <ImageView
+                android:id="@+id/show_favourites"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="@drawable/ripple_effect_primary"
+                android:src="@drawable/ic_starred"
+                android:visibility="gone"
+                android:onClick="showFavouritesActivity"
+                android:contentDescription="@string/favourites" />
 
             <TextView
                 android:id="@+id/toolbar_title"
