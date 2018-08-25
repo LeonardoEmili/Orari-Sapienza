@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     private Runnable mRunnable;
     private FirebaseAuth mAuth;
     private volatile boolean isAuthenticated;
-    private FrameLayout fragmentContainer;
     private HomeFragment homeFragment;
     private ContactFragment contactFragment;
     private FragmentTransaction fragmentTransaction;
@@ -227,7 +226,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         favouritesImg = findViewById(R.id.show_favourites);
         mAdsContainer = findViewById(R.id.ad_container);
-        fragmentContainer = findViewById(R.id.fragment_container);
         homeFragment = HomeFragment.newInstance(MainActivity.this);
         contactFragment = ContactFragment.newInstance(actionBar);
         homeFragment.setChangeFragmentListener(this);

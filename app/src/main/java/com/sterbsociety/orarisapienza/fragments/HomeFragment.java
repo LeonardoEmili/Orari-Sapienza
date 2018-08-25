@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.ClassListActivity;
 import com.sterbsociety.orarisapienza.activities.FaqActivity;
@@ -85,7 +86,12 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(mContext, ClassListActivity.class));
             }
         });
-
+        timeTablesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, LessonTimetableActivity.class));
+            }
+        });
 
         return view;
     }

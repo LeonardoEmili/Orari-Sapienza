@@ -105,7 +105,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_title);
                     String classID = mDataList.get(adapterPosition).getCode();
                     if (mTextView.getCompoundDrawables()[2] != null) {
-                        AppUtils.removeClassToFavourites(ClassListActivity.this, classID);
+                        AppUtils.removeClassFromFavourites(ClassListActivity.this, classID);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     }
                     else {
@@ -145,7 +145,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mLayoutManager = new LinearLayoutManager(this);
         mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
-        mDataList = AppUtils.createDataList();
+        mDataList = AppUtils.createClassesList();
         mAdapter = new MainAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);

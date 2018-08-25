@@ -98,4 +98,8 @@
     <string name="distance">Distanza</string>
     <string name="up_to">fino a</string>
     <string name="apply">applica</string>
+    <string name="image">Immagine</string>
+    <string name="favourites">Preferiti</string>
+    <string name="lessons_timetable">Orario Lezioni</string>
+    <string name="timetables">Orari</string>
 </resources>

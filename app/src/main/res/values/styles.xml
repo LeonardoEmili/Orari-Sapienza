@@ -25,6 +25,11 @@
         <item name="drawColor">@android:color/white</item>
     </style>
 
+    <style name="ClassTimetables.NoActionBar" parent="AppTheme.NoActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
+    </style>
+
     <style name="AppTheme.Dark" parent="Theme.AppCompat">
         <item name="cardStyle">@style/CardView.Dark</item>
         <item name="textStyle">@android:color/white</item>

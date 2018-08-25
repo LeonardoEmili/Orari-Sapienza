@@ -202,7 +202,7 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
-    public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.favourites";
+    public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.classFavourites";
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
     private static String sCurrentRingtone, currentLanguage;
@@ -235,9 +235,10 @@ public class AppUtils {
         }
 
         readClassPreferences(activity);
+        readCoursePreferences(activity);
     }
 
-    public static final String KEY_PREF_FAVOURITES = "fav_class";
+    public static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
 
 
     /**
@@ -250,19 +251,19 @@ public class AppUtils {
     public static void readClassPreferences(Activity activity) {
 
         // Here we create another HashSet from the one stored in SharedPreferences
-        mFavouriteClassSet = new HashSet<>(activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_FAVOURITES, new HashSet<String>()));
+        mFavouriteClassSet = new HashSet<>(activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
     }
 
     public static void addClassToFavourites(Activity activity, String classId) {
 
         mFavouriteClassSet.add(classId);
-        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_FAVOURITES, mFavouriteClassSet).apply();
+        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
-    public static void removeClassToFavourites(Activity activity, String classId) {
+    public static void removeClassFromFavourites(Activity activity, String classId) {
 
         mFavouriteClassSet.remove(classId);
-        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_FAVOURITES, mFavouriteClassSet).apply();
+        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
     public static Set<String> getFavouriteClassSet() {
@@ -524,7 +525,6 @@ public class AppUtils {
         return MIN_HOUR;
     }
 
-
     public static int getMaxHour() {
         return MAX_HOUR;
     }
@@ -553,18 +553,80 @@ public class AppUtils {
         DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
     }
 
-    private static List<Classroom> mDataList;
+    private static List<Classroom> mClassesList;
 
-    public static ArrayList<Classroom> createDataList() {
+    // todo This has to be made once at the start of the activity be looping over all of the classes present in the DB.
+    public static ArrayList<Classroom> createClassesList() {
         ArrayList<Classroom> dataList = new ArrayList<>();
         for (int i = 1; i < 100; i++) {
             dataList.add(new Classroom("Aula P"+i, i+""+(i*42+79/2),42));
         }
-        mDataList = new ArrayList<>(dataList);
+        mClassesList = new ArrayList<>(dataList);
         return dataList;
     }
 
-    public static List<Classroom> getDataList() {
-        return mDataList;
+    public static List<Classroom> getClassesList() {
+        return mClassesList;
+    }
+
+    private static List<String> mCoursesList;
+
+    // todo This has to be made once at the start of the activity be looping over all of the courses present in the DB.
+    public static void createCoursesList() {
+
+        mCoursesList = new ArrayList<>(getFavouriteCourses());
+        for (int i = 0; i < 30; i++) {
+            String courseName = 26654+i+" - Course name Lorem Ipsum";
+            if (!hasBeenAlreadySearchedByUser(courseName)) {
+                mCoursesList.add(courseName);
+            }
+        }
+    }
+
+    public static List<String> getCoursesList() {
+        return mCoursesList;
+    }
+
+    public static List<String> getFavouriteCourses() {
+        return new ArrayList<>(mFavouriteCourseSet);
+    }
+
+    public static boolean areFavouritesPresent() {
+        return mFavouriteCourseSet.size() != 0;
+    }
+
+    public static boolean hasBeenAlreadySearchedByUser(String course) {
+        for (String favouriteCourse : AppUtils.getFavouriteCourses()) {
+            if (favouriteCourse.equals(course))
+                return true;
+        }
+        return false;
+    }
+
+    private static Set<String> mFavouriteCourseSet;
+    public static final String COURSE_FAVOURITES = "com.sterbsociety.orarisapienza.coursesFavourites";
+    public static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
+
+    /**
+     * Go to readClassPreferences for more info about these three methods
+     */
+    public static void readCoursePreferences(Activity activity) {
+
+        // Here we create another HashSet from the one stored in SharedPreferences
+        mFavouriteCourseSet = new HashSet<>(activity.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
+    }
+
+    public static void addCourseToFavourites(Context context, String courseName) {
+
+        if (!mFavouriteCourseSet.contains(courseName)) {
+            mFavouriteCourseSet.add(courseName);
+            context.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+        }
+    }
+
+    public static void clearAllCoursesFromFavourites(Activity activity) {
+
+        mFavouriteCourseSet.clear();
+        activity.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().clear().apply();
     }
 }

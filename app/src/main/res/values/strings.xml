@@ -163,9 +163,11 @@
     <string name="apply">apply</string>
     <string name="image">Image</string>
     <string name="favourites">Favourites</string>
-    <string name="class_status">class_status</string>
-    <string name="leonardo_emili">Leonardo Emili</string>
-    <string name="fabio_capirchio">Fabio Capirchio</string>
+    <string name="class_status" translatable="false">class_status</string>
+    <string name="leonardo_emili" translatable="false">Leonardo Emili</string>
+    <string name="fabio_capirchio" translatable="false">Fabio Capirchio</string>
+    <string name="lessons_timetable">Lessons Timetables</string>
+    <string name="timetables">Timetables</string>
 
 
 </resources>

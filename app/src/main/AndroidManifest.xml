@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -54,9 +53,12 @@
         <activity
             android:name=".activities.ClassListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FilterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.FilterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.FavouritesActivity" />
+        <activity android:name=".activities.LessonTimetableActivity"
+            android:theme="@style/ClassTimetables.NoActionBar" />
     </application>
 
 </manifest>

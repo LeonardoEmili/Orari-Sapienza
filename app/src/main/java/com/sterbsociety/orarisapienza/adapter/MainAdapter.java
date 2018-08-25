@@ -36,11 +36,12 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
         super.notifyDataSetChanged();
     }
 
+    // todo put conditions in AND with FilterActivity conditions
     public void filterClassroomsByQuery(String query) {
 
         mDataList.clear();
         final String lowerCaseQuery = query.toLowerCase();
-        final List<Classroom> dataList = AppUtils.getDataList();
+        final List<Classroom> dataList = AppUtils.getClassesList();
 
         for (Classroom model : dataList) {
             final String className = model.getName().toLowerCase();
@@ -58,7 +59,6 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
         return mDataList == null ? 0 : mDataList.size();
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,7 +68,6 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(mDataList.get(position), position);
-
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
