@@ -87,4 +87,13 @@ public class Course {
     public void setClassRoom(String classRoom) {
         this.classRoom = classRoom;
     }
+
+    public int getStartLessonHour() {
+        try {
+            return Integer.parseInt(startLesson.split(":")[0]);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 24;
+    }
 }

@@ -45,20 +45,28 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:theme="@style/SettingsTheme" />
-        <activity android:name=".activities.FeedbackActivity" />
-        <activity android:name=".activities.BugReportActivity" />
-        <activity android:name=".activities.DevsActivity" />
-        <activity android:name=".activities.FaqActivity" />
+        <activity android:name=".activities.FeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.BugReportActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.DevsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FaqActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.ClassListActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FavouritesActivity" />
+        <activity android:name=".activities.FavouritesActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activities.LessonTimetableActivity"
-            android:theme="@style/ClassTimetables.NoActionBar" />
+            android:theme="@style/ClassTimetables.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

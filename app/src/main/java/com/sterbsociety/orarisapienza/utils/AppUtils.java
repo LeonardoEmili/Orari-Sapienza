@@ -496,6 +496,7 @@ public class AppUtils {
     }
 
     private static boolean[] SELECTED_DAY_BTN_INDEX;
+    private static int CURRENT_DAY = -1;
 
     private static void initDate() {
 
@@ -510,6 +511,19 @@ public class AppUtils {
         else
             index = day - 2;
         SELECTED_DAY_BTN_INDEX[index] = true;
+        CURRENT_DAY = index;
+    }
+
+    public static int getCurrentWeekDayIndex() {
+        if (CURRENT_DAY == -1) {
+            Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (day == Calendar.SATURDAY || day == Calendar.SUNDAY || day == Calendar.MONDAY)
+                CURRENT_DAY = 0;
+            else
+                CURRENT_DAY = day-2;
+        }
+        return CURRENT_DAY;
     }
 
     public static boolean[] getSelectedDayBtnIndex() {
@@ -628,5 +642,15 @@ public class AppUtils {
 
         mFavouriteCourseSet.clear();
         activity.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().clear().apply();
+    }
+
+    private static int TOOLBAR_COLOR = -1;
+
+    public static int getToolbarColor() {
+        return TOOLBAR_COLOR;
+    }
+
+    public static void setToolbarColor(int toolbarColor) {
+        TOOLBAR_COLOR = toolbarColor;
     }
 }

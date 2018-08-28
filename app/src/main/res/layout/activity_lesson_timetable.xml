@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".activities.LessonTimetableActivity">
-    
-    <com.google.android.material.appbar.AppBarLayout
+
+    <!-- CONTENT -->
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="?colorPrimary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/white"
+        app:tabMode="fixed"
+        app:tabTextColor="@android:color/white" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabs"
+        android:layout_above="@id/ad_container" />
+
+    <LinearLayout
+        android:id="@+id/ad_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" />
+
+    <!-- END OF CONTENT -->
+
+
+    <!-- Must be last for right layering display -->
+    <FrameLayout
+        android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,21 +48,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@android:color/white"
-            app:title="@string/timetables" >
+            android:background="?colorPrimary"
+            app:subtitleTextColor="@android:color/white"
+            app:titleTextColor="@android:color/white" />
 
-        </androidx.appcompat.widget.Toolbar>
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
-        <include layout="@layout/widget_search_bar"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- CONTENT -->
-
-
-
-
-
-    <!-- END OF CONTENT -->
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

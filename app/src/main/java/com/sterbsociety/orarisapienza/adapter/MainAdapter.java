@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
+public class MainAdapter extends MBaseAdapter<MainAdapter.ViewHolder> {
 
     private List<Classroom> mDataList;
     private static Set<String> mClassFavourites;

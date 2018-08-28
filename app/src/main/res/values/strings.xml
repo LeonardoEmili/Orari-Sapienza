@@ -166,8 +166,16 @@
     <string name="class_status" translatable="false">class_status</string>
     <string name="leonardo_emili" translatable="false">Leonardo Emili</string>
     <string name="fabio_capirchio" translatable="false">Fabio Capirchio</string>
-    <string name="lessons_timetable">Lessons Timetables</string>
+    <string name="lessons_timetable">Lessons timetables</string>
     <string name="timetables">Timetables</string>
+    <string name="timetables_help_msg">To start seeing for a course timetable click x in the upper right part of the screen.</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="course_code">Course code</string>
+    <string name="time_course">Time</string>
+    <string name="course">Course</string>
+    <string name="classroom">Class</string>
 
 
 </resources>

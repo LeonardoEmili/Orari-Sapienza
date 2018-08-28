@@ -100,6 +100,11 @@
     <string name="apply">applica</string>
     <string name="image">Immagine</string>
     <string name="favourites">Preferiti</string>
-    <string name="lessons_timetable">Orario Lezioni</string>
+    <string name="lessons_timetable">Orario lezioni</string>
     <string name="timetables">Orari</string>
+    <string name="timetables_help_msg">Per vedere gli orari del corso clicca x nella parte in alto a destra dello schermo.</string>
+    <string name="course_code">Codice corso</string>
+    <string name="time_course">Orario</string>
+    <string name="course">Corso</string>
+    <string name="classroom">Classe</string>
 </resources>
