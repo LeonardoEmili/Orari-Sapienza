@@ -12,6 +12,7 @@ import android.os.Bundle;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.FirebaseApp;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;

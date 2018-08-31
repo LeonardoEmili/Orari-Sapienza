@@ -23,7 +23,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.MainAdapter;
+import com.sterbsociety.orarisapienza.adapter.ClassListAdapter;
 import com.sterbsociety.orarisapienza.model.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
@@ -48,7 +48,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     private LinearLayout mAdsContainer;
     private AdView mAdView;
     private AdRequest mAdRequest;
-    protected MainAdapter mAdapter;
+    protected ClassListAdapter mAdapter;
     protected ArrayList<Classroom> mDataList;
 
     @Override
@@ -64,6 +64,12 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
+    }
+
     private final SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
         @Override
         public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
@@ -71,23 +77,12 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            {
-                SwipeMenuItem starItem = new SwipeMenuItem(ClassListActivity.this)
-                        .setBackground(R.drawable.selector_yellow)
-                        .setImage(R.drawable.ic_star)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(starItem);
-
-                SwipeMenuItem addItem = new SwipeMenuItem(ClassListActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setImage(R.drawable.ic_info)
-                        .setText("Info")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(addItem);
-            }
+            SwipeMenuItem starItem = new SwipeMenuItem(ClassListActivity.this)
+                    .setBackground(R.drawable.selector_yellow)
+                    .setImage(R.drawable.ic_star)
+                    .setWidth(width)
+                    .setHeight(height);
+            swipeRightMenu.addMenuItem(starItem);
         }
     };
 
@@ -107,19 +102,17 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
                     if (mTextView.getCompoundDrawables()[2] != null) {
                         AppUtils.removeClassFromFavourites(ClassListActivity.this, classID);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    }
-                    else {
+                    } else {
                         AppUtils.addClassToFavourites(ClassListActivity.this, classID);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.ic_starred), null);
                     }
                 } else {
-                    // Info button to be placed here
+                    // Second button to be placed here
                 }
             }
             // else we could ad a left swipe menu
         }
     };
-
 
 
     private void initActivity() {
@@ -146,7 +139,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
         mDataList = AppUtils.createClassesList();
-        mAdapter = new MainAdapter(this);
+        mAdapter = new ClassListAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(mItemDecoration);
@@ -224,6 +217,9 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Toast.makeText(this, "You clicked the element number: "+position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "You clicked the element number: " + position, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, ClassDetailActivity.class);
+        i.putExtra("KEY", mDataList.get(position));
+        startActivity(i);
     }
 }

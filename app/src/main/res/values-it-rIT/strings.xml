@@ -107,4 +107,6 @@
     <string name="time_course">Orario</string>
     <string name="course">Corso</string>
     <string name="classroom">Classe</string>
+    <string name="favourite_classroom">Classi preferite</string>
+    <string name="name_class_detail">Dettaglio aula</string>
 </resources>

@@ -18,14 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainAdapter extends MBaseAdapter<MainAdapter.ViewHolder> {
+public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.ViewHolder> {
 
     private List<Classroom> mDataList;
     private static Set<String> mClassFavourites;
     private static Drawable starImg;
 
 
-    public MainAdapter(Context context) {
+    public ClassListAdapter(Context context) {
         super(context);
         mClassFavourites = AppUtils.getFavouriteClassSet();
         starImg = context.getResources().getDrawable(R.drawable.ic_starred);

@@ -1,6 +1,9 @@
 package com.sterbsociety.orarisapienza.model;
 
-public class Classroom {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Classroom implements Parcelable {
 
     private String name, code;
     private int numberOfSeats;
@@ -38,6 +41,26 @@ public class Classroom {
         return "foo";
     }
 
+    public String getMainBuildingAddress() {
+        // todo add reference to his father
+        // should return getFather().getAddress;
+        return "bar";
+    }
+
+    public String getCurrentClass() {
+        // todo add reference to db ? maybe ?
+        return "Fondamenti di programmazione";
+    }
+
+    // Returns available/occupied
+    public String getStatus() {
+        return "Occupata";
+    }
+
+    public String getCurrentClassTime() {
+        return "10:30 - 13:00";
+    }
+
     public void printInfo() {
         System.out.print("   | ");
         System.out.println(this.name);
@@ -45,5 +68,40 @@ public class Classroom {
         System.out.println(this.numberOfSeats);
         System.out.print("       | ");
         System.out.println(this.code);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    // write your object's data to the passed-in Parcel
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(this.name);
+        out.writeString(this.code);
+        out.writeInt(this.numberOfSeats);
+        out.writeDouble(this.appeal);
+    }
+
+    /**
+     * This method is used to regenerate the object.
+     * All Parcelables must have a CREATOR that implements these two methods
+     */
+    public static final Parcelable.Creator<Classroom> CREATOR = new Parcelable.Creator<Classroom>() {
+        public Classroom createFromParcel(Parcel in) {
+            return new Classroom(in);
+        }
+
+        public Classroom[] newArray(int size) {
+            return new Classroom[size];
+        }
+    };
+
+    private Classroom(Parcel in) {
+        this.name = in.readString();
+        this.code = in.readString();
+        this.numberOfSeats = in.readInt();
+        this.appeal = in.readDouble();
     }
 }

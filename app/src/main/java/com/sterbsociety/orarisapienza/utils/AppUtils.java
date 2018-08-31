@@ -202,6 +202,19 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
+    public static void setSameWidthAs(Activity activity, View view, View dest) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        int screenWidth = metrics.widthPixels;
+
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(screenWidth, View.MeasureSpec.EXACTLY);
+
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        dest.getLayoutParams().width = view.getMeasuredWidth();
+    }
+
     public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.classFavourites";
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
@@ -577,6 +590,17 @@ public class AppUtils {
         }
         mClassesList = new ArrayList<>(dataList);
         return dataList;
+    }
+
+    // todo this method is just to check the logic and see if it is correct.
+    public static ArrayList<Classroom> getFakeFavouriteClasses() {
+        final ArrayList<Classroom> dataList = createClassesList();
+        ArrayList<Classroom> mResultList = new ArrayList<>();
+        for (Classroom classroom: dataList) {
+            if (mFavouriteClassSet.contains(classroom.getCode()))
+                mResultList.add(classroom);
+        }
+        return mResultList;
     }
 
     public static List<Classroom> getClassesList() {

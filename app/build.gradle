@@ -1,5 +1,8 @@
+import com.google.gms.googleservices.GoogleServicesPlugin
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+//GoogleServicesPlugin.config.disableVersionCheck = true
 
 android {
     compileSdkVersion 28
@@ -21,14 +24,15 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc02'
     implementation 'androidx.cardview:cardview:1.0.0-rc01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.3'
-    implementation 'com.google.firebase:firebase-crash:16.0.1'
+    implementation 'com.google.firebase:firebase-crash:16.2.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.muddzdev:styleabletoast:2.1.2'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
@@ -47,6 +51,7 @@ dependencies {
     implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     implementation 'de.codecrafters.tableview:tableview:2.8.0'
+    implementation 'com.airbnb.android:airmapview:1.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'

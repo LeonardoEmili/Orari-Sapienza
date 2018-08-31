@@ -4,6 +4,7 @@
     <string name="app_version">"App Version"</string>
     <string name="manufacturer">Manufacturer:</string>
     <string name="class_detail">Details</string>
+    <string name="name_class_detail">Class detail</string>
     <string name="describe">Description</string>
     <string name="confirm">Confirm</string>
     <string name="error">Error</string>
@@ -162,7 +163,7 @@
     <string name="up_to">up to</string>
     <string name="apply">apply</string>
     <string name="image">Image</string>
-    <string name="favourites">Favourites</string>
+    <string name="favourite_classroom">Favourite classes</string>
     <string name="class_status" translatable="false">class_status</string>
     <string name="leonardo_emili" translatable="false">Leonardo Emili</string>
     <string name="fabio_capirchio" translatable="false">Fabio Capirchio</string>
@@ -176,6 +177,12 @@
     <string name="time_course">Time</string>
     <string name="course">Course</string>
     <string name="classroom">Class</string>
+    <string name="favourites">Favourites</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="add_to_favs">ADD TO FAVOURITES</string>
+    <string name="status">Status:</string>
+    <string name="_course">Course:</string>
+    <string name="_time">Time:</string>
 
 
 </resources>

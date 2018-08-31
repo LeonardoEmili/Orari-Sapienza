@@ -9,11 +9,11 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class MBaseAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseClassListAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     private final LayoutInflater mInflater;
 
-    public MBaseAdapter(Context context) {
+    public BaseClassListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
     }
 

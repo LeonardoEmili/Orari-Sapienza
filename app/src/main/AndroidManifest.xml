@@ -47,14 +47,18 @@
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:theme="@style/SettingsTheme" />
-        <activity android:name=".activities.FeedbackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.BugReportActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.DevsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.FaqActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.BugReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DevsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FaqActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ClassListActivity"
             android:screenOrientation="portrait"
@@ -62,11 +66,29 @@
         <activity
             android:name=".activities.FilterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FavouritesActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.LessonTimetableActivity"
-            android:theme="@style/ClassTimetables.NoActionBar"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.FavouritesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.LessonTimetableActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ClassTimetables.NoActionBar" />
+        <activity android:name=".activities.ClassDetailActivity" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>
