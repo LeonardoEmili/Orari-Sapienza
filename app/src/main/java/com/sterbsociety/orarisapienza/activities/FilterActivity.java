@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
-import com.sterbsociety.orarisapienza.MyLocationListener;
+import com.sterbsociety.orarisapienza.utils.MyLocationListener;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 

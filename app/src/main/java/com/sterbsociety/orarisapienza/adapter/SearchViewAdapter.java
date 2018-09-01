@@ -68,6 +68,7 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results.values != null) {
+                    //noinspection unchecked
                     mData = (ArrayList<String>) results.values;
                     notifyDataSetChanged();
                 }

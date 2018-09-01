@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.utils;
 
 import android.app.Activity;
 import android.content.Context;

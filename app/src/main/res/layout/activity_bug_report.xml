@@ -85,7 +85,6 @@
             android:text="@string/add_attachments" />
 
         <HorizontalScrollView
-            android:id="@+id/horizontal_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/_80sdp">

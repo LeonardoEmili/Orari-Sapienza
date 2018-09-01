@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -87,6 +86,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     };
 
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
+        @SuppressWarnings("StatementWithEmptyBody")
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge) {
             menuBridge.closeMenu();

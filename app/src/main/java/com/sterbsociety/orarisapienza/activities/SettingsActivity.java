@@ -17,7 +17,6 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import com.sterbsociety.orarisapienza.AppCompatPreferenceActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 

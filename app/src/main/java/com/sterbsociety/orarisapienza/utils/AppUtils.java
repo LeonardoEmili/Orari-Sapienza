@@ -202,19 +202,6 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
-    public static void setSameWidthAs(Activity activity, View view, View dest) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        int screenWidth = metrics.widthPixels;
-
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(screenWidth, View.MeasureSpec.EXACTLY);
-
-        view.measure(widthMeasureSpec, heightMeasureSpec);
-        dest.getLayoutParams().width = view.getMeasuredWidth();
-    }
-
     public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.classFavourites";
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
@@ -629,10 +616,6 @@ public class AppUtils {
         return new ArrayList<>(mFavouriteCourseSet);
     }
 
-    public static boolean areFavouritesPresent() {
-        return mFavouriteCourseSet.size() != 0;
-    }
-
     public static boolean hasBeenAlreadySearchedByUser(String course) {
         for (String favouriteCourse : AppUtils.getFavouriteCourses()) {
             if (favouriteCourse.equals(course))
@@ -660,12 +643,6 @@ public class AppUtils {
             mFavouriteCourseSet.add(courseName);
             context.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
         }
-    }
-
-    public static void clearAllCoursesFromFavourites(Activity activity) {
-
-        mFavouriteCourseSet.clear();
-        activity.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().clear().apply();
     }
 
     private static int TOOLBAR_COLOR = -1;

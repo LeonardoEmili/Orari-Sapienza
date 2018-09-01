@@ -3,7 +3,6 @@
     <string name="app_name" translatable="false">Orari Sapienza</string>
     <string name="app_version">"App Version"</string>
     <string name="manufacturer">Manufacturer:</string>
-    <string name="class_detail">Details</string>
     <string name="name_class_detail">Class detail</string>
     <string name="describe">Description</string>
     <string name="confirm">Confirm</string>
@@ -13,7 +12,6 @@
     <string name="report_sent">Report sent!</string>
     <string name="feedback_not_sent">Feedback has not been sent</string>
     <string name="settings">Settings</string>
-    <string name="map">Map</string>
     <string name="select_issue_type">Select issue type</string>
     <string name="crash_freeze" translatable="false">Crash/Freeze</string>
     <string name="graphic_problem">Graphic issue</string>
@@ -23,15 +21,6 @@
     <string name="medium">Medium</string>
     <string name="low">Low</string>
 
-
-    <string-array name="query_suggestions">
-        <item>Android</item>
-        <item>And</item>
-        <item>iOS</item>
-        <item>SCALA</item>
-        <item>Ruby</item>
-        <item>JavaScript</item>
-    </string-array>
 
     <string-array name="issue_type">
         <item>@string/select_issue_type</item>
@@ -62,7 +51,6 @@
     <string name="report_not_sent">Report has not been sent</string>
     <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
     <string name="attachment_remove">Attachment removal</string>
-    <string name="class_timetables">Class timetables</string>
     <string name="faq" translatable="false">FAQ</string>
     <string name="study_plan_active">Active Study Plan</string>
     <string name="classrooms_list">Classroom list</string>
@@ -78,9 +66,7 @@
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
 
-    <string name="pref_theme">Theme</string>
     <string name="theme_desc">Apply a dark theme throughout the app</string>
     <string name="theme_title">Dark Theme</string>
     <string name="sync_desc">By enabling this you will allow the app to auto sync itself.</string>
@@ -99,22 +85,6 @@
     <string name="cancel">Cancel</string>
     <string name="english">english</string>
     <string name="italian">italian</string>
-
-    <string-array name="pref_theme_list_titles">
-        <item>Light</item>
-        <item>Dark</item>
-    </string-array>
-
-    <string-array name="pref_theme_list_values">
-        <item>1</item>
-        <item>0</item>
-    </string-array>
-
-    <string-array name="pref_font_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
 
     <string-array name="languages">
         <item name="english">@string/english</item>
@@ -140,7 +110,6 @@
     <string name="infinity" translatable="false">&#8734;</string>
     <string name="location_not_allowed">(GPS not allowed)</string>
     <string name="location_not_active">(GPS not active)</string>
-    <string name="location">LOCATION</string>
     <string name="some_errors_occured">Some errors occurred.</string>
     <string name="gps_service_inactive">GPS service is not active</string>
     <string name="open_settings">Open in Settings</string>

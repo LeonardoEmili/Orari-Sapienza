@@ -150,6 +150,7 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
             int adapterPosition = menuBridge.getAdapterPosition();
             int menuPosition = menuBridge.getPosition();
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
+                //noinspection StatementWithEmptyBody
                 if (menuPosition == 0) {
 
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_title);

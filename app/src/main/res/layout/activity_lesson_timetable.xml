@@ -40,7 +40,6 @@
 
     <!-- Must be last for right layering display -->
     <FrameLayout
-        android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

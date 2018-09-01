@@ -48,7 +48,6 @@
             tools:text="Aula P1 (ex Aula del Pratone)" />
 
         <TextView
-            android:id="@+id/tv_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edificio Caglioti"

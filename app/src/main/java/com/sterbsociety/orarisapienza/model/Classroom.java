@@ -3,6 +3,12 @@ package com.sterbsociety.orarisapienza.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * This class implements Parcelable, which is a way of Android to serialize an Object.
+ * Doc about it here: http://www.vogella.com/tutorials/AndroidParcelable/article.html
+ * This is a model for many RecyclerViews and other views, it should keep a reference
+ * to its father in getMainBuilding() for better retrieving data.
+ */
 public class Classroom implements Parcelable {
 
     private String name, code;

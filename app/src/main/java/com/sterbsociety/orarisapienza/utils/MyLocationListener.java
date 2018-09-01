@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.utils;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -24,7 +24,7 @@ public class MyLocationListener implements LocationListener {
     @SuppressLint("MissingPermission")
     private Location getLastBestLocation() {
 
-        // Android stupid ... if you come here then permissions have already been checked !
+        // Android Stupid ... if you come here then permissions have already been checked !
         Location locationGPS = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Location locationNet = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 

@@ -5,7 +5,6 @@
     <string name="device_model">"Modello: "</string>
     <string name="os_version">"Versione SO: "</string>
     <string name="piano_di_studi">Piano di studi</string>
-    <string name="map">Mappa</string>
     <string name="settings">Impostazioni</string>
     <string name="add_attachments">AGGIUNGI ALLEGATI</string>
     <string name="type_of_problem">Tipo di problema</string>
@@ -25,9 +24,7 @@
     <string name="error">Errore</string>
     <string name="confirm">Conferma</string>
     <string name="describe">Descrizione</string>
-    <string name="class_detail">Dettagli</string>
     <string name="app_version">Versione App</string>
-    <string name="class_timetables">Orari aule</string>
     <string name="study_plan_active">P.D.S. attivo</string>
     <string name="classrooms_list">Elenco aule</string>
     <string name="contacts">Contatti</string>
@@ -35,8 +32,6 @@
     <string name="lets_start">AVVIA L\'APP</string>
     <string name="skip_tutorial">SALTA IL TUTORIAL</string>
     <string name="title_activity_settings">Impostazioni</string>
-    <string name="pref_header_general">Generale</string>
-    <string name="pref_theme">Tema</string>
     <string name="theme_desc">Applica un tema scuro</string>
     <string name="theme_title">Tema scuro</string>
     <string name="sync_desc">Permetti all\'app di sincronizzare i dati in automatico</string>
@@ -76,7 +71,6 @@
     <string name="about">Info</string>
     <string name="location_not_allowed">(GPS non autorizzato)</string>
     <string name="location_not_active">(GPS non attivo)</string>
-    <string name="location">LUOGO</string>
     <string name="some_errors_occured">Qualcosa é andato storto.</string>
     <string name="gps_service_inactive">Servizio GPS non attivo.</string>
     <string name="open_settings">Apri in impostazioni</string>

@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.model.Course;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
+import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;

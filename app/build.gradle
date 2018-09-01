@@ -1,8 +1,5 @@
-import com.google.gms.googleservices.GoogleServicesPlugin
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-//GoogleServicesPlugin.config.disableVersionCheck = true
 
 android {
     compileSdkVersion 28
@@ -14,9 +11,11 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

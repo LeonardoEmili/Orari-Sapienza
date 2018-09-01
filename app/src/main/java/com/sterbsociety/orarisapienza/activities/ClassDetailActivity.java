@@ -27,8 +27,6 @@ import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.model.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
-import java.util.Iterator;
-
 public class ClassDetailActivity extends AppCompatActivity implements OnMapInitializedListener, OnMapClickListener {
 
     private AirMapView mapView;

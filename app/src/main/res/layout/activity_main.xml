@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
-        android:id="@+id/toolbar_wrapper"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_100sdp"
         android:background="@drawable/rounded_corner">
@@ -34,7 +32,6 @@
                 android:contentDescription="@string/favourites" />
 
             <TextView
-                android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

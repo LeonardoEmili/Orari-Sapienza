@@ -12,7 +12,6 @@ import android.os.Bundle;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.firebase.FirebaseApp;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;
@@ -36,7 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.DatabaseHelper;
-import com.sterbsociety.orarisapienza.NetworkStatus;
+import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

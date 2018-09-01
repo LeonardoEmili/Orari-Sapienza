@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainGrid"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_below="@id/toolbar"
@@ -17,9 +16,9 @@
     <!-- Column 1 -->
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_108sdp"
-        android:layout_height="@dimen/_108sdp"
         android:id="@+id/feedback_btn"
+        android:layout_width="@dimen/home_btn_height"
+        android:layout_height="@dimen/home_btn_width"
         android:layout_marginLeft="@dimen/_13sdp"
         android:layout_marginRight="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_13sdp"
@@ -58,9 +57,9 @@
 
     <!-- Column 2 -->
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_108sdp"
-        android:layout_height="@dimen/_108sdp"
         android:id="@+id/bug_report_btn"
+        android:layout_width="@dimen/home_btn_height"
+        android:layout_height="@dimen/home_btn_width"
         android:layout_marginLeft="@dimen/_13sdp"
         android:layout_marginRight="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_13sdp"
@@ -102,8 +101,8 @@
 
     <!-- Column 1 -->
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_108sdp"
-        android:layout_height="@dimen/_108sdp"
+        android:layout_width="@dimen/home_btn_height"
+        android:layout_height="@dimen/home_btn_width"
         android:layout_marginLeft="@dimen/_13sdp"
         android:layout_marginRight="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_13sdp"
@@ -142,8 +141,8 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_108sdp"
-        android:layout_height="@dimen/_108sdp"
+        android:layout_width="@dimen/home_btn_height"
+        android:layout_height="@dimen/home_btn_width"
         android:layout_marginLeft="@dimen/_13sdp"
         android:layout_marginRight="@dimen/_13sdp"
         android:layout_marginBottom="@dimen/_13sdp"
