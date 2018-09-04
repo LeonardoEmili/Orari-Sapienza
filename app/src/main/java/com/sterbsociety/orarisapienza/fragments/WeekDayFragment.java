@@ -20,14 +20,16 @@ import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.SortableCourseTableView;
+import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.adapter.CourseTableDataAdapter;
-import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WeekDayFragment extends Fragment {
+import static com.sterbsociety.orarisapienza.activities.LessonTimetableActivity.isIsTableVisible;
+
+public abstract class WeekDayFragment extends Fragment {
 
     private final static String SPAN_PLACEHOLDER = "x";
     private TextView mTextView;
@@ -81,47 +83,34 @@ public class WeekDayFragment extends Fragment {
 
         // We set up an itemOnClickListener
         sortableCourseTableView.addDataClickListener(new CourseClickListener());
+
+        if (isIsTableVisible()) {
+            displayTableView();
+        }
     }
 
     /**
-     * @param courseName is the name of the course composed by "codeID - courseName"
      * This is an utility method to show the tableView when a course is selected.
      */
-    public void displayTableView(String courseName) {
+    public void displayTableView() {
 
         mTextView.setVisibility(View.GONE);
 
         // Here we have to retrieve the course data by getting the name
-        List<Course> courseList = new ArrayList<>();
+        List<Lesson> lessonList = LessonTimetableActivity.getScheduledLessonsForDay(getWeekDayIndex());
 
-        courseList.add(new Course("Aula A", 26654, "Informatica", "mon", "12:00", "Sterbini", "09:00", "Fondamenti di programmazione"));
-        courseList.add(new Course("Aula B", 26655, "Informatica e pokemon del mondo di sterbini con la s", "mon", "11:00", "Sterbini", "08:00", "Biologia"));
-        courseList.add(new Course("Aula C", 26652, "Informatica", "mon", "10:00", "Sterbini", "07:00", "Storia"));
-        courseList.add(new Course("Aula D", 26651, "Informatica", "mon", "09:00", "Sterbini", "06:00", "Matematica"));
-        courseList.add(new Course("Aula E", 266565, "Informatica", "mon", "12:00", "Sterbini", "05:00", "Filosofia"));
-        courseList.add(new Course("Aula F", 26651, "Informatica", "mon", "10:00", "Sterbini", "04:00", "Algebra"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        courseList.add(new Course("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-
-        final CourseTableDataAdapter carTableDataAdapter = new CourseTableDataAdapter(getContext(), courseList, sortableCourseTableView);
+        final CourseTableDataAdapter carTableDataAdapter = new CourseTableDataAdapter(getContext(), lessonList, sortableCourseTableView);
         sortableCourseTableView.setDataAdapter(carTableDataAdapter);
     }
 
-    private class CourseClickListener implements TableDataClickListener<Course> {
+    private class CourseClickListener implements TableDataClickListener<Lesson> {
 
         @Override
-        public void onDataClicked(final int rowIndex, final Course clickedData) {
+        public void onDataClicked(final int rowIndex, final Lesson clickedData) {
             final String carString = "Click: " + clickedData.getCourseName() + " " + clickedData.getProfessor();
             Toast.makeText(getActivity(), carString, Toast.LENGTH_SHORT).show();
         }
     }
+
+    abstract protected int getWeekDayIndex();
 }

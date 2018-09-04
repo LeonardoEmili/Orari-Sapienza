@@ -3,7 +3,7 @@ package com.sterbsociety.orarisapienza;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.Lesson;
 import com.sterbsociety.orarisapienza.utils.CourseComparator;
 
 import androidx.core.content.ContextCompat;
@@ -13,7 +13,7 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.SortStateViewProviders;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 
-public class SortableCourseTableView extends SortableTableView<Course> {
+public class SortableCourseTableView extends SortableTableView<Lesson> {
 
     public SortableCourseTableView(final Context context) {
         this(context, null);
@@ -27,7 +27,7 @@ public class SortableCourseTableView extends SortableTableView<Course> {
         super(context, attributes, styleAttributes);
 
         final SimpleTableHeaderAdapter simpleTableHeaderAdapter = new SimpleTableHeaderAdapter(context, getContext().getString(R.string.time_course),
-                getContext().getString(R.string.course), getContext().getString(R.string.classroom));
+                getContext().getString(R.string.lesson), getContext().getString(R.string.classroom));
         simpleTableHeaderAdapter.setTextColor(ContextCompat.getColor(context, R.color.white));
         setHeaderAdapter(simpleTableHeaderAdapter);
 

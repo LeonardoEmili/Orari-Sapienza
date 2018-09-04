@@ -11,16 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapter.ClassListAdapter;
 import com.sterbsociety.orarisapienza.model.Classroom;
@@ -44,9 +40,6 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     SwipeMenuRecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.ItemDecoration mItemDecoration;
-    private LinearLayout mAdsContainer;
-    private AdView mAdView;
-    private AdRequest mAdRequest;
     protected ClassListAdapter mAdapter;
     protected ArrayList<Classroom> mDataList;
 
@@ -129,7 +122,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
         searchView = findViewById(R.id.search_view);
         mainWrapper = findViewById(R.id.main_content);
-        mAdsContainer = findViewById(R.id.ad_container);
+        LinearLayout mAdsContainer = findViewById(R.id.ad_container);
 
         // This method handles click inside the layout
         AppUtils.setupUIElements(this, mainWrapper);
@@ -165,20 +158,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
             }
         });
 
-        // AdMob App ID: ca-app-pub-9817701892167034~2496155654
-        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AppUtils.hash(androidId).toUpperCase();
-
-        mAdView = new AdView(getApplicationContext());
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        mAdRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(deviceId)
-                .build();
-        mAdView.loadAd(mAdRequest);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        mAdsContainer.addView(mAdView, params);
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
     }
 
     @Override

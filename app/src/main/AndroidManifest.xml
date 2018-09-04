@@ -73,7 +73,8 @@
             android:name=".activities.LessonTimetableActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ClassTimetables.NoActionBar" />
-        <activity android:name=".activities.ClassDetailActivity" />
+        <activity android:name=".activities.ClassDetailActivity"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -88,7 +89,7 @@
 
         <activity
             android:name=".activities.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"/>
     </application>
 
 </manifest>

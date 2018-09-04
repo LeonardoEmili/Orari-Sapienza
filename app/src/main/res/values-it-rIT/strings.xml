@@ -99,8 +99,18 @@
     <string name="timetables_help_msg">Per vedere gli orari del corso clicca x nella parte in alto a destra dello schermo.</string>
     <string name="course_code">Codice corso</string>
     <string name="time_course">Orario</string>
-    <string name="course">Corso</string>
+    <string name="lesson">Corso</string>
     <string name="classroom">Classe</string>
     <string name="favourite_classroom">Classi preferite</string>
     <string name="name_class_detail">Dettaglio aula</string>
+    <string name="title_activity_maps">Mappa</string>
+    <string name="add_to_favs">AGGIUNGI AI PREFERITI</string>
+    <string name="status">Stato:</string>
+    <string name="_course">Corso:</string>
+    <string name="_time">Ora:</string>
+    <string name="updating">Aggiornamento...</string>
+    <string name="vote_the_app">Vota l\'App!</string>
+    <string name="no_thanks">No, grazie</string>
+    <string name="rate">Vota</string>
+    <string name="data_not_sync_wait_please">Dati aule non sincronizzati.\\nAttendere prego.</string>
 </resources>

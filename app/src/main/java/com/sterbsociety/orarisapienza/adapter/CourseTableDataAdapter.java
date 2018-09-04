@@ -5,35 +5,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.Lesson;
 
 import java.util.List;
 
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.toolkit.LongPressAwareTableDataAdapter;
 
-public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Course> {
+public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesson> {
 
     private static final int TEXT_SIZE = 15;
 
-    public CourseTableDataAdapter(final Context context, final List<Course> data, final TableView<Course> tableView) {
+    public CourseTableDataAdapter(final Context context, final List<Lesson> data, final TableView<Lesson> tableView) {
         super(context, data, tableView);
     }
 
     @Override
     public View getDefaultCellView(int rowIndex, int columnIndex, ViewGroup parentView) {
-        final Course course = getRowData(rowIndex);
+        final Lesson lesson = getRowData(rowIndex);
         View renderedView = null;
 
         switch (columnIndex) {
             case 0:
-                renderedView = renderString(course.getStartLesson());
+                renderedView = renderString(lesson.getStartLesson());
                 break;
             case 1:
-                renderedView = renderString(course.getSubjectName());
+                renderedView = renderString(lesson.getSubjectName());
                 break;
             case 2:
-                renderedView = renderString(course.getClassRoom());
+                renderedView = renderString(lesson.getClassRoom());
                 break;
         }
         return renderedView;

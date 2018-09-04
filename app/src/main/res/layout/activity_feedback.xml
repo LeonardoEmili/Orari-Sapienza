@@ -90,7 +90,6 @@
             android:inputType="text"
             tools:ignore="Autofill,LabelFor,TextFields" />
 
-
     </LinearLayout>
 
 </ScrollView>

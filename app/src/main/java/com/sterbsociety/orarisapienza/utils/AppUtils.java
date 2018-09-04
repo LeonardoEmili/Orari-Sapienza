@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -25,9 +27,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
@@ -202,9 +208,8 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
-    public static final String CLASS_FAVOURITES = "com.sterbsociety.orarisapienza.classFavourites";
-
-    private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed, vibrationAllowed, currentTheme;
+    private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
+            vibrationAllowed, currentTheme, firstTimeStartUp;
     private static String sCurrentRingtone, currentLanguage;
     private static Set<String> mFavouriteClassSet;
 
@@ -234,11 +239,10 @@ public class AppUtils {
             editor.apply();
         }
 
-        readClassPreferences(activity);
-        readCoursePreferences(activity);
+        readGeneralPreferences(activity);
     }
 
-    public static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
+    private static final String GENERAL_PREF = "com.sterbsociety.orarisapienza.general";
 
 
     /**
@@ -248,22 +252,28 @@ public class AppUtils {
      *                 and here
      *                 https://developer.android.com/reference/android/content/SharedPreferences
      */
-    public static void readClassPreferences(Activity activity) {
+    private static void readGeneralPreferences(Activity activity) {
 
-        // Here we create another HashSet from the one stored in SharedPreferences
-        mFavouriteClassSet = new HashSet<>(activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
+        // Here we create different HashSets from the those which are stored in SharedPreferences.
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE);
+        mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
+        mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
+        firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
     }
+
+    private static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
+
 
     public static void addClassToFavourites(Activity activity, String classId) {
 
         mFavouriteClassSet.add(classId);
-        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
+        activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
     public static void removeClassFromFavourites(Activity activity, String classId) {
 
         mFavouriteClassSet.remove(classId);
-        activity.getSharedPreferences(CLASS_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
+        activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
     public static Set<String> getFavouriteClassSet() {
@@ -521,7 +531,7 @@ public class AppUtils {
             if (day == Calendar.SATURDAY || day == Calendar.SUNDAY || day == Calendar.MONDAY)
                 CURRENT_DAY = 0;
             else
-                CURRENT_DAY = day-2;
+                CURRENT_DAY = day - 2;
         }
         return CURRENT_DAY;
     }
@@ -573,7 +583,7 @@ public class AppUtils {
     public static ArrayList<Classroom> createClassesList() {
         ArrayList<Classroom> dataList = new ArrayList<>();
         for (int i = 1; i < 100; i++) {
-            dataList.add(new Classroom("Aula P"+i, i+""+(i*42+79/2),42));
+            dataList.add(new Classroom("Aula P" + i, i + "" + (i * 42 + 79 / 2), 42));
         }
         mClassesList = new ArrayList<>(dataList);
         return dataList;
@@ -583,7 +593,7 @@ public class AppUtils {
     public static ArrayList<Classroom> getFakeFavouriteClasses() {
         final ArrayList<Classroom> dataList = createClassesList();
         ArrayList<Classroom> mResultList = new ArrayList<>();
-        for (Classroom classroom: dataList) {
+        for (Classroom classroom : dataList) {
             if (mFavouriteClassSet.contains(classroom.getCode()))
                 mResultList.add(classroom);
         }
@@ -601,7 +611,7 @@ public class AppUtils {
 
         mCoursesList = new ArrayList<>(getFavouriteCourses());
         for (int i = 0; i < 30; i++) {
-            String courseName = 26654+i+" - Course name Lorem Ipsum";
+            String courseName = 26654 + i + " - Lesson name Lorem Ipsum";
             if (!hasBeenAlreadySearchedByUser(courseName)) {
                 mCoursesList.add(courseName);
             }
@@ -625,23 +635,14 @@ public class AppUtils {
     }
 
     private static Set<String> mFavouriteCourseSet;
-    public static final String COURSE_FAVOURITES = "com.sterbsociety.orarisapienza.coursesFavourites";
+
     public static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
-
-    /**
-     * Go to readClassPreferences for more info about these three methods
-     */
-    public static void readCoursePreferences(Activity activity) {
-
-        // Here we create another HashSet from the one stored in SharedPreferences
-        mFavouriteCourseSet = new HashSet<>(activity.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
-    }
 
     public static void addCourseToFavourites(Context context, String courseName) {
 
         if (!mFavouriteCourseSet.contains(courseName)) {
             mFavouriteCourseSet.add(courseName);
-            context.getSharedPreferences(COURSE_FAVOURITES, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+            context.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
         }
     }
 
@@ -651,7 +652,45 @@ public class AppUtils {
         return TOOLBAR_COLOR;
     }
 
-    public static void setToolbarColor(int toolbarColor) {
-        TOOLBAR_COLOR = toolbarColor;
+    public static void setToolbarColor(Drawable background) {
+        TOOLBAR_COLOR = ((ColorDrawable)background).getColor();
+    }
+
+    /**
+     * @param activity    is the current activity where the Ad will be displayed
+     * @param adContainer is the wrapper where to put the Ad
+     * @param unitId      is the AdUnitId to earn money from advertisement
+     */
+    public static void setAdLayout(Activity activity, LinearLayout adContainer, String unitId) {
+
+        if (!NetworkStatus.getInstance().isOnline(activity)) {
+            // Here we could put a message to promote our app.
+            // The line below removes the 'inactive' ad.
+            ((ViewGroup) adContainer.getParent()).removeView(adContainer);
+
+        } else {
+            // AdMob App ID: ca-app-pub-9817701892167034~2496155654
+            String androidId = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
+            String deviceId = AppUtils.hash(androidId).toUpperCase();
+
+            AdView mAdView = new AdView(activity.getApplicationContext());
+            mAdView.setAdSize(AdSize.BANNER);
+            mAdView.setAdUnitId(unitId);
+            AdRequest mAdRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice(deviceId)
+                    .build();
+            mAdView.loadAd(mAdRequest);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            adContainer.addView(mAdView, params);
+        }
+    }
+
+    public static Boolean isFirstTimeStartApp() {
+        return firstTimeStartUp;
+    }
+
+    public static void setFirstTimeStartApp(Activity activity) {
+        activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putBoolean(FIRST_TIME_FLAG, false).apply();
     }
 }

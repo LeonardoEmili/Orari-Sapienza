@@ -20,6 +20,7 @@ public class WeekDayFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context mActivity;
 
+
     public WeekDayFragmentPagerAdapter(Activity activity, FragmentManager fm) {
         super(fm);
         mActivity = activity;

@@ -58,12 +58,6 @@
 
     <!-- END HERE-->
 
-    <LinearLayout
-        android:id="@+id/ad_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal" />
+    <include layout="@layout/ad_layout" />
 
 </RelativeLayout>

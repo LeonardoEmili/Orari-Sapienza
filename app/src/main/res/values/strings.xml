@@ -138,13 +138,10 @@
     <string name="fabio_capirchio" translatable="false">Fabio Capirchio</string>
     <string name="lessons_timetable">Lessons timetables</string>
     <string name="timetables">Timetables</string>
-    <string name="timetables_help_msg">To start seeing for a course timetable click x in the upper right part of the screen.</string>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="timetables_help_msg">To start seeing for a lesson timetable click x in the upper right part of the screen.</string>
     <string name="course_code">Course code</string>
     <string name="time_course">Time</string>
-    <string name="course">Course</string>
+    <string name="lesson">Course</string>
     <string name="classroom">Class</string>
     <string name="favourites">Favourites</string>
     <string name="title_activity_maps">Map</string>
@@ -152,6 +149,8 @@
     <string name="status">Status:</string>
     <string name="_course">Course:</string>
     <string name="_time">Time:</string>
+    <string name="updating">Updating…</string>
+    <string name="data_not_sync_wait_please">Data is not sync.\nWait please.</string>
 
 
 </resources>

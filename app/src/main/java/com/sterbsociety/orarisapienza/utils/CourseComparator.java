@@ -1,11 +1,11 @@
 package com.sterbsociety.orarisapienza.utils;
 
-import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.Lesson;
 
 import java.util.Comparator;
 
 /**
- * A collection of {@link Comparator}s for {@link Course} objects.
+ * A collection of {@link Comparator}s for {@link Lesson} objects.
  *
  * @author ISchwarz
  */
@@ -15,39 +15,39 @@ public final class CourseComparator {
         //no instance
     }
 
-    public static Comparator<Course> getCourseTimeComparator() {
+    public static Comparator<Lesson> getCourseTimeComparator() {
         return new CourseTimeComparator();
     }
 
-    public static Comparator<Course> getCourseNameComparator() {
+    public static Comparator<Lesson> getCourseNameComparator() {
         return new CourseNameComparator();
     }
 
-    public static Comparator<Course> getCourseClassComparator() {
+    public static Comparator<Lesson> getCourseClassComparator() {
         return new CourseClassComparator();
     }
 
-    private static class CourseTimeComparator implements Comparator<Course> {
+    private static class CourseTimeComparator implements Comparator<Lesson> {
 
         @Override
-        public int compare(final Course course1, final Course course2) {
-            return course1.getStartLessonHour() - course2.getStartLessonHour();
+        public int compare(final Lesson lesson1, final Lesson lesson2) {
+            return lesson1.getStartLessonHour() - lesson2.getStartLessonHour();
         }
     }
 
-    private static class CourseNameComparator implements Comparator<Course> {
+    private static class CourseNameComparator implements Comparator<Lesson> {
 
         @Override
-        public int compare(Course course1, Course course2) {
-            return course1.getCourseName().compareTo(course2.getCourseName());
+        public int compare(Lesson lesson1, Lesson lesson2) {
+            return lesson1.getCourseName().compareTo(lesson2.getCourseName());
         }
     }
 
-    private static class CourseClassComparator implements Comparator<Course> {
+    private static class CourseClassComparator implements Comparator<Lesson> {
 
         @Override
-        public int compare(Course course1, Course course2) {
-            return course1.getClassRoom().compareTo(course2.getClassRoom());
+        public int compare(Lesson lesson1, Lesson lesson2) {
+            return lesson1.getClassRoom().compareTo(lesson2.getClassRoom());
         }
     }
 

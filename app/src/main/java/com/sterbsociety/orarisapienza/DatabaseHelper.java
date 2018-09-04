@@ -2,20 +2,17 @@ package com.sterbsociety.orarisapienza;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
-
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
-import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
-import com.sterbsociety.orarisapienza.utils.NetworkStatus;
-
-import net.sqlcipher.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteException;
-import net.sqlcipher.database.SQLiteOpenHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +77,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    public static boolean createDatabase(Activity activity, DataSnapshot dataSnapshot) {
+        return getInstance(activity).createDB(activity, dataSnapshot);
+    }
 
     /**
      * This method is responsible for the correct creation of the embedded db in the device.
@@ -88,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * https://medium.com/@JasonWyatt/squeezing-performance-from-sqlite-insertions-971aff98eef2
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public boolean createDB(Activity activity, DataSnapshot currentDataSnapshot) {
+    private boolean createDB(Activity activity, DataSnapshot currentDataSnapshot) {
 
         // Just updates its currentDataSnapshot whenever gets called.
         mCurrentDataSnapshot = currentDataSnapshot;
@@ -98,8 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         databaseFile.mkdirs();
         databaseFile.delete();
 
-        String psw = AppUtils.hash(NetworkStatus.getMACAddress(null));
-        SQLiteDatabase encryptedDb = this.getWritableDatabase(psw);
+        SQLiteDatabase encryptedDb = this.getWritableDatabase();
         Gson gson = new Gson();
 
         // This will hold all the rows of the table
@@ -139,19 +138,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public ArrayList<Course> getAllCourses(Activity activity) {
+    public ArrayList<Lesson> getAllCourses(Activity activity) {
 
-        ArrayList<Course> courseList = new ArrayList<>();
+        ArrayList<Lesson> lessonList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_NAME;
         SQLiteDatabase mSQLiteDB;
 
         try {
-            mSQLiteDB = this.getWritableDatabase(AppUtils.hash(NetworkStatus.getMACAddress(null)));
+            mSQLiteDB = this.getWritableDatabase();
         } catch (SQLiteException ex) {
             if (mCurrentDataSnapshot != null) {
                 // If the password is wrong, then a new attempt is done.
                 createDB(activity, mCurrentDataSnapshot);
-                mSQLiteDB = this.getWritableDatabase(AppUtils.hash(NetworkStatus.getMACAddress(null)));
+                mSQLiteDB = this.getWritableDatabase();
             } else
                 return null;
         }
@@ -170,24 +169,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             final int subjectNameIndex = mCursor.getColumnIndex(KEY_SUBJECT_NAME);
             // If the Cursor is no empty
             do {
-                Course course = new Course();
-                course.setClassRoom(mCursor.getString(classRoomIndex));
-                course.setCourseId(Integer.parseInt(mCursor.getString(courseIdIndex)));
-                course.setCourseName(mCursor.getString(courseNameIndex));
-                course.setDay(mCursor.getString(dayIndex));
-                course.setEndLesson(mCursor.getString(endLessonIndex));
-                course.setProfessor(mCursor.getString(professorIndex));
-                course.setStartLesson(mCursor.getString(startLessonIndex));
-                course.setSubjectName(mCursor.getString(subjectNameIndex));
-                courseList.add(course);
+                Lesson lesson = new Lesson();
+                lesson.setClassRoom(mCursor.getString(classRoomIndex));
+                lesson.setCourseId(Integer.parseInt(mCursor.getString(courseIdIndex)));
+                lesson.setCourseName(mCursor.getString(courseNameIndex));
+                lesson.setDay(mCursor.getString(dayIndex));
+                lesson.setEndLesson(mCursor.getString(endLessonIndex));
+                lesson.setProfessor(mCursor.getString(professorIndex));
+                lesson.setStartLesson(mCursor.getString(startLessonIndex));
+                lesson.setSubjectName(mCursor.getString(subjectNameIndex));
+                lessonList.add(lesson);
             } while (mCursor.moveToNext());
         }
         mCursor.close();
         mSQLiteDB.close();
-        return courseList;
+        return lessonList;
     }
 
     public boolean offlineDBAvailable(Activity activity) {
+        AppUtils.setLocale(activity);
         boolean outCome = activity.getDatabasePath(DATABASE_NAME).exists();
         if (outCome)
             return true;
@@ -195,8 +195,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseHelper.getInstance(activity).createDB(activity, mCurrentDataSnapshot);
             return true;
         }
-        StyleableToast.makeText(activity, "Dati aulee non sincronizzati.\nAttendere prego",
-                Toast.LENGTH_LONG, R.style.errorToast).show();
+
+        StyleableToast.makeText(activity, activity.getString(R.string.data_not_sync_wait_please), Toast.LENGTH_LONG, R.style.errorToast).show();
         return false;
     }
 }

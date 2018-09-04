@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,9 +17,6 @@ import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.listeners.OnMapClickListener;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.sterbsociety.orarisapienza.R;
@@ -31,9 +27,6 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
 
     private AirMapView mapView;
     private DefaultAirMapViewBuilder mapViewBuilder;
-    private LinearLayout mAdsContainer;
-    private AdView mAdView;
-    private AdRequest mAdRequest;
     private Classroom classroom;
     private Button favouritesButton;
 
@@ -65,21 +58,8 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         mapView.setOnMapClickListener(this);
         mapView.initialize(getSupportFragmentManager(), mapViewBuilder.builder().withOptions(new AirGoogleMapOptions(new GoogleMapOptions().liteMode(true))).build());
 
-        // AdMob App ID: ca-app-pub-9817701892167034~2496155654
-        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AppUtils.hash(androidId).toUpperCase();
-
-        mAdsContainer = findViewById(R.id.ad_container);
-        mAdView = new AdView(getApplicationContext());
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        mAdRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(deviceId)
-                .build();
-        mAdView.loadAd(mAdRequest);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        mAdsContainer.addView(mAdView, params);
+        LinearLayout mAdsContainer = findViewById(R.id.ad_container);
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
 
         TextView className = findViewById(R.id.class_name);
         TextView buildingName = findViewById(R.id.building_name);
@@ -111,7 +91,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             currentLesson.setTextColor(white);
             classTimetable.setTextColor(white);
             ((TextView)findViewById(R.id.status)).setTextColor(white);
-            ((TextView)findViewById(R.id.course)).setTextColor(white);
+            ((TextView)findViewById(R.id.lesson)).setTextColor(white);
             ((TextView)findViewById(R.id.time)).setTextColor(white);
         }
     }

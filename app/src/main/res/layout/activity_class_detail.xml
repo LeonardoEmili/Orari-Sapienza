@@ -34,7 +34,8 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:onClick="addToFavourites"
-                android:text="@string/add_to_favs" />
+                android:text="@string/add_to_favs"
+                tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
 
@@ -85,7 +86,7 @@
                     android:textSize="@dimen/_15sdp" />
 
                 <TextView
-                    android:id="@+id/course"
+                    android:id="@+id/lesson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/_14sdp"
@@ -150,12 +151,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ad_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal" />
+    <include layout="@layout/ad_layout" />
 
 </RelativeLayout>
