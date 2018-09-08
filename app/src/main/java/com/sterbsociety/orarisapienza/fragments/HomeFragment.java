@@ -18,6 +18,7 @@ import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.ClassListActivity;
 import com.sterbsociety.orarisapienza.activities.FaqActivity;
+import com.sterbsociety.orarisapienza.activities.MapsActivity;
 
 
 /**
@@ -90,6 +91,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, LessonTimetableActivity.class));
+            }
+        });
+        studyPlanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, MapsActivity.class));
             }
         });
 

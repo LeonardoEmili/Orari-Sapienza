@@ -151,6 +151,11 @@
     <string name="_time">Time:</string>
     <string name="updating">Updating…</string>
     <string name="data_not_sync_wait_please">Data is not sync.\nWait please.</string>
+    <string name="from_">From</string>
+    <string name="to_">To</string>
+    <string name="where_to_study">Where to study?</string>
+    <string name="set_study_time">SET STUDY TIME</string>
+    <string name="use_current_gps_pos">Use current GPS position</string>
 
 
 </resources>

@@ -1,6 +1,5 @@
 package com.sterbsociety.orarisapienza.utils;
 
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -37,6 +36,8 @@ import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
+import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
+import com.sterbsociety.orarisapienza.model.Building;
 import com.sterbsociety.orarisapienza.model.Classroom;
 
 import java.io.PrintWriter;
@@ -44,9 +45,12 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -211,7 +215,7 @@ public class AppUtils {
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp;
     private static String sCurrentRingtone, currentLanguage;
-    private static Set<String> mFavouriteClassSet;
+    private static Set<String> mFavouriteClassSet, mFavouriteCourseSet, mFavouriteBuildingSetCodes;
 
     public static void loadSettings(Activity activity) {
 
@@ -240,6 +244,9 @@ public class AppUtils {
         }
 
         readGeneralPreferences(activity);
+
+        // Here we have to parse all the information.
+        createFakeBuildingsList(); // This has to be a parse
     }
 
     private static final String GENERAL_PREF = "com.sterbsociety.orarisapienza.general";
@@ -259,10 +266,63 @@ public class AppUtils {
         mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
         mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
         firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
+
+        mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<String>()));
     }
 
     private static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
+    private static final String KEY_PREF_BUILDING_FAVOURITES = "fav_building";
 
+    public static void addBuildingToFavourites(Activity activity, Building building, int index) {
+
+        final String buildingCode = building.getCode();
+
+        // todo may be useful to limit user history max to 10 or less
+        if (!isFavouriteBuilding(buildingCode)) {
+            // If the Building is not yet in favourites, then it will be added. Since favourites are stored in a set
+            // we can't keep track of order in there, so the code is formed by POSITION + BuildingCode.
+            mFavouriteBuildingSetCodes.add(mFavouriteBuildingSetCodes.size() + "/" + buildingCode);
+            mFavouriteBuildingList.add(0, building);
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
+            buildingList.remove(index);
+            buildingList.add(0, building);
+        } else {
+            // Just the history position needs to be fixed, simple thing -> hard to write.
+            int buildingIndex = -1;
+
+            // We search through all the favourites the index of the building to 'reorder'
+            for (String currentBuildingCode : mFavouriteBuildingSetCodes) {
+                String[] parts = currentBuildingCode.split("/");
+                if (parts[1].equals(buildingCode))
+                    buildingIndex = Integer.parseInt(parts[0]);
+            }
+
+            if (buildingIndex != -1) {
+                // If the index is != -1 then the hashMap is reordered with the previous logic of POSITION in name
+                // Items before the selected one keep their POSITION, those after scale 1 position up, and the current
+                // item is set as the last (first) item in the order.
+                Set<String> tmpHashSet = new HashSet<>(mFavouriteBuildingSetCodes);
+                mFavouriteBuildingSetCodes.clear();
+                for (String currentBuildingCode : tmpHashSet) {
+                    String[] parts = currentBuildingCode.split("/");
+                    final int currentIndex = Integer.parseInt(parts[0]);
+                    if (currentIndex < buildingIndex) {
+                        mFavouriteBuildingSetCodes.add(currentBuildingCode);
+                    } else if (currentIndex > buildingIndex) {
+                        mFavouriteBuildingSetCodes.add(currentIndex - 1 + "/" + parts[1]);
+                    } else {
+                        mFavouriteBuildingSetCodes.add(tmpHashSet.size() + "/" + parts[1]);
+                    }
+                }
+            }
+
+            mFavouriteBuildingList.remove(building);
+            mFavouriteBuildingList.add(0, building);
+
+            buildingList.remove(index);
+            buildingList.add(0, building);
+        }
+    }
 
     public static void addClassToFavourites(Activity activity, String classId) {
 
@@ -634,15 +694,31 @@ public class AppUtils {
         return false;
     }
 
-    private static Set<String> mFavouriteCourseSet;
+    /**
+     * It checks if a building is already put in favourites,
+     * in accordance with the logic described at 282.
+     */
+    public static boolean isFavouriteBuilding(String buildingCode) {
+        for (String favouriteBuildingCode : mFavouriteBuildingSetCodes) {
+            if (favouriteBuildingCode.split("/")[1].equals(buildingCode))
+                return true;
+        }
+        return false;
+    }
 
-    public static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
+    private static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
 
-    public static void addCourseToFavourites(Context context, String courseName) {
+    public static void addCourseToFavourites(Context context, String courseName, SearchViewAdapter searchViewAdapter, int index) {
 
         if (!mFavouriteCourseSet.contains(courseName)) {
             mFavouriteCourseSet.add(courseName);
             context.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+
+            String courseObject = mCoursesList.get(index);
+            mCoursesList.remove(index);
+            mCoursesList.add(0, courseObject);
+
+            searchViewAdapter.updateSuggestions(mCoursesList);
         }
     }
 
@@ -653,7 +729,7 @@ public class AppUtils {
     }
 
     public static void setToolbarColor(Drawable background) {
-        TOOLBAR_COLOR = ((ColorDrawable)background).getColor();
+        TOOLBAR_COLOR = ((ColorDrawable) background).getColor();
     }
 
     /**
@@ -692,5 +768,53 @@ public class AppUtils {
 
     public static void setFirstTimeStartApp(Activity activity) {
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putBoolean(FIRST_TIME_FLAG, false).apply();
+    }
+
+    private static ArrayList<Building> buildingList, mFavouriteBuildingList;
+
+    public static void createFakeBuildingsList() {
+
+        // These lines below emulate a parse from file.
+        final ArrayDeque<Building> resultList = new ArrayDeque<>();
+        for (int i = 0; i < 100; i++) {
+            Building building = new Building("Palazzo lorem" + i, 31415 + i + "", new iVec2(41.904472 + 0.40 * i, 12.512889 + 0.40 * i), "Viale universitá, 2" + i);
+            resultList.add(building);
+        }
+
+        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
+        ArrayList<String> dirtySortedFavouriteCodes = new ArrayList<>(mFavouriteBuildingSetCodes);
+        Collections.sort(dirtySortedFavouriteCodes, new Comparator<String>() {
+            @Override
+            public int compare(String c1, String c2) {
+                return Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]);
+            }
+        });
+
+        // This is responsible for cleaning buildingCodes from their dirty indexes.
+        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
+        for (String dirtyCode : dirtySortedFavouriteCodes) {
+            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+        }
+
+        // Inside here we put each building in accordance to their code's position.
+        Building[] tmpFavourites = new Building[mFavouriteBuildingSetCodes.size()];
+        for (Building building : resultList) {
+            if (isFavouriteBuilding(building.getCode())) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.getCode())] = building;
+                resultList.remove(building);
+            }
+        }
+
+        mFavouriteBuildingList = new ArrayList<>(Arrays.asList(tmpFavourites));
+        buildingList = new ArrayList<>(mFavouriteBuildingList);
+        buildingList.addAll(resultList);
+    }
+
+    public static ArrayList<Building> getBuildingList() {
+        return buildingList;
+    }
+
+    public static ArrayList<Building> getFavouriteBuildingList() {
+        return new ArrayList<>(mFavouriteBuildingList);
     }
 }

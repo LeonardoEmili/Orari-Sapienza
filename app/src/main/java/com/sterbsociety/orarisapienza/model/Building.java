@@ -4,21 +4,23 @@ import com.sterbsociety.orarisapienza.utils.iVec2;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+
 public class Building {
 
     private String name;
     private String code;
     private iVec2 pos;
-    private String maps;
+    private String location;
     private ArrayList<Classroom> classrooms;
     private String[] other;
 
-    public Building(String name, String code, iVec2 pos, String maps) {
+    public Building(String name, String code, iVec2 pos, String location) {
         this.classrooms = new ArrayList<>();
         this.name=name;
         this.code=code;
         this.pos=pos;
-        this.maps=maps;
+        this.location=location;
     }
 
     public Building(String name, String code) {
@@ -46,5 +48,9 @@ public class Building {
 
     public String[] getOther() {
         return other;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

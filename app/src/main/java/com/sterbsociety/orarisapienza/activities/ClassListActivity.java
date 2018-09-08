@@ -51,9 +51,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         setContentView(R.layout.activity_class_list);
 
         initActivity();
-
         AppUtils.askForGPSPermission(this);
-
     }
 
     @Override

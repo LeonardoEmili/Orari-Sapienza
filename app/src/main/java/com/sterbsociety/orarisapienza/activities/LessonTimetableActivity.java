@@ -88,14 +88,17 @@ public class LessonTimetableActivity extends AppCompatActivity {
         AppUtils.createCoursesList();
         searchView = findViewById(R.id.search_view);
         searchView.setVoiceSearch(false);
-        searchView.setAdapter(new SearchViewAdapter(this, AppUtils.getCoursesList()));
+        final SearchViewAdapter searchViewAdapter = new SearchViewAdapter(this, AppUtils.getCoursesList());
+        searchView.setAdapter(searchViewAdapter);
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 final TextView textView = view.findViewById(R.id.suggestion_text);
                 final String courseName = textView.getText().toString();
-                AppUtils.addCourseToFavourites(view.getContext(), courseName);
+                // todo this is a better way of doing it, we have to work with Course objects
+                // adapterView.getItemAtPosition(position);
+                AppUtils.addCourseToFavourites(view.getContext(), courseName, searchViewAdapter, position);
 
                 displayTableView(courseName);
 

@@ -114,7 +114,6 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
                 .build());
         mapView.animateCenterZoom(latLng, 16);
         mapView.setMyLocationEnabled(false);
-        new AirGoogleMapOptions(new GoogleMapOptions().liteMode(true));
     }
 
     @Override

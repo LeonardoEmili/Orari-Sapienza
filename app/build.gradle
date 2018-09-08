@@ -49,6 +49,8 @@ dependencies {
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
     implementation 'com.github.codechimp-org.apprater:library:1.0.35'
+    implementation 'com.github.florent37:singledateandtimepicker:2.0.7'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 
     implementation 'com.jaredrummler:android-device-names:1.1.7'
     implementation 'com.muddzdev:styleabletoast:2.1.2'
@@ -61,6 +63,7 @@ dependencies {
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     implementation 'com.airbnb.android:airmapview:1.8.0'
     implementation 'de.codecrafters.tableview:tableview:2.8.0'
+    implementation 'xyz.sahildave:searchviewlayout:0.6'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'

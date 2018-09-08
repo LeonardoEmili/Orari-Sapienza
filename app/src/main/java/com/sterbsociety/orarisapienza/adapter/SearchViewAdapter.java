@@ -76,6 +76,10 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
         };
     }
 
+    public void updateSuggestions(List<String> suggestions) {
+        mSuggestions = suggestions.toArray(new String[0]);
+    }
+
     @Override
     public int getCount() {
         return mData.size();

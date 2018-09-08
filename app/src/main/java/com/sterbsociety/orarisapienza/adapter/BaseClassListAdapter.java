@@ -13,11 +13,11 @@ public abstract class BaseClassListAdapter<VH extends RecyclerView.ViewHolder> e
 
     private final LayoutInflater mInflater;
 
-    public BaseClassListAdapter(Context context) {
+    BaseClassListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public LayoutInflater getInflater() {
+    LayoutInflater getInflater() {
         return mInflater;
     }
 
