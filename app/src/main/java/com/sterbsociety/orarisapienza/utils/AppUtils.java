@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.sterbsociety.orarisapienza.activities.SettingsActivity;
 import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.model.Building;
 import com.sterbsociety.orarisapienza.model.Classroom;
+import com.sterbsociety.orarisapienza.model.Course;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -248,6 +250,7 @@ public class AppUtils {
 
         // Here we have to parse all the information.
         createFakeBuildingsList(); // This has to be a parse
+        createFakeCoursesList();       // This has to be a parse
     }
 
     private static final String GENERAL_PREF = "com.sterbsociety.orarisapienza.general";
@@ -264,11 +267,11 @@ public class AppUtils {
 
         // Here we create different HashSets from the those which are stored in SharedPreferences.
         SharedPreferences sharedPreferences = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE);
-        mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
         mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
         firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
 
         mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<String>()));
+        mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
     }
 
     private static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
@@ -313,7 +316,7 @@ public class AppUtils {
                     } else if (currentIndex > buildingIndex) {
                         mFavouriteBuildingSetCodes.add(currentIndex - 1 + "/" + parts[1]);
                     } else {
-                        mFavouriteBuildingSetCodes.add(tmpHashSet.size() + "/" + parts[1]);
+                        mFavouriteBuildingSetCodes.add(tmpHashSet.size()-1 + "/" + parts[1]);
                     }
                 }
                 activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
@@ -667,31 +670,62 @@ public class AppUtils {
         return mClassesList;
     }
 
-    private static List<String> mCoursesList;
+    private static ArrayList<Course> courseList, mFavouriteCourseList;
 
-    // todo This has to be made once at the start of the activity be looping over all of the courses present in the DB.
-    public static void createCoursesList() {
+    private static void createFakeCoursesList() {
 
-        mCoursesList = new ArrayList<>(getFavouriteCourses());
+        // These lines below emulate a parse from file.
+        final ArrayDeque<Course> resultList = new ArrayDeque<>();
         for (int i = 0; i < 30; i++) {
-            String courseName = 26654 + i + " - Lesson name Lorem Ipsum";
-            if (!hasBeenAlreadySearchedByUser(courseName)) {
-                mCoursesList.add(courseName);
+            Course course = new Course("Course lorem" + i, 26654 + i + "");
+            resultList.add(course);
+        }
+
+        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
+        ArrayList<String> dirtySortedFavouriteCourses = new ArrayList<>(mFavouriteCourseSet);
+        Collections.sort(dirtySortedFavouriteCourses, new Comparator<String>() {
+            @Override
+            public int compare(String c1, String c2) {
+                return Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]);
+            }
+        });
+
+        // This is responsible for cleaning buildingCodes from their dirty indexes.
+        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
+        for (String dirtyCode : dirtySortedFavouriteCourses) {
+            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+        }
+
+        // Inside here we put each building in accordance to their code's position.
+        Course[] tmpFavourites = new Course[mFavouriteCourseSet.size()];
+
+        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
+        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+        Iterator<Course> iterator = resultList.iterator();
+        while (iterator.hasNext()) {
+            Course course = iterator.next();
+            if (hasAlreadyBeenSearchedByUser(course.getId())) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getId())] = course;
+                iterator.remove();
             }
         }
+
+        mFavouriteCourseList = new ArrayList<>(Arrays.asList(tmpFavourites));
+        courseList = new ArrayList<>(mFavouriteCourseList);
+        courseList.addAll(resultList);
     }
 
-    public static List<String> getCoursesList() {
-        return mCoursesList;
+    public static List<Course> getCoursesList() {
+        return courseList;
     }
 
-    public static List<String> getFavouriteCourses() {
-        return new ArrayList<>(mFavouriteCourseSet);
+    public static List<Course> getFavouriteCourses() {
+        return new ArrayList<>(mFavouriteCourseList);
     }
 
-    public static boolean hasBeenAlreadySearchedByUser(String course) {
-        for (String favouriteCourse : AppUtils.getFavouriteCourses()) {
-            if (favouriteCourse.equals(course))
+    public static boolean hasAlreadyBeenSearchedByUser(String courseId) {
+        for (String favouriteCourseId : mFavouriteCourseSet) {
+            if (favouriteCourseId.split("/")[1].equals(courseId))
                 return true;
         }
         return false;
@@ -711,17 +745,57 @@ public class AppUtils {
 
     private static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
 
-    public static void addCourseToFavourites(Context context, String courseName, SearchViewAdapter searchViewAdapter, int index) {
+    public static void addCourseToFavourites(Activity activity, Course course, SearchViewAdapter searchViewAdapter, int index) {
 
-        if (!mFavouriteCourseSet.contains(courseName)) {
-            mFavouriteCourseSet.add(courseName);
-            context.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+        final String courseCode = course.getId();
 
-            String courseObject = mCoursesList.get(index);
-            mCoursesList.remove(index);
-            mCoursesList.add(0, courseObject);
+        // todo may be useful to limit user history max to 10 or less
+        if (!hasAlreadyBeenSearchedByUser(courseCode)) {
+            // If the Course has never been searched before, then it will be added. Since favourites are stored in a set
+            // we can't keep track of order in there, so the code is formed by POSITION + CourseID.
+            mFavouriteCourseSet.add(mFavouriteCourseSet.size() + "/" + courseCode);
+            mFavouriteCourseList.add(0, course);
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+            courseList.remove(course);
+            courseList.add(0, course);
+            searchViewAdapter.updateSuggestions(courseList);
+        } else {
+            // Just the history position needs to be fixed, simple thing -> hard to write.
+            int courseIndex = -1;
+            // We search through all the favourites the index of the course to 'reorder'
+            for (String currentCourseCode : mFavouriteCourseSet) {
+                String[] parts = currentCourseCode.split("/");
+                int tmpIndex = Integer.parseInt(parts[0]);
+                if (parts[1].equals(courseCode)) {
+                    courseIndex = tmpIndex;
+                }
+            }
 
-            searchViewAdapter.updateSuggestions(mCoursesList);
+            if (courseIndex != -1) {
+                // If the index is != -1 then the hashMap is reordered with the previous logic of POSITION in name
+                // Items before the selected one keep their POSITION, those after scale 1 position up, and the current
+                // item is set as the last (first) item in the order.
+                Set<String> tmpHashSet = new HashSet<>(mFavouriteCourseSet);
+                mFavouriteCourseSet.clear();
+                for (String currentCourseCode : tmpHashSet) {
+                    String[] parts = currentCourseCode.split("/");
+                    final int currentIndex = Integer.parseInt(parts[0]);
+                    if (currentIndex < courseIndex) {
+                        mFavouriteCourseSet.add(currentCourseCode);
+                    } else if (currentIndex > courseIndex) {
+                        mFavouriteCourseSet.add(currentIndex - 1 + "/" + parts[1]);
+                    } else {
+                        mFavouriteCourseSet.add(tmpHashSet.size()-1 + "/" + parts[1]);
+                    }
+                }
+                activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
+            }
+            mFavouriteCourseList.remove(course);
+            mFavouriteCourseList.add(0, course);
+
+            courseList.remove(index);
+            courseList.add(0, course);
+            searchViewAdapter.updateSuggestions(courseList);
         }
     }
 

@@ -21,12 +21,12 @@ import androidx.annotation.NonNull;
  * Custom ArrayAdapter which has been optimized thanks to this tutorial:
  * https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#improving-performance-with-the-viewholder-pattern
  */
-public class ListViewAdapter extends ArrayAdapter<Building> {
+public class BuildingListViewAdapter extends ArrayAdapter<Building> {
 
     private List<Building> mDataList;
     private Drawable searchImg, historyImg;
 
-    public ListViewAdapter(Context context, List<Building> dataList) {
+    public BuildingListViewAdapter(Context context, List<Building> dataList) {
         super(context, R.layout.search_static_list_item, dataList);
         mDataList = dataList;
         searchImg = context.getResources().getDrawable(R.drawable.ic_search_cool_black_24dp);

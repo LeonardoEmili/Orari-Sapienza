@@ -14,7 +14,7 @@ import com.airbnb.android.airmapview.AirMapMarker;
 import com.google.android.gms.maps.model.LatLng;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.MapsActivity;
-import com.sterbsociety.orarisapienza.adapter.ListViewAdapter;
+import com.sterbsociety.orarisapienza.adapter.BuildingListViewAdapter;
 import com.sterbsociety.orarisapienza.model.Building;
 
 import androidx.cardview.widget.CardView;
@@ -43,11 +43,13 @@ public class SearchStaticListSupportFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_search_static_list, container, false);
 
+        // Just references initialization here
         mapsActivity = ((MapsActivity) rootView.getContext());
         final ListView listView = rootView.findViewById(R.id.search_static_list);
         final SearchViewLayout searchViewLayout = mapsActivity.searchViewLayout;
-        final ListViewAdapter mAdapter = mapsActivity.listViewAdapter;
+        final BuildingListViewAdapter mAdapter = mapsActivity.buildingListViewAdapter;
 
+        // Use current GPS position button here
         CardView gpsButton = rootView.findViewById(R.id.use_gps_button);
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +60,7 @@ public class SearchStaticListSupportFragment extends Fragment {
             }
         });
 
+        // We set the adapter for our listView
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,14 +77,19 @@ public class SearchStaticListSupportFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Utility method which is responsible for correctly setting up the map markers.
+     */
     private void setMarker(Building building, long id) {
 
         if (lastAirMapMarker != null) {
             mapsActivity.mapView.removeMarker(lastAirMapMarker);
         }
+        // Updates the flag of MapsActivity here
         mapsActivity.isPlaceSelected = true;
-
         LatLng latLng = new LatLng(building.getLat(), building.getLong());
+
+        // The last AirMapMarker is saved since we want to keep just one inside the view
         lastAirMapMarker = new AirMapMarker.Builder()
                 .id(id)
                 .position(latLng)

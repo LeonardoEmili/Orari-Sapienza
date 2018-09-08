@@ -156,6 +156,7 @@
     <string name="where_to_study">Where to study?</string>
     <string name="set_study_time">SET STUDY TIME</string>
     <string name="use_current_gps_pos">Use current GPS position</string>
+    <string name="search_it_now">SEARCH IT NOW</string>
 
 
 </resources>

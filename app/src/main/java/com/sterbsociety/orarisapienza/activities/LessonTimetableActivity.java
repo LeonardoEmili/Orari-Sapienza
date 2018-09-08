@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -20,6 +19,7 @@ import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.adapter.WeekDayFragmentPagerAdapter;
 import com.sterbsociety.orarisapienza.fragments.WeekDayFragment;
+import com.sterbsociety.orarisapienza.model.Course;
 import com.sterbsociety.orarisapienza.model.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
@@ -85,7 +85,6 @@ public class LessonTimetableActivity extends AppCompatActivity {
 
     private void initSearchView() {
 
-        AppUtils.createCoursesList();
         searchView = findViewById(R.id.search_view);
         searchView.setVoiceSearch(false);
         final SearchViewAdapter searchViewAdapter = new SearchViewAdapter(this, AppUtils.getCoursesList());
@@ -94,21 +93,18 @@ public class LessonTimetableActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                final TextView textView = view.findViewById(R.id.suggestion_text);
-                final String courseName = textView.getText().toString();
-                // todo this is a better way of doing it, we have to work with Course objects
-                // adapterView.getItemAtPosition(position);
-                AppUtils.addCourseToFavourites(view.getContext(), courseName, searchViewAdapter, position);
+                Course course = (Course) adapterView.getItemAtPosition(position);
+                AppUtils.addCourseToFavourites(LessonTimetableActivity.this, course, searchViewAdapter, position);
 
-                displayTableView(courseName);
+                displayTableView(course);
 
                 searchView.closeSearch();
-                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + courseName.split("-")[0]);
+                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + course.getId());
             }
         });
     }
 
-    private void displayTableView(String courseName) {
+    private void displayTableView(Course course) {
 
         // ---------------------CREATE DATA LIST----------------------------------
 

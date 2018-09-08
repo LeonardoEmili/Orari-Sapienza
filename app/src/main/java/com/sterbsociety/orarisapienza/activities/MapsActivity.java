@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
 import com.sterbsociety.orarisapienza.MyDoubleDateAndTimePickerDialog;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.ListViewAdapter;
+import com.sterbsociety.orarisapienza.adapter.BuildingListViewAdapter;
 import com.sterbsociety.orarisapienza.fragments.SearchStaticListSupportFragment;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
@@ -38,7 +38,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     private Button myButton;
     public boolean isPlaceSelected;
     private SimpleDateFormat simpleDateFormat;
-    public ListViewAdapter listViewAdapter;
+    public BuildingListViewAdapter buildingListViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                         // if (!isPlaceSelected) {
                         //     show an alert box saying that it will just search in any building inside Sapienza.
                         // }
-                        myButton.setText("SEARCH IT NOW");
+                        myButton.setText(R.string.search_it_now);
 
                         // todo build PDS and retrieve Dates from tabXDate here above
                     }
@@ -111,7 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         // Retrieve data
         AppUtils.createFakeBuildingsList();
-        listViewAdapter = new ListViewAdapter(this, AppUtils.getFavouriteBuildingList());
+        buildingListViewAdapter = new BuildingListViewAdapter(this, AppUtils.getFavouriteBuildingList());
 
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticListSupportFragment());
         searchViewLayout.setHint(getString(R.string.where_to_study));
@@ -154,7 +154,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
             @Override
             public void afterTextChanged(Editable query) {
-                listViewAdapter.filterBuildingsByQuery(query.toString());
+                buildingListViewAdapter.filterBuildingsByQuery(query.toString());
             }
         });
     }

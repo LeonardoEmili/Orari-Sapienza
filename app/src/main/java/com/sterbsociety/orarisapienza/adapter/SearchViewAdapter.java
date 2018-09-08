@@ -3,6 +3,7 @@ package com.sterbsociety.orarisapienza.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.model.Course;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
@@ -21,14 +23,14 @@ import java.util.List;
 public class SearchViewAdapter extends BaseAdapter implements Filterable {
 
     private ArrayList<String> mData;
-    private String[] mSuggestions;
+    private Course[] mSuggestions;
     private LayoutInflater inflater;
     private Drawable searchImg, historyImg;
 
-    public SearchViewAdapter(Context context, List<String> suggestions) {
+    public SearchViewAdapter(Context context, List<Course> suggestions) {
         inflater = LayoutInflater.from(context);
         mData = new ArrayList<>();
-        mSuggestions = suggestions.toArray(new String[0]);
+        mSuggestions = suggestions.toArray(new Course[0]);
         searchImg = context.getResources().getDrawable(R.drawable.ic_action_search);
         historyImg = context.getResources().getDrawable(R.drawable.ic_history);
     }
@@ -42,7 +44,7 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
                 FilterResults filterResults = new FilterResults();
 
                 // Retrieve the autocomplete results.
-                List<String> searchData;
+                List<Course> searchData;
 
                 if (!TextUtils.isEmpty(query)) {
 
@@ -50,9 +52,9 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
 
                     final String lowerCaseQuery = query.toString().toLowerCase();
 
-                    for (String string : mSuggestions) {
-                        if (string.toLowerCase().contains(lowerCaseQuery)) {
-                            searchData.add(string);
+                    for (Course course: mSuggestions) {
+                        if (course.getFullName().toLowerCase().contains(lowerCaseQuery)) {
+                            searchData.add(course);
                         }
                     }
                 } else {
@@ -76,8 +78,8 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
         };
     }
 
-    public void updateSuggestions(List<String> suggestions) {
-        mSuggestions = suggestions.toArray(new String[0]);
+    public void updateSuggestions(List<Course> suggestions) {
+        mSuggestions = suggestions.toArray(new Course[0]);
     }
 
     @Override
@@ -112,11 +114,11 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
             viewHolder = (SuggestionsViewHolder) convertView.getTag();
         }
 
-        final String currentListData = (String) getItem(position);
+        final Course course = (Course) getItem(position);
 
-        viewHolder.textView.setText(currentListData);
+        viewHolder.textView.setText(course.getFullName());
 
-        if (AppUtils.hasBeenAlreadySearchedByUser(currentListData)) {
+        if (AppUtils.hasAlreadyBeenSearchedByUser(course.getId())) {
             viewHolder.imageView.setImageDrawable(historyImg);
         } else {
             viewHolder.imageView.setImageDrawable(searchImg);
