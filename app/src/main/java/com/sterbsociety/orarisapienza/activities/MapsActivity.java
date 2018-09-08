@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import xyz.sahildave.widget.SearchViewLayout;
 
-import com.airbnb.android.airmapview.AirMapMarker;
 import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
@@ -32,14 +31,12 @@ import java.util.Locale;
 
 public class MapsActivity extends AppCompatActivity implements OnMapInitializedListener{
 
-    private AirMapView mapView;
-    private DefaultAirMapViewBuilder mapViewBuilder;
+    public AirMapView mapView;
     public SearchViewLayout searchViewLayout;
     private MyDoubleDateAndTimePickerDialog.Builder mPickerDialog;
     private Date tab0date, tab1date;
-    private RelativeLayout alterNativeLayout;
     private Button myButton;
-    private boolean isPlaceSelected;
+    public boolean isPlaceSelected;
     private SimpleDateFormat simpleDateFormat;
     public ListViewAdapter listViewAdapter;
 
@@ -94,10 +91,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         myButton = findViewById(R.id.my_button);
         mapView = findViewById(R.id.map_view);
-        alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
+        RelativeLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
 
         if (NetworkStatus.getInstance().isOnline(this)) {
-            mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            DefaultAirMapViewBuilder mapViewBuilder = new DefaultAirMapViewBuilder(this);
             mapView.setOnMapInitializedListener(this);
             mapView.initialize(getSupportFragmentManager());
             alterNativeLayout.setVisibility(View.GONE);
@@ -167,13 +164,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     public void onMapInitialized() {
 
         final LatLng latLng = new LatLng(41.904130, 12.515297);
-        mapView.addMarker(new AirMapMarker.Builder()
-                .id(1)
-                .position(latLng)
-                .title("Sapienza")
-                .iconId(R.drawable.ic_location_pin)
-                .build());
-        mapView.animateCenterZoom(latLng, 13);
+        mapView.animateCenterZoom(latLng, 14);
         mapView.setMyLocationEnabled(false);
     }
 

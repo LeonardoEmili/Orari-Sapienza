@@ -38,6 +38,14 @@ public class Building {
         }
     }
 
+    public double getLat() {
+        return pos.getX();
+    }
+
+    public double getLong() {
+        return pos.getY();
+    }
+
     public String getName() {
         return name;
     }

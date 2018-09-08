@@ -52,6 +52,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -289,12 +290,13 @@ public class AppUtils {
         } else {
             // Just the history position needs to be fixed, simple thing -> hard to write.
             int buildingIndex = -1;
-
             // We search through all the favourites the index of the building to 'reorder'
             for (String currentBuildingCode : mFavouriteBuildingSetCodes) {
                 String[] parts = currentBuildingCode.split("/");
-                if (parts[1].equals(buildingCode))
-                    buildingIndex = Integer.parseInt(parts[0]);
+                int tmpIndex = Integer.parseInt(parts[0]);
+                if (parts[1].equals(buildingCode)) {
+                    buildingIndex = tmpIndex;
+                }
             }
 
             if (buildingIndex != -1) {
@@ -314,6 +316,7 @@ public class AppUtils {
                         mFavouriteBuildingSetCodes.add(tmpHashSet.size() + "/" + parts[1]);
                     }
                 }
+                activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
             }
 
             mFavouriteBuildingList.remove(building);
@@ -798,10 +801,15 @@ public class AppUtils {
 
         // Inside here we put each building in accordance to their code's position.
         Building[] tmpFavourites = new Building[mFavouriteBuildingSetCodes.size()];
-        for (Building building : resultList) {
+
+        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
+        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+        Iterator<Building> iterator = resultList.iterator();
+        while (iterator.hasNext()) {
+            Building building = iterator.next();
             if (isFavouriteBuilding(building.getCode())) {
                 tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.getCode())] = building;
-                resultList.remove(building);
+                iterator.remove();
             }
         }
 

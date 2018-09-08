@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.airbnb.android.airmapview.AirMapMarker;
+import com.google.android.gms.maps.model.LatLng;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.MapsActivity;
+import com.sterbsociety.orarisapienza.adapter.ListViewAdapter;
 import com.sterbsociety.orarisapienza.model.Building;
 
 import androidx.cardview.widget.CardView;
@@ -27,6 +29,9 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.addBuildingToFavouri
  */
 public class SearchStaticListSupportFragment extends Fragment {
 
+    private MapsActivity mapsActivity;
+    private AirMapMarker<?> lastAirMapMarker;
+
     public SearchStaticListSupportFragment() {
         // Required empty public constructor
     }
@@ -37,10 +42,11 @@ public class SearchStaticListSupportFragment extends Fragment {
 
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_search_static_list, container, false);
-        final MapsActivity mapsActivity = ((MapsActivity)rootView.getContext());
 
+        mapsActivity = ((MapsActivity) rootView.getContext());
         final ListView listView = rootView.findViewById(R.id.search_static_list);
         final SearchViewLayout searchViewLayout = mapsActivity.searchViewLayout;
+        final ListViewAdapter mAdapter = mapsActivity.listViewAdapter;
 
         CardView gpsButton = rootView.findViewById(R.id.use_gps_button);
         gpsButton.setOnClickListener(new View.OnClickListener() {
@@ -52,16 +58,36 @@ public class SearchStaticListSupportFragment extends Fragment {
             }
         });
 
-        listView.setAdapter(mapsActivity.listViewAdapter);
+        listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                final Building building = mapsActivity.listViewAdapter.getItem(position);
-                addBuildingToFavourites(mapsActivity, building, position);
+                final Building building = mAdapter.getItem(position);
+                if (building != null) {
+                    setMarker(building, id);
+                    addBuildingToFavourites(mapsActivity, building, position);
+                }
                 searchViewLayout.collapse();
             }
         });
 
         return rootView;
+    }
+
+    private void setMarker(Building building, long id) {
+
+        if (lastAirMapMarker != null) {
+            mapsActivity.mapView.removeMarker(lastAirMapMarker);
+        }
+        mapsActivity.isPlaceSelected = true;
+
+        LatLng latLng = new LatLng(building.getLat(), building.getLong());
+        lastAirMapMarker = new AirMapMarker.Builder()
+                .id(id)
+                .position(latLng)
+                .title(building.getName())
+                .build();
+        mapsActivity.mapView.addMarker(lastAirMapMarker);
+        mapsActivity.mapView.animateCenterZoom(latLng, 16);
     }
 }
