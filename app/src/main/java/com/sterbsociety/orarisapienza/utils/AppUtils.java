@@ -41,6 +41,7 @@ import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.model.Building;
 import com.sterbsociety.orarisapienza.model.Classroom;
 import com.sterbsociety.orarisapienza.model.Course;
+import com.sterbsociety.orarisapienza.model.StudyPlanPresenter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -898,5 +899,20 @@ public class AppUtils {
 
     public static ArrayList<Building> getFavouriteBuildingList() {
         return new ArrayList<>(mFavouriteBuildingList);
+    }
+
+    private static StudyPlanPresenter mStudyPlanPresenter;
+
+    public static boolean isSameStudyPlanAsBefore(@NonNull StudyPlanPresenter studyPlanPresenter) {
+        boolean outcome = false;
+        if (mStudyPlanPresenter != null) {
+            outcome = mStudyPlanPresenter.getStartDate().equals(studyPlanPresenter.getStartDate())
+                    && mStudyPlanPresenter.getEndDate().equals(studyPlanPresenter.getEndDate())
+                    && mStudyPlanPresenter.getLatitude() == studyPlanPresenter.getLatitude()
+                    && mStudyPlanPresenter.getLongitude() == studyPlanPresenter.getLongitude();
+        }
+        mStudyPlanPresenter = new StudyPlanPresenter(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate(),
+                studyPlanPresenter.getLatitude(), studyPlanPresenter.getLongitude(), studyPlanPresenter.getBuilding());
+        return outcome;
     }
 }

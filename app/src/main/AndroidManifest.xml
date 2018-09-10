@@ -15,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -73,7 +77,8 @@
             android:name=".activities.LessonTimetableActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ClassTimetables.NoActionBar" />
-        <activity android:name=".activities.ClassDetailActivity"
+        <activity
+            android:name=".activities.ClassDetailActivity"
             android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -90,7 +95,8 @@
         <activity
             android:name=".activities.MapsActivity"
             android:theme="@style/ClassTimetables.NoActionBar" />
-            android:label="@string/title_activity_maps"/>
+        android:label="@string/title_activity_maps"/>
+        <activity android:name=".activities.StudyPlanActivity"></activity>
     </application>
 
 </manifest>

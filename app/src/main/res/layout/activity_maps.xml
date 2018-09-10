@@ -14,17 +14,42 @@
 
     <include layout="@layout/widget_search_bar" />
 
-    <Button
-        android:id="@+id/my_button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/_24sdp"
-        android:background="@color/picker_button_background_selected"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:onClick="showPickerDialog"
-        android:text="@string/set_study_time"
-        android:textColor="@android:color/white" />
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_30sdp">
+
+        <TextView
+            android:id="@+id/dummyView"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/dummyView"
+            android:background="@drawable/maps_first_btn"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="showPickerDialog"
+            android:text="@string/set_study_time"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/dummyView"
+            android:background="@drawable/maps_second_btn"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="createStudyPlan"
+            android:text="@string/create_plan"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

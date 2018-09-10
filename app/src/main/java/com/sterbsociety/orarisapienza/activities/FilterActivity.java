@@ -168,7 +168,7 @@ public class FilterActivity extends AppCompatActivity {
      */
     private void setDayButtons() {
 
-        // Here we mark the choosen days as active
+        // Here we mark the chosen days as active
         for (int i = 0; i < cachedDayIndex.length; i++) {
             if (cachedDayIndex[i]) {
                 TextView currentDefaultDay = dayButtonArray[i];

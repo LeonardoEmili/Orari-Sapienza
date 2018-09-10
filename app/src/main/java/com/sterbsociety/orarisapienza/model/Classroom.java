@@ -84,10 +84,10 @@ public class Classroom implements Parcelable {
     // write your object's data to the passed-in Parcel
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(this.name);
-        out.writeString(this.code);
-        out.writeInt(this.numberOfSeats);
-        out.writeDouble(this.appeal);
+        out.writeString(name);
+        out.writeString(code);
+        out.writeInt(numberOfSeats);
+        out.writeDouble(appeal);
     }
 
     /**

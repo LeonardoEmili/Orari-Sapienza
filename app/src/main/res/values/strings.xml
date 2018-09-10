@@ -157,6 +157,10 @@
     <string name="set_study_time">SET STUDY TIME</string>
     <string name="use_current_gps_pos">Use current GPS position</string>
     <string name="search_it_now">SEARCH IT NOW</string>
-
+    <string name="your_position">Your position</string>
+    <string name="create_plan">Create plan</string>
+    <string name="place_not_selected">No place selected, by default Sapienza Campus will considered as place of study.</string>
+    <string name="ok">Ok</string>
+    <string name="_no">No</string>
 
 </resources>

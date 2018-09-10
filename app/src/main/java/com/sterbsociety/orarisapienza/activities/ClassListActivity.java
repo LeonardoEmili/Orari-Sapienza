@@ -195,7 +195,6 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Toast.makeText(this, "You clicked the element number: " + position, Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, ClassDetailActivity.class);
         i.putExtra("KEY", mDataList.get(position));
         startActivity(i);
