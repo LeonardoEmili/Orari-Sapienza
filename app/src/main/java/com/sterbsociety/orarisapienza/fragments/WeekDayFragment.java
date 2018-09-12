@@ -19,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.SortableCourseTableView;
+import com.sterbsociety.orarisapienza.views.SortableCourseTableView;
 import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
-import com.sterbsociety.orarisapienza.adapter.CourseTableDataAdapter;
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.adapters.CourseTableDataAdapter;
+import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.List;

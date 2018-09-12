@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.model;
+package com.sterbsociety.orarisapienza.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.sterbsociety.orarisapienza.utils.iVec2;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
 
 public class Building implements Parcelable {
 

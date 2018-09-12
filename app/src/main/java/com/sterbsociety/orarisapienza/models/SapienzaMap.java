@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.model;
+package com.sterbsociety.orarisapienza.models;
 
 import java.util.ArrayList;
 

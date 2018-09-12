@@ -20,7 +20,7 @@ import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.model.Classroom;
+import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 public class ClassDetailActivity extends AppCompatActivity implements OnMapInitializedListener, OnMapClickListener {

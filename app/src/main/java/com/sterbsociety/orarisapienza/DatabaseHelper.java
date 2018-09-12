@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DataSnapshot;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import org.json.JSONException;

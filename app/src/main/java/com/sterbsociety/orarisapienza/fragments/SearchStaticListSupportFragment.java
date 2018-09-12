@@ -10,8 +10,8 @@ import android.widget.ListView;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.MapsActivity;
-import com.sterbsociety.orarisapienza.adapter.BuildingListViewAdapter;
-import com.sterbsociety.orarisapienza.model.Building;
+import com.sterbsociety.orarisapienza.adapters.BuildingListViewAdapter;
+import com.sterbsociety.orarisapienza.models.Building;
 
 import androidx.cardview.widget.CardView;
 import xyz.sahildave.widget.SearchViewLayout;

@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +36,11 @@ import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
-import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
-import com.sterbsociety.orarisapienza.model.Building;
-import com.sterbsociety.orarisapienza.model.Classroom;
-import com.sterbsociety.orarisapienza.model.Course;
-import com.sterbsociety.orarisapienza.model.StudyPlanPresenter;
+import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
+import com.sterbsociety.orarisapienza.models.Building;
+import com.sterbsociety.orarisapienza.models.Classroom;
+import com.sterbsociety.orarisapienza.models.Course;
+import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -68,6 +67,7 @@ public class AppUtils {
 
     private static final int PICK_FROM_GALLERY = 1;
     public static final String APP_VERSION = "1.0";
+    public static final String DEFAULT_KEY = "KEY";
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
@@ -404,6 +404,10 @@ public class AppUtils {
 
     public static String getTitleOf(Uri ringtone, Activity activity) {
         return RingtoneManager.getRingtone(activity, ringtone).getTitle(activity);
+    }
+
+    public static void updateCurrentLanguage(String language) {
+        currentLanguage = language;
     }
 
     public static String getCurrentLanguage() {

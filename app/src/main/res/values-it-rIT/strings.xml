@@ -113,4 +113,17 @@
     <string name="no_thanks">No, grazie</string>
     <string name="rate">Vota</string>
     <string name="data_not_sync_wait_please">Dati aule non sincronizzati.\\nAttendere prego.</string>
+    <string name="from_">Dalle</string>
+    <string name="to_">Alle</string>
+    <string name="where_to_study">Dove vuoi studiare?</string>
+    <string name="set_study_time">SCEGLI ORARIO</string>
+    <string name="use_current_gps_pos">Usa la posizione GPS attuale</string>
+    <string name="search_it_now">CREA PIANO</string>
+    <string name="your_position">La tua posizione</string>
+    <string name="create_plan">Crea piano</string>
+    <string name="place_not_selected">Nessun posto selezionato, verrá utilizzata la cittá universitaria come luogo di studi.</string>
+    <string name="study_plan">Piano di studi</string>
+    <string name="save_it">Salva</string>
+    <string name="from">dalle</string>
+    <string name="_up_to">fino alle</string>
 </resources>

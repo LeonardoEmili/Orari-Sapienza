@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.adapter;
+package com.sterbsociety.orarisapienza.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

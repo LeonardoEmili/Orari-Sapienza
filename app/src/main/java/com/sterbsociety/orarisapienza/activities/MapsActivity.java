@@ -27,11 +27,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
 import com.sterbsociety.orarisapienza.MyDoubleDateAndTimePickerDialog;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.BuildingListViewAdapter;
+import com.sterbsociety.orarisapienza.adapters.BuildingListViewAdapter;
 import com.sterbsociety.orarisapienza.fragments.SearchStaticListSupportFragment;
 
-import com.sterbsociety.orarisapienza.model.Building;
-import com.sterbsociety.orarisapienza.model.StudyPlanPresenter;
+import com.sterbsociety.orarisapienza.models.Building;
+import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 

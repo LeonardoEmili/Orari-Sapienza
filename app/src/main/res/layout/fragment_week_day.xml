@@ -19,7 +19,7 @@
         android:textColor="@color/coolBlack"
         android:textSize="@dimen/_15sdp" />
 
-    <com.sterbsociety.orarisapienza.SortableCourseTableView xmlns:table="http://schemas.android.com/apk/res-auto"
+    <com.sterbsociety.orarisapienza.views.SortableCourseTableView xmlns:table="http://schemas.android.com/apk/res-auto"
         android:id="@+id/tableView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,6 +1,6 @@
 package com.sterbsociety.orarisapienza.utils;
 
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.models.Lesson;
 
 import java.util.Comparator;
 

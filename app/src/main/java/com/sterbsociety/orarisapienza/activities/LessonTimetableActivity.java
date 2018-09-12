@@ -16,11 +16,11 @@ import android.widget.LinearLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.SearchViewAdapter;
-import com.sterbsociety.orarisapienza.adapter.WeekDayFragmentPagerAdapter;
+import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
+import com.sterbsociety.orarisapienza.adapters.WeekDayFragmentPagerAdapter;
 import com.sterbsociety.orarisapienza.fragments.WeekDayFragment;
-import com.sterbsociety.orarisapienza.model.Course;
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.models.Course;
+import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;

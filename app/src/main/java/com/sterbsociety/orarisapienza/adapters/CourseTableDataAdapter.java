@@ -1,11 +1,11 @@
-package com.sterbsociety.orarisapienza.adapter;
+package com.sterbsociety.orarisapienza.adapters;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.models.Lesson;
 
 import java.util.List;
 

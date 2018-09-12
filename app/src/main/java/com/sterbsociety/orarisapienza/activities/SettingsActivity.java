@@ -51,6 +51,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     private static ActionBar mActionBar;
     private static SwitchPreference themePreference;
     private static ListPreference languagePreference;
+    private static String userLanguage;
 
     // todo implement clear favourites function in settings
 
@@ -106,9 +107,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             notification = findPreference(KEY_NOTIFICATIONS);
             about = findPreference(KEY_ABOUT);
 
-            String userLang = AppUtils.getCurrentLanguage();
+            userLanguage = AppUtils.getCurrentLanguage();
 
-            languagePreference.setValue(userLang);
+            languagePreference.setValue(userLanguage);
             languagePreference.setSummary(languagePreference.getEntry());
         }
 
@@ -263,6 +264,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             case KEY_PREF_LANGUAGE:
                 translateOnDemand(languagePreference.getValue());
                 languagePreference.setNegativeButtonText(AppUtils.getStringByLocal(SettingsActivity.this, R.string.cancel, languagePreference.getValue()));
+                AppUtils.updateCurrentLanguage(languagePreference.getValue());
                 break;
         }
     }
@@ -349,7 +351,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     private void checkSharedPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
         if (sharedPref.getBoolean(SettingsActivity.KEY_PREF_ANIMATION_SWITCH, false) != AppUtils.areAnimationsAllowed()
-                || !sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "").equals(AppUtils.getCurrentLanguage())) {
+                || !sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "").equals(userLanguage)) {
             AppUtils.scheduleReboot();
         }
     }

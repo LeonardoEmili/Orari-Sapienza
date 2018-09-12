@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.model;
+package com.sterbsociety.orarisapienza.models;
 
 // todo ref to Facoltá?
 public class Course {

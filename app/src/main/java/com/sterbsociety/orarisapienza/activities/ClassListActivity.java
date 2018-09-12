@@ -18,8 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.ClassListAdapter;
-import com.sterbsociety.orarisapienza.model.Classroom;
+import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
+import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -112,7 +112,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

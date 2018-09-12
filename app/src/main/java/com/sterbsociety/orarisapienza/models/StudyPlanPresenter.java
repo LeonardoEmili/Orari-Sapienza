@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.model;
+package com.sterbsociety.orarisapienza.models;
 
 import android.location.Location;
 import android.os.Parcel;

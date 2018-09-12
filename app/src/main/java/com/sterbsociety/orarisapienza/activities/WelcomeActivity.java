@@ -29,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sterbsociety.orarisapienza.DatabaseHelper;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.adapter.SliderAdapter;
+import com.sterbsociety.orarisapienza.adapters.SliderAdapter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 

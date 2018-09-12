@@ -1,9 +1,10 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.sterbsociety.orarisapienza.model.Lesson;
+import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.CourseComparator;
 
 import androidx.core.content.ContextCompat;

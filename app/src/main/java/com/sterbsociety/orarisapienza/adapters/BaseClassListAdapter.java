@@ -1,9 +1,9 @@
-package com.sterbsociety.orarisapienza.adapter;
+package com.sterbsociety.orarisapienza.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.sterbsociety.orarisapienza.model.Classroom;
+import com.sterbsociety.orarisapienza.models.Classroom;
 
 import java.util.List;
 

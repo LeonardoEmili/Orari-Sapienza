@@ -46,7 +46,7 @@
     <string name="tell_us_about_issue">Tell us about the issue you experienced using the app Orari Sapienza.</string>
     <string name="please_wait">Please wait ...</string>
     <string name="feedback_sent">Feedback sent!</string>
-    <string name="sending_feedback">Sending feedback</string>
+    <string name="sending_feedback" translatable="false">Sending feedback</string>
     <string name="sending_report">Sending report</string>
     <string name="report_not_sent">Report has not been sent</string>
     <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
@@ -156,11 +156,15 @@
     <string name="where_to_study">Where to study?</string>
     <string name="set_study_time">SET STUDY TIME</string>
     <string name="use_current_gps_pos">Use current GPS position</string>
-    <string name="search_it_now">SEARCH IT NOW</string>
+    <string name="search_it_now">CREATE PLAN</string>
     <string name="your_position">Your position</string>
     <string name="create_plan">Create plan</string>
     <string name="place_not_selected">No place selected, by default Sapienza Campus will considered as place of study.</string>
-    <string name="ok">Ok</string>
-    <string name="_no">No</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="_no" translatable="false">No</string>
+    <string name="study_plan">Study plan</string>
+    <string name="save_it">Save it</string>
+    <string name="from">from</string>
+    <string name="_up_to">up to</string>
 
 </resources>

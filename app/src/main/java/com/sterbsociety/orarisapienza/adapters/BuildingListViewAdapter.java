@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza.adapter;
+package com.sterbsociety.orarisapienza.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.model.Building;
+import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.List;
