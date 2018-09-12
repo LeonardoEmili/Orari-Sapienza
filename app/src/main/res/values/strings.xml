@@ -46,7 +46,7 @@
     <string name="tell_us_about_issue">Tell us about the issue you experienced using the app Orari Sapienza.</string>
     <string name="please_wait">Please wait ...</string>
     <string name="feedback_sent">Feedback sent!</string>
-    <string name="sending_feedback" translatable="false">Sending feedback</string>
+    <string name="sending_feedback">Sending feedback</string>
     <string name="sending_report">Sending report</string>
     <string name="report_not_sent">Report has not been sent</string>
     <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
@@ -166,5 +166,11 @@
     <string name="save_it">Save it</string>
     <string name="from">from</string>
     <string name="_up_to">up to</string>
+    <string name="_from">"from "</string>
+    <string name="_up_to_">" up to "</string>
+    <string name="_special_" translatable="false">" - "</string>
+    <string name="vote_the_app">Vote the App!</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="rate">Vote</string>
 
 </resources>

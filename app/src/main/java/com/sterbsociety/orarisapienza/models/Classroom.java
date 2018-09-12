@@ -14,6 +14,12 @@ public class Classroom implements Parcelable {
     private String name, code;
     private int numberOfSeats;
     private double appeal;
+    private Building building;
+
+    public Classroom(String name, String id, int numberOfSeats, Building building) {
+        this(name, id, numberOfSeats);
+        this.building = building;
+    }
 
     public Classroom(String name, String id, int numberOfSeats) {
         this.name = name;
@@ -42,20 +48,26 @@ public class Classroom implements Parcelable {
     }
 
     public String getMainBuilding() {
-        // todo add reference to his father
-        // should return getFather().getName();
+        // todo add reference to his father, to be replaced with getBuilding
         return "foo";
     }
 
     public String getMainBuildingAddress() {
-        // todo add reference to his father
-        // should return getFather().getAddress;
-        return "bar";
+        // todo add reference to his father, to be replaced with building.getAddress
+        return "Viale dell'universitá, 42";
     }
 
     public String getCurrentClass() {
         // todo add reference to db ? maybe ?
         return "Fondamenti di programmazione";
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
     // Returns available/occupied
@@ -88,6 +100,7 @@ public class Classroom implements Parcelable {
         out.writeString(code);
         out.writeInt(numberOfSeats);
         out.writeDouble(appeal);
+        out.writeParcelable(building, flags);
     }
 
     /**
@@ -109,5 +122,6 @@ public class Classroom implements Parcelable {
         this.code = in.readString();
         this.numberOfSeats = in.readInt();
         this.appeal = in.readDouble();
+        this.building = in.readParcelable(Building.class.getClassLoader());
     }
 }

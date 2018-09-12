@@ -38,7 +38,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/text_timeline_date"
+                    android:id="@+id/timeline_class"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -47,8 +47,8 @@
                     android:text="Aula P1"/>
 
                 <TextView
-                    android:id="@+id/text_timeline_title"
-                    android:layout_below="@id/text_timeline_date"
+                    android:id="@+id/timeline_address"
+                    android:layout_below="@id/timeline_class"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
@@ -90,6 +90,7 @@
                         android:text="@string/from"/>
 
                     <TextView
+                        android:id="@+id/start_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_15sdp"
@@ -114,6 +115,7 @@
                         android:text="@string/up_to"/>
 
                     <TextView
+                        android:id="@+id/end_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_15sdp"

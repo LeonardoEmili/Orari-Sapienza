@@ -126,4 +126,6 @@
     <string name="save_it">Salva</string>
     <string name="from">dalle</string>
     <string name="_up_to">fino alle</string>
+    <string name="_from">" dalle"</string>
+    <string name="_up_to_">" alle "</string>
 </resources>

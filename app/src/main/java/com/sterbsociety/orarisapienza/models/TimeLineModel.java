@@ -3,45 +3,38 @@ package com.sterbsociety.orarisapienza.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.sterbsociety.orarisapienza.utils.OrderStatus;
-
 /**
  * Created by HP-HP on 05-12-2015.
  */
 public class TimeLineModel implements Parcelable {
 
-    private String mMessage;
-    private String mDate;
-    private OrderStatus mStatus;
+    private String mStartDate, mEndDate;
+    private Classroom mClassroom;
 
-    public TimeLineModel(String mMessage, String mDate, OrderStatus mStatus) {
-        this.mMessage = mMessage;
-        this.mDate = mDate;
-        this.mStatus = mStatus;
+    public TimeLineModel(String startDate, String endDate, Classroom classroom) {
+        mStartDate = startDate;
+        mEndDate = endDate;
+        mClassroom = classroom;
     }
 
-    public String getMessage() {
-        return mMessage;
+    public String getStartDate() {
+        return mStartDate;
     }
 
-    public void semMessage(String message) {
-        this.mMessage = message;
+    public void setStartDate(String startDate) {
+        mStartDate = startDate;
     }
 
-    public String getDate() {
-        return mDate;
+    public String getEndDate() {
+        return mEndDate;
     }
 
-    public void setDate(String date) {
-        this.mDate = date;
+    public void setEndDate(String endDate) {
+        mEndDate = endDate;
     }
 
-    public OrderStatus getStatus() {
-        return mStatus;
-    }
-
-    public void setStatus(OrderStatus mStatus) {
-        this.mStatus = mStatus;
+    public Classroom getClassroom() {
+        return mClassroom;
     }
 
     @Override
@@ -51,16 +44,15 @@ public class TimeLineModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mMessage);
-        dest.writeString(this.mDate);
-        dest.writeInt(this.mStatus == null ? -1 : this.mStatus.ordinal());
+        dest.writeString(mStartDate);
+        dest.writeString(mEndDate);
+        dest.writeParcelable(mClassroom, flags);
     }
 
-    protected TimeLineModel(Parcel in) {
-        this.mMessage = in.readString();
-        this.mDate = in.readString();
-        int tmpMStatus = in.readInt();
-        this.mStatus = tmpMStatus == -1 ? null : OrderStatus.values()[tmpMStatus];
+    private TimeLineModel(Parcel in) {
+        mStartDate = in.readString();
+        mEndDate = in.readString();
+        mClassroom = in.readParcelable(Classroom.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<TimeLineModel> CREATOR = new Parcelable.Creator<TimeLineModel>() {
