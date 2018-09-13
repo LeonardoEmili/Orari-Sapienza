@@ -1,6 +1,7 @@
 package com.sterbsociety.orarisapienza.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.github.florent37.rxgps.RxGps;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
-import com.sterbsociety.orarisapienza.MyDoubleDateAndTimePickerDialog;
+import com.sterbsociety.orarisapienza.views.MyDoubleDateAndTimePickerDialog;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.BuildingListViewAdapter;
 import com.sterbsociety.orarisapienza.fragments.SearchStaticListSupportFragment;
@@ -42,7 +43,8 @@ import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-import static com.sterbsociety.orarisapienza.utils.AppUtils.isSameStudyPlanAsBefore;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isSameStudyPlanRequestAsBefore;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapInitializedListener {
@@ -103,8 +105,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     @Override
     protected void onResume() {
         super.onResume();
-        if (isSameStudyPlanAsBefore(studyPlanPresenter)) {
+        if (isSameStudyPlanRequestAsBefore(studyPlanPresenter)) {
             // todo alert the user if he wants to regenerate a study plan with same settings
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == STUDY_PLAN && resultCode == Activity.RESULT_OK) {
+            finish();
         }
     }
 
@@ -129,7 +138,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
             alterNativeLayout.setVisibility(View.GONE);
         }
 
-        simpleDateFormat = new SimpleDateFormat("EEE d MM HH:mm", Locale.ENGLISH);
+        simpleDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
         studyPlanPresenter = new StudyPlanPresenter();
 
         initSearchViewLayout();
@@ -253,8 +262,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
     private void launchStudyPlanActivity() {
         Intent i = new Intent(this, StudyPlanActivity.class);
-        i.putExtra("KEY", studyPlanPresenter);
-        startActivity(i);
+        i.putExtra(AppUtils.DEFAULT_KEY, studyPlanPresenter);
+        startActivityForResult(i, STUDY_PLAN);
     }
 
     public void useGPSPosition() {
@@ -302,7 +311,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                         Log.e(MapsActivity.class.getSimpleName(), throwable.getMessage());
                     }
                 });
-        getAccuratePosition();
+        //getAccuratePosition();
     }
 
     public void createStudyPlan(View view) {

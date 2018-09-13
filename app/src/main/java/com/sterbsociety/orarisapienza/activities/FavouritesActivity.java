@@ -100,7 +100,7 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
         mLayoutManager = new LinearLayoutManager(this);
         mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
-        mDataList = AppUtils.getFakeFavouriteClasses();
+        mDataList = AppUtils.getFavouriteClassroomList();
         mAdapter = new ClassListAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -114,30 +114,27 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
         mAdapter.notifyDataSetChanged(mDataList);
     }
 
-    private final SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
-            int width = getResources().getDimensionPixelSize(R.dimen._64sdp);
+    private final SwipeMenuCreator swipeMenuCreator = (swipeLeftMenu, swipeRightMenu, viewType) -> {
+        int width = getResources().getDimensionPixelSize(R.dimen._64sdp);
 
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+        int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            {
-                SwipeMenuItem starItem = new SwipeMenuItem(FavouritesActivity.this)
-                        .setBackground(R.drawable.selector_yellow)
-                        .setImage(R.drawable.ic_star)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(starItem);
+        {
+            SwipeMenuItem starItem = new SwipeMenuItem(FavouritesActivity.this)
+                    .setBackground(R.drawable.selector_yellow)
+                    .setImage(R.drawable.ic_star)
+                    .setWidth(width)
+                    .setHeight(height);
+            swipeRightMenu.addMenuItem(starItem);
 
-                SwipeMenuItem addItem = new SwipeMenuItem(FavouritesActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setImage(R.drawable.ic_info)
-                        .setText("Info")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(addItem);
-            }
+            SwipeMenuItem addItem = new SwipeMenuItem(FavouritesActivity.this)
+                    .setBackground(R.drawable.selector_green)
+                    .setImage(R.drawable.ic_info)
+                    .setText("Info")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
+            swipeRightMenu.addMenuItem(addItem);
         }
     };
 
@@ -153,7 +150,7 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
                 //noinspection StatementWithEmptyBody
                 if (menuPosition == 0) {
 
-                    TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_title);
+                    TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
                     String classID = mDataList.get(adapterPosition).getCode();
                     if (mTextView.getCompoundDrawables()[2] != null) {
                         AppUtils.removeClassFromFavourites(FavouritesActivity.this, classID);

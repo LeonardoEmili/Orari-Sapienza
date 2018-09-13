@@ -61,6 +61,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="confirm_exit">Are you sure you want to exit?</string>
     <string name="yes">Yes</string>
+    <string name="confirm_plan_overriding">A study plan is still active, if you choose to create another one the past will be erased</string>
 
 
     <!-- Strings related to Settings -->
@@ -172,5 +173,6 @@
     <string name="vote_the_app">Vote the App!</string>
     <string name="no_thanks">No, thanks</string>
     <string name="rate">Vote</string>
+    <string name="study_plan_currupted">Your Study Plan is corrupted. It can\'t be used in app</string>
 
 </resources>

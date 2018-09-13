@@ -41,16 +41,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/tv_classroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_13sdp"
-            tools:text="Aula P1 (ex Aula del Pratone)" />
+            android:textSize="@dimen/_13sdp" />
 
         <TextView
+            android:id="@+id/tv_building"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edificio Caglioti"
             android:textSize="@dimen/_11sdp" />
 
     </LinearLayout>

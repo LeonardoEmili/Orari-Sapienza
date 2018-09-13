@@ -3,7 +3,6 @@ package com.sterbsociety.orarisapienza.activities;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +21,6 @@ import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
@@ -32,6 +30,8 @@ import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static com.sterbsociety.orarisapienza.utils.AppUtils.askForGPSPermission;
 
 public class ClassListActivity extends AppCompatActivity implements SwipeItemClickListener {
 
@@ -51,7 +51,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         setContentView(R.layout.activity_class_list);
 
         initActivity();
-        AppUtils.askForGPSPermission(this);
+        askForGPSPermission(this);
     }
 
     @Override
@@ -60,20 +60,17 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mAdapter.notifyDataSetChanged();
     }
 
-    private final SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
-            int width = getResources().getDimensionPixelSize(R.dimen._64sdp);
+    private final SwipeMenuCreator swipeMenuCreator = (swipeLeftMenu, swipeRightMenu, viewType) -> {
+        int width = getResources().getDimensionPixelSize(R.dimen._64sdp);
 
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+        int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            SwipeMenuItem starItem = new SwipeMenuItem(ClassListActivity.this)
-                    .setBackground(R.drawable.selector_yellow)
-                    .setImage(R.drawable.ic_star)
-                    .setWidth(width)
-                    .setHeight(height);
-            swipeRightMenu.addMenuItem(starItem);
-        }
+        SwipeMenuItem starItem = new SwipeMenuItem(ClassListActivity.this)
+                .setBackground(R.drawable.selector_yellow)
+                .setImage(R.drawable.ic_star)
+                .setWidth(width)
+                .setHeight(height);
+        swipeRightMenu.addMenuItem(starItem);
     };
 
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
@@ -88,7 +85,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
                 if (menuPosition == 0) {
 
-                    TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_title);
+                    TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
                     String classID = mDataList.get(adapterPosition).getCode();
                     if (mTextView.getCompoundDrawables()[2] != null) {
                         AppUtils.removeClassFromFavourites(ClassListActivity.this, classID);
@@ -129,7 +126,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mLayoutManager = new LinearLayoutManager(this);
         mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
-        mDataList = AppUtils.createClassesList();
+        mDataList = AppUtils.getClassroomList();
         mAdapter = new ClassListAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -196,7 +193,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     @Override
     public void onItemClick(View itemView, int position) {
         Intent i = new Intent(this, ClassDetailActivity.class);
-        i.putExtra("KEY", mDataList.get(position));
+        i.putExtra(AppUtils.DEFAULT_KEY, mDataList.get(position));
         startActivity(i);
     }
 }

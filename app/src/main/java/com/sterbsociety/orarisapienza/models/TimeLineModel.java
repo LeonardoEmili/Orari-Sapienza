@@ -3,9 +3,6 @@ package com.sterbsociety.orarisapienza.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by HP-HP on 05-12-2015.
- */
 public class TimeLineModel implements Parcelable {
 
     private String mStartDate, mEndDate;

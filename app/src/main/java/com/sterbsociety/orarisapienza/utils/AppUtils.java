@@ -29,30 +29,42 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.BugReportActivity;
+import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
+import com.sterbsociety.orarisapienza.activities.StudyPlanActivity;
 import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.models.Course;
+import com.sterbsociety.orarisapienza.models.StudyPlan;
 import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
+import com.sterbsociety.orarisapienza.models.TimeLineModel;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +72,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
@@ -218,7 +231,7 @@ public class AppUtils {
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp;
-    private static String sCurrentRingtone, currentLanguage;
+    private static String sCurrentRingtone, currentLanguage, currentStudyPlan;
     private static Set<String> mFavouriteClassSet, mFavouriteCourseSet, mFavouriteBuildingSetCodes;
 
     public static void loadSettings(Activity activity) {
@@ -250,8 +263,48 @@ public class AppUtils {
         readGeneralPreferences(activity);
 
         // Here we have to parse all the information.
-        createFakeBuildingsList(); // This has to be a parse
-        createFakeCoursesList();       // This has to be a parse
+        // These have to be parsing.
+        createFakeCoursesList();
+
+
+        createFakeBuildingsList();
+        // After parsing buildings, we parse classrooms
+        createFakeClassroomList();
+        parseFavouriteClassroomsList();
+
+        // After we have parsed everything we check if the Study Plan is still valid.
+        checkStudyPlanIntegrity(activity);
+        System.out.println(currentStudyPlan);
+    }
+
+    private static ArrayList<Classroom> classroomList, favouriteClassroomList;
+
+    public static ArrayList<Classroom> getFavouriteClassroomList() {
+        return favouriteClassroomList;
+    }
+
+    private static void parseFavouriteClassroomsList() {
+        favouriteClassroomList = new ArrayList<>();
+        for (Classroom classroom : classroomList) {
+            if (mFavouriteClassSet.contains(classroom.getCode()))
+                favouriteClassroomList.add(classroom);
+        }
+    }
+
+    private static void createFakeClassroomList() {
+        classroomList = new ArrayList<>();
+        int classroomIndex = 0;
+        for (int i = 0; i < buildingList.size(); i++) {
+            // Suppose a medium of 20 classrooms per building
+            for (int j = 0; j < 20; j++) {
+                classroomList.add(new Classroom("Aula " + classroomIndex, "" + classroomIndex, 42, buildingList.get(i), i));
+                classroomIndex++;
+            }
+        }
+    }
+
+    public static ArrayList<Classroom> getClassroomList() {
+        return classroomList;
     }
 
     private static final String GENERAL_PREF = "com.sterbsociety.orarisapienza.general";
@@ -268,11 +321,40 @@ public class AppUtils {
 
         // Here we create different HashSets from the those which are stored in SharedPreferences.
         SharedPreferences sharedPreferences = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE);
-        mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<String>()));
+        mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<>()));
         firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
 
-        mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<String>()));
-        mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<String>()));
+        mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<>()));
+        mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<>()));
+
+        currentStudyPlan = sharedPreferences.getString(KEY_PREF_STUDY_PLAN, null);
+        checkIfIsCurrentStudyPlanExpired(activity);
+    }
+
+    private static void checkStudyPlanIntegrity(Activity activity) {
+
+        final StudyPlan studyPlan = getStudyPlan();
+
+        if (studyPlan == null) {
+            return;
+        }
+        System.out.println(new GsonBuilder().create().toJson(studyPlan));
+        try {
+            for (TimeLineModel model : studyPlan.getDataList()) {
+                int buildingIndex = model.getClassroom().getBuildingIndex();
+                if (!buildingList.get(buildingIndex).getCode().equals(model.getClassroom().getBuildingCode())) {
+                    clearCachedStudyPlan(activity);
+                    StyleableToast.makeText(activity, getStringByLocal(activity, R.string.study_plan_currupted),
+                            Toast.LENGTH_LONG, R.style.errorToast).show();
+                    return;
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            sendSilentReport(activity, 333, ex, AppUtils.class.toString());
+            clearCachedStudyPlan(activity);
+        }
     }
 
     private static final String KEY_PREF_CLASS_FAVOURITES = "fav_class";
@@ -317,7 +399,7 @@ public class AppUtils {
                     } else if (currentIndex > buildingIndex) {
                         mFavouriteBuildingSetCodes.add(currentIndex - 1 + "/" + parts[1]);
                     } else {
-                        mFavouriteBuildingSetCodes.add(tmpHashSet.size()-1 + "/" + parts[1]);
+                        mFavouriteBuildingSetCodes.add(tmpHashSet.size() - 1 + "/" + parts[1]);
                     }
                 }
                 activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
@@ -624,7 +706,7 @@ public class AppUtils {
         return MAX_HOUR;
     }
 
-    // This value is just a custom bizarre value that means 'no distance limit' (half of 42 eheheh).
+    // This value is just a custom bizarre value that means 'no distance limit' (half of 42 xD).
     private static int DISTANCE_FROM_CURRENT_POSITION = 21;
 
     public static int getDistanceFromCurrentPosition() {
@@ -646,33 +728,6 @@ public class AppUtils {
         MIN_HOUR = data.getIntExtra(KEY_FILTER_MIN_HOUR, MIN_HOUR);
         MAX_HOUR = data.getIntExtra(KEY_FILTER_MAX_HOUR, MAX_HOUR);
         DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
-    }
-
-    private static List<Classroom> mClassesList;
-
-    // todo This has to be made once at the start of the activity be looping over all of the classes present in the DB.
-    public static ArrayList<Classroom> createClassesList() {
-        ArrayList<Classroom> dataList = new ArrayList<>();
-        for (int i = 1; i < 100; i++) {
-            dataList.add(new Classroom("Aula P" + i, i + "" + (i * 42 + 79 / 2), 42));
-        }
-        mClassesList = new ArrayList<>(dataList);
-        return dataList;
-    }
-
-    // todo this method is just to check the logic and see if it is correct.
-    public static ArrayList<Classroom> getFakeFavouriteClasses() {
-        final ArrayList<Classroom> dataList = createClassesList();
-        ArrayList<Classroom> mResultList = new ArrayList<>();
-        for (Classroom classroom : dataList) {
-            if (mFavouriteClassSet.contains(classroom.getCode()))
-                mResultList.add(classroom);
-        }
-        return mResultList;
-    }
-
-    public static List<Classroom> getClassesList() {
-        return mClassesList;
     }
 
     private static ArrayList<Course> courseList, mFavouriteCourseList;
@@ -750,6 +805,8 @@ public class AppUtils {
 
     private static final String KEY_PREF_COURSE_FAVOURITES = "fav_course";
 
+    private static final String KEY_PREF_STUDY_PLAN = "study_plan";
+
     public static void addCourseToFavourites(Activity activity, Course course, SearchViewAdapter searchViewAdapter, int index) {
 
         final String courseCode = course.getId();
@@ -790,7 +847,7 @@ public class AppUtils {
                     } else if (currentIndex > courseIndex) {
                         mFavouriteCourseSet.add(currentIndex - 1 + "/" + parts[1]);
                     } else {
-                        mFavouriteCourseSet.add(tmpHashSet.size()-1 + "/" + parts[1]);
+                        mFavouriteCourseSet.add(tmpHashSet.size() - 1 + "/" + parts[1]);
                     }
                 }
                 activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
@@ -865,12 +922,7 @@ public class AppUtils {
 
         // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
         ArrayList<String> dirtySortedFavouriteCodes = new ArrayList<>(mFavouriteBuildingSetCodes);
-        Collections.sort(dirtySortedFavouriteCodes, new Comparator<String>() {
-            @Override
-            public int compare(String c1, String c2) {
-                return Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]);
-            }
-        });
+        Collections.sort(dirtySortedFavouriteCodes, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
 
         // This is responsible for cleaning buildingCodes from their dirty indexes.
         ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
@@ -907,7 +959,7 @@ public class AppUtils {
 
     private static StudyPlanPresenter mStudyPlanPresenter;
 
-    public static boolean isSameStudyPlanAsBefore(@NonNull StudyPlanPresenter studyPlanPresenter) {
+    public static boolean isSameStudyPlanRequestAsBefore(@NonNull StudyPlanPresenter studyPlanPresenter) {
         boolean outcome = false;
         if (mStudyPlanPresenter != null) {
             outcome = mStudyPlanPresenter.getStartDate().equals(studyPlanPresenter.getStartDate())
@@ -919,4 +971,66 @@ public class AppUtils {
                 studyPlanPresenter.getLatitude(), studyPlanPresenter.getLongitude(), studyPlanPresenter.getBuilding());
         return outcome;
     }
+
+    /**
+     * @param classroom is the classroom located in the building
+     * @return the building that houses the classroom
+     * This is a safe method since the classroom.getBuildingIndex is created at runtime,
+     * so we use it to reference to its main Building object.
+     */
+    public static Building getRealBuilding(Classroom classroom) {
+        return buildingList.get(classroom.getBuildingIndex());
+    }
+
+    public static void saveStudyPlan(StudyPlanActivity activity, @NonNull String studyPlan) {
+        checkIfIsCurrentStudyPlanExpired(activity);
+        if (currentStudyPlan == null) {
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(KEY_PREF_STUDY_PLAN, studyPlan).apply();
+            currentStudyPlan = studyPlan;
+            activity.goBackToMainActivity(true);
+        } else {
+
+            new AlertDialog.Builder(activity)
+                    .setMessage(AppUtils.getStringByLocal(activity, R.string.confirm_plan_overriding))
+                    .setCancelable(false)
+                    .setPositiveButton(AppUtils.getStringByLocal(activity, R.string.ok), (dialog, id) -> {
+                        activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(KEY_PREF_STUDY_PLAN, studyPlan).apply();
+                        currentStudyPlan = studyPlan;
+                        activity.goBackToMainActivity(true);
+                    })
+                    .setNegativeButton(AppUtils.getStringByLocal(activity, R.string._no), null)
+                    .show();
+            activity.goBackToMainActivity(false);
+        }
+    }
+
+    private static void checkIfIsCurrentStudyPlanExpired(Activity activity) {
+        if (currentStudyPlan == null) {
+            return;
+        }
+        try {
+            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
+            final Date expirationDate = simpleDateFormat.parse(new Gson().fromJson(currentStudyPlan, StudyPlan.class).getEndRequestDate());
+            if (expirationDate.before(new Date())) {
+                clearCachedStudyPlan(activity);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void clearCachedStudyPlan(Activity activity) {
+        activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().remove(KEY_PREF_STUDY_PLAN).apply();
+        currentStudyPlan = null;
+    }
+
+    public static boolean isThereAnActiveStudyPlan() {
+        return currentStudyPlan != null;
+    }
+
+    public static StudyPlan getStudyPlan() {
+        return new Gson().fromJson(currentStudyPlan, StudyPlan.class);
+    }
+
+    public static final int STUDY_PLAN = 79;
 }

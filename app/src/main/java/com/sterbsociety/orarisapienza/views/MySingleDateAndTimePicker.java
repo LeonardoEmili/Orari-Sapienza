@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.views;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -16,6 +16,7 @@ import com.github.florent37.singledateandtimepicker.widget.WheelMinutePicker;
 import com.github.florent37.singledateandtimepicker.widget.WheelMonthPicker;
 import com.github.florent37.singledateandtimepicker.widget.WheelPicker;
 import com.github.florent37.singledateandtimepicker.widget.WheelYearPicker;
+import com.sterbsociety.orarisapienza.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

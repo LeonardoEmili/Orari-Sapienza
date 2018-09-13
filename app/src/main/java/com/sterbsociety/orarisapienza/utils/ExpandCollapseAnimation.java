@@ -1,4 +1,4 @@
-package com.sterbsociety.orarisapienza;
+package com.sterbsociety.orarisapienza.utils;
 
 import android.view.View;
 import android.view.animation.Animation;

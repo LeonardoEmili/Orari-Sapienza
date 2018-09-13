@@ -57,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PROFESSOR + " TEXT" + ")";
 
     private DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override

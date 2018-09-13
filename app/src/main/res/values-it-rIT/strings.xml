@@ -126,6 +126,8 @@
     <string name="save_it">Salva</string>
     <string name="from">dalle</string>
     <string name="_up_to">fino alle</string>
-    <string name="_from">" dalle"</string>
+    <string name="_from">"dalle "</string>
     <string name="_up_to_">" alle "</string>
+    <string name="confirm_plan_overriding">Esiste giá un piano di studio, se scegli di generarne un\'altro quello precedente verrá cancellato.</string>
+    <string name="study_plan_currupted">Piano di studi corrotti. Non potrá piú essere usato nell\'App.</string>
 </resources>

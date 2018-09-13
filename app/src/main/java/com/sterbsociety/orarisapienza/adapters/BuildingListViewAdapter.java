@@ -33,10 +33,6 @@ public class BuildingListViewAdapter extends ArrayAdapter<Building> {
         historyImg = context.getResources().getDrawable(R.drawable.ic_history);
     }
 
-    public void updateHistory(List<Building> dataList) {
-        mDataList = dataList;
-    }
-
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {

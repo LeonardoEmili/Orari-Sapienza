@@ -11,6 +11,7 @@ import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,16 +24,18 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     private List<Classroom> mDataList;
     private static Set<String> mClassFavourites;
     private static Drawable starImg;
-
+    private int redColor, greenColor;
 
     public ClassListAdapter(Context context) {
         super(context);
         mClassFavourites = AppUtils.getFavouriteClassSet();
         starImg = context.getResources().getDrawable(R.drawable.ic_starred);
+        redColor = context.getResources().getColor(R.color.red_normal);
+        greenColor = context.getResources().getColor(R.color.green_normal);
     }
 
     public void notifyDataSetChanged(List<Classroom> dataList) {
-        this.mDataList = dataList;
+        this.mDataList = new ArrayList<>(dataList);
         super.notifyDataSetChanged();
     }
 
@@ -41,11 +44,11 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
 
         mDataList.clear();
         final String lowerCaseQuery = query.toLowerCase();
-        final List<Classroom> dataList = AppUtils.getClassesList();
+        final List<Classroom> dataList = AppUtils.getClassroomList();
 
         for (Classroom model : dataList) {
             final String className = model.getName().toLowerCase();
-            final String buildingName = model.getMainBuilding().toLowerCase();
+            final String buildingName = AppUtils.getRealBuilding(model).getName().toLowerCase();
             final String classId = model.getCode();
             if (className.contains(lowerCaseQuery) || buildingName.contains(lowerCaseQuery) || classId.contains(lowerCaseQuery)) {
                 mDataList.add(model);
@@ -67,33 +70,32 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setData(mDataList.get(position), position);
+
+        final Classroom classroom = mDataList.get(position);
+
+        if (mClassFavourites.contains(classroom.getCode())) {
+            holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, starImg, null);
+        } else {
+            holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+        if ((position%2)==0)
+            holder.background.setColor(redColor);
+        else
+            holder.background.setColor(greenColor);
+        holder.classroom.setText(classroom.getName());
+        holder.building.setText(AppUtils.getRealBuilding(classroom).getName());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
+
+        TextView classroom, building;
         GradientDrawable background;
-        Context mContext;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mContext = itemView.getContext();
-            tvTitle = itemView.findViewById(R.id.tv_title);
+            classroom = itemView.findViewById(R.id.tv_classroom);
+            building = itemView.findViewById(R.id.tv_building);
             background = (GradientDrawable) (itemView.findViewById(R.id.circle_status)).getBackground();
-        }
-
-        void setData(Classroom classroom, int position) {
-            
-            if (mClassFavourites.contains(classroom.getCode())) {
-                tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, starImg, null);
-            } else {
-                tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            }
-            if ((position%2)==0)
-                background.setColor(ContextCompat.getColor(mContext, R.color.red_normal));
-            else
-                background.setColor(ContextCompat.getColor(mContext, R.color.green_normal));
-            this.tvTitle.setText(classroom.getName());
         }
     }
 }

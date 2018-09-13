@@ -41,30 +41,31 @@
                     android:id="@+id/timeline_class"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_14sdp"
+                    android:text="Aula P1"
                     android:textColor="@color/coolBlack"
-                    android:text="Aula P1"/>
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/timeline_address"
-                    android:layout_below="@id/timeline_class"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/timeline_class"
                     android:layout_marginTop="@dimen/_2sdp"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="Viale dell'universitá, 23"/>
+                    android:text="Viale dell'universitá, 23"
+                    android:textSize="@dimen/_12sdp" />
 
                 <ImageView
+                    android:id="@+id/info_building_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_info"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/image" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="@string/image"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_info" />
 
             </RelativeLayout>
 
@@ -72,57 +73,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_40sdp"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="@dimen/_40sdp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14sdp"
+                        android:text="@string/from"
                         android:textColor="@color/coolBlack"
-                        android:text="@string/from"/>
+                        android:textSize="@dimen/_14sdp" />
 
                     <TextView
                         android:id="@+id/start_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_15sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:textStyle="bold"
+                        android:text="17:30"
                         android:textColor="@color/coolBlack"
-                        android:text="17:30"/>
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_40sdp"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    android:layout_marginStart="@dimen/_40sdp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14sdp"
+                        android:text="@string/up_to"
                         android:textColor="@color/coolBlack"
-                        android:text="@string/up_to"/>
+                        android:textSize="@dimen/_14sdp" />
 
                     <TextView
                         android:id="@+id/end_hour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_15sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:textStyle="bold"
+                        android:text="21:15"
                         android:textColor="@color/coolBlack"
-                        android:text="21:15"/>
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -134,10 +135,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_2sdp"
         android:contentDescription="@string/image"
         android:src="@drawable/circle_over_line"
-        android:layout_alignParentBottom="true"
         android:translationZ="@dimen/_10sdp" />
 
 </RelativeLayout>

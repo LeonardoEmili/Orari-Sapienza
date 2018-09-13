@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.sterbsociety.orarisapienza.MySingleDateAndTimePicker
+                <com.sterbsociety.orarisapienza.views.MySingleDateAndTimePicker
                     android:id="@+id/picker_tab_0"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.sterbsociety.orarisapienza.MySingleDateAndTimePicker
+                <com.sterbsociety.orarisapienza.views.MySingleDateAndTimePicker
                     android:id="@+id/picker_tab_1"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"

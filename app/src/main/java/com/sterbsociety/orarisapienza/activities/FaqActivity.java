@@ -9,7 +9,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.sterbsociety.orarisapienza.ExpandCollapseAnimation;
+import com.sterbsociety.orarisapienza.utils.ExpandCollapseAnimation;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 

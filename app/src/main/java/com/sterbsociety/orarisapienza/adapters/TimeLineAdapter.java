@@ -1,11 +1,16 @@
 package com.sterbsociety.orarisapienza.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.ClassDetailActivity;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.views.TimelineView;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 import com.sterbsociety.orarisapienza.utils.LineType;
@@ -18,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder> {
 
-    private List<TimeLineModel> mFeedList;
-    private int currentClassroomIndex;
+    private static List<TimeLineModel> mFeedList;
+    private static int currentClassroomIndex;
 
     public TimeLineAdapter(List<TimeLineModel> feedList) {
         this(feedList, -1);
@@ -60,10 +65,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
 
         if (holder instanceof SpecialViewHolder) {
             // We want to display it as the current element.
-            ((SpecialViewHolder)holder).buildingAddress.setText(timeLineModel.getClassroom().getMainBuildingAddress());
+            ((SpecialViewHolder) holder).buildingAddress.setText(AppUtils.getRealBuilding(timeLineModel.getClassroom()).getLocation());
         } else if (holder instanceof SimpleViewHolder) {
-            // Normal visualization
-            ((SimpleViewHolder)holder).timeLineIndex.setText(String.format(Locale.getDefault(), "%d", SimpleViewHolder.index++));
+            // StudyPlanActivity visualization.
+            ((SimpleViewHolder) holder).timeLineIndex.setText(String.format(Locale.getDefault(), "%d", SimpleViewHolder.index++));
         }
     }
 
@@ -86,6 +91,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
         SpecialViewHolder(@NonNull View itemView) {
             super(itemView);
             buildingAddress = itemView.findViewById(R.id.timeline_address);
+            final ImageView infoButton = itemView.findViewById(R.id.info_building_btn);
+            infoButton.setOnClickListener(view -> {
+                final Context context = infoButton.getContext();
+                Intent i = new Intent(context, ClassDetailActivity.class);
+                i.putExtra(AppUtils.DEFAULT_KEY, mFeedList.get(currentClassroomIndex).getClassroom());
+                context.startActivity(i);
+            });
         }
     }
 

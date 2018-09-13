@@ -14,17 +14,29 @@ public class Classroom implements Parcelable {
     private String name, code;
     private int numberOfSeats;
     private double appeal;
-    private Building building;
+    private String buildingCode;
+
+    // todo buildingIndex has to be always given to this object as a light reference to its building
+    private int buildingIndex;
+
+    public Classroom(String name, String id, int numberOfSeats, Building building, int buildingIndex) {
+        this(name, id, numberOfSeats, building);
+        this.buildingIndex = buildingIndex;
+    }
 
     public Classroom(String name, String id, int numberOfSeats, Building building) {
         this(name, id, numberOfSeats);
-        this.building = building;
+        this.buildingCode = building.getCode();
     }
 
     public Classroom(String name, String id, int numberOfSeats) {
         this.name = name;
         this.code = id;
         this.numberOfSeats = numberOfSeats;
+    }
+
+    public String getBuildingCode() {
+        return buildingCode;
     }
 
     public String getName() {
@@ -47,27 +59,17 @@ public class Classroom implements Parcelable {
         this.appeal = appeal;
     }
 
-    public String getMainBuilding() {
-        // todo add reference to his father, to be replaced with getBuilding
-        return "foo";
-    }
-
-    public String getMainBuildingAddress() {
-        // todo add reference to his father, to be replaced with building.getAddress
-        return "Viale dell'universitá, 42";
-    }
-
     public String getCurrentClass() {
         // todo add reference to db ? maybe ?
         return "Fondamenti di programmazione";
     }
 
-    public Building getBuilding() {
-        return building;
+    public int getBuildingIndex() {
+        return buildingIndex;
     }
 
-    public void setBuilding(Building building) {
-        this.building = building;
+    public void setBuildingIndex(int buildingIndex) {
+        this.buildingIndex = buildingIndex;
     }
 
     // Returns available/occupied
@@ -100,7 +102,8 @@ public class Classroom implements Parcelable {
         out.writeString(code);
         out.writeInt(numberOfSeats);
         out.writeDouble(appeal);
-        out.writeParcelable(building, flags);
+        out.writeString(buildingCode);
+        out.writeInt(buildingIndex);
     }
 
     /**
@@ -122,6 +125,7 @@ public class Classroom implements Parcelable {
         this.code = in.readString();
         this.numberOfSeats = in.readInt();
         this.appeal = in.readDouble();
-        this.building = in.readParcelable(Building.class.getClassLoader());
+        this.buildingCode = in.readString();
+        this.buildingIndex = in.readInt();
     }
 }
