@@ -22,6 +22,7 @@ import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.addClassroomToFavourites;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
 
 public class ClassDetailActivity extends AppCompatActivity implements OnMapInitializedListener {
@@ -121,7 +122,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
     }
 
     public void addToFavourites(View view) {
-        AppUtils.addClassToFavourites(this, classroom.getCode());
+        addClassroomToFavourites(this, classroom);
         favouritesButton.setVisibility(View.GONE);
     }
 }

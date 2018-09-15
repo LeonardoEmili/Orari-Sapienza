@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sterbsociety.orarisapienza.activities.CurrentPlanActivity;
 import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.ClassListActivity;
@@ -34,7 +35,6 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ChangeFragmentListener changeFragmentListener;
     public final static String TAG = "HOME_FRAGMENT";
-    private CardView studyPlanBtn, timeTablesBtn, currentPlanBtn, classListBtn, faqBtn, contactBtn;
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
 
@@ -62,43 +62,19 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        studyPlanBtn = view.findViewById(R.id.study_plan_btn);
-        timeTablesBtn = view.findViewById(R.id.timetables_btn);
-        currentPlanBtn = view.findViewById(R.id.current_plan_btn);
-        classListBtn = view.findViewById(R.id.class_list_btn);
-        faqBtn = view.findViewById(R.id.faq_btn);
-        contactBtn = view.findViewById(R.id.contact_btn);
+        CardView studyPlanBtn = view.findViewById(R.id.study_plan_btn);
+        CardView timeTablesBtn = view.findViewById(R.id.timetables_btn);
+        CardView currentPlanBtn = view.findViewById(R.id.current_plan_btn);
+        CardView classListBtn = view.findViewById(R.id.class_list_btn);
+        CardView faqBtn = view.findViewById(R.id.faq_btn);
+        CardView contactBtn = view.findViewById(R.id.contact_btn);
 
-        contactBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeFragmentListener.onChangeFragmentLicked("CONTACT_FRAGMENT");
-            }
-        });
-        faqBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, FaqActivity.class));
-            }
-        });
-        classListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, ClassListActivity.class));
-            }
-        });
-        timeTablesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, LessonTimetableActivity.class));
-            }
-        });
-        studyPlanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, MapsActivity.class));
-            }
-        });
+        contactBtn.setOnClickListener(view16 -> changeFragmentListener.onChangeFragmentLicked("CONTACT_FRAGMENT"));
+        faqBtn.setOnClickListener(view15 -> startActivity(new Intent(mContext, FaqActivity.class)));
+        classListBtn.setOnClickListener(view14 -> startActivity(new Intent(mContext, ClassListActivity.class)));
+        timeTablesBtn.setOnClickListener(view13 -> startActivity(new Intent(mContext, LessonTimetableActivity.class)));
+        studyPlanBtn.setOnClickListener(view12 -> startActivity(new Intent(mContext, MapsActivity.class)));
+        currentPlanBtn.setOnClickListener(view1 -> startActivity(new Intent(mContext, CurrentPlanActivity.class)));
 
         return view;
     }

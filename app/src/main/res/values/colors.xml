@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <color name="colorPrimary">#95022F</color>
     <color name="colorPrimaryDark">#6f0123</color>
@@ -8,8 +7,10 @@
     <color name="coolBlack">#c8000000</color>
     <color name="white">#FFF</color>
     <color name="whiteSmoke">#F5F5F5</color>
+    <color name="whiteSmokeFaded">#c4f5f5f5</color>
     <color name="gray">#ef404040</color>
     <color name="lightGray">#d7b9b9b9</color>
+    <color name="superLightGray">#d7bababa</color>
     <color name="darkGray">#9a000000</color>
     <color name="divider_color">#FFB7B2B2</color>
     <color name="red_normal">#FF0000</color>
@@ -17,7 +18,6 @@
     <color name="green_pressed">#30A070</color>
     <color name="yellow_normal">#ffe033</color>
     <color name="yellow_pressed">#dec120</color>
-
     <color name="table_data_row_even">#11C5CAE9</color>
     <color name="table_data_row_odd">#33C5CAE9</color>
 </resources>

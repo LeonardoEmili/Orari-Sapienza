@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_54sdp"
     android:layout_margin="8dp"
+    android:backgroundTint="@android:color/white"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     app:cardElevation="4dp"
@@ -41,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Viale dell'universitá, 22"
+                android:textColor="@color/darkGray"
                 android:textSize="16sp" />
 
         </LinearLayout>

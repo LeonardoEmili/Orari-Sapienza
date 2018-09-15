@@ -29,12 +29,13 @@ import com.sterbsociety.orarisapienza.utils.MyLocationListener;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
+
 public class FilterActivity extends AppCompatActivity {
 
     private RangeSeekBar rangeSeekBar, rangeSeekBar2;
     private TextView leftTime, rightTime, distanceText, distanceFrom, upToText;
     private Button allowBtn, activeBtn;
-    private LocationListener mLocationListener = null;
     private LocationManager mLocationManager = null;
     boolean isGPSEnabled, needToObfuscateView, needAllowBtn, needActiveBtn;
     private LinearLayout[] toggleArray;
@@ -45,7 +46,8 @@ public class FilterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyThemeNoActionBar(FilterActivity.this);
+        //applyThemeNoActionBar(FilterActivity.this);
+        setLocale(FilterActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
@@ -89,7 +91,7 @@ public class FilterActivity extends AppCompatActivity {
 
             // mLocationManager may return NullPointerException , but here we are inside a try-catch block.
             if (isGPSEnabled = (AppUtils.isGPSEnabled(this, mLocationManager))) {
-                mLocationListener = new MyLocationListener(mLocationManager);
+                LocationListener mLocationListener = new MyLocationListener(mLocationManager);
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
             } else {
                 needToObfuscateView = true;
@@ -104,8 +106,6 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void initActivity() {
-
-        AppUtils.setLocale(FilterActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -180,25 +180,22 @@ public class FilterActivity extends AppCompatActivity {
         // Here we set up the behaviour for these buttons
         for (int i = 0; i < dayButtonArray.length; i++) {
             final int index = i;
-            dayButtonArray[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            dayButtonArray[i].setOnClickListener(view -> {
 
-                    if (isTheOnlyActiveLeft(index)) {
-                        return;
-                    }
-
-                    if (cachedDayIndex[index]) {
-                        view.setBackgroundResource(R.drawable.back_gray_rounded);
-                        ((TextView)view).setTextColor(getResources().getColor(android.R.color.black));
-                    } else {
-                        view.setBackgroundResource(R.drawable.back_secondary_col_rounded);
-                        ((TextView)view).setTextColor(getResources().getColor(android.R.color.white));
-                    }
-
-                    // If we arrive here then the button has been toggled
-                    cachedDayIndex[index] = !cachedDayIndex[index];
+                if (isTheOnlyActiveLeft(index)) {
+                    return;
                 }
+
+                if (cachedDayIndex[index]) {
+                    view.setBackgroundResource(R.drawable.back_gray_rounded);
+                    ((TextView)view).setTextColor(getResources().getColor(android.R.color.black));
+                } else {
+                    view.setBackgroundResource(R.drawable.back_secondary_col_rounded);
+                    ((TextView)view).setTextColor(getResources().getColor(android.R.color.white));
+                }
+
+                // If we arrive here then the button has been toggled
+                cachedDayIndex[index] = !cachedDayIndex[index];
             });
         }
     }
@@ -218,28 +215,25 @@ public class FilterActivity extends AppCompatActivity {
 
         for (int i = 0; i < toggleArray.length; i++) {
             final int index = i;
-            toggleArray[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for (int j = 0; j < toggleArray.length; j++) {
-                        if (j != index) {
-                            ((ImageView)toggleArray[j].getChildAt(0)).setImageDrawable(getDrawable(R.drawable.circle_to_check_static));
-                            activeToggleBtn[j] = false;
-                        }
+            toggleArray[i].setOnClickListener(view -> {
+                for (int j = 0; j < toggleArray.length; j++) {
+                    if (j != index) {
+                        ((ImageView)toggleArray[j].getChildAt(0)).setImageDrawable(getDrawable(R.drawable.circle_to_check_static));
+                        activeToggleBtn[j] = false;
                     }
-
-                    // For each toggleButton we work on LinearLayout(father) and on it's ImageView(child) which is always the first child.
-                    final ImageView mImageView = ((ImageView)((LinearLayout)view).getChildAt(0));
-
-                    if (!activeToggleBtn[index]) {
-                        //view.setBackgroundColor(getResources().getColor(R.color.colorSecondaryFaded));
-                        mImageView.setImageDrawable(getDrawable(R.drawable.animated_check));
-                        ((Animatable) mImageView.getDrawable()).start();
-                        activeToggleBtn[index] = true;
-                    }
-                    // We update the current availability button.
-                    cachedAvailabilityIndex = index;
                 }
+
+                // For each toggleButton we work on LinearLayout(father) and on it's ImageView(child) which is always the first child.
+                final ImageView mImageView = ((ImageView)((LinearLayout)view).getChildAt(0));
+
+                if (!activeToggleBtn[index]) {
+                    //view.setBackgroundColor(getResources().getColor(R.color.colorSecondaryFaded));
+                    mImageView.setImageDrawable(getDrawable(R.drawable.animated_check));
+                    ((Animatable) mImageView.getDrawable()).start();
+                    activeToggleBtn[index] = true;
+                }
+                // We update the current availability button.
+                cachedAvailabilityIndex = index;
             });
         }
     }
@@ -354,21 +348,15 @@ public class FilterActivity extends AppCompatActivity {
     private void showAlertDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(getString(R.string.gps_service_inactive));
-        dialog.setPositiveButton(getString(R.string.open_settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(myIntent);
+        dialog.setPositiveButton(getString(R.string.open_settings), (paramDialogInterface, paramInt) -> {
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(myIntent);
 
-                // Updates the value
-                isGPSEnabled = AppUtils.isGPSEnabled(FilterActivity.this, mLocationManager);
-            }
+            // Updates the value
+            isGPSEnabled = AppUtils.isGPSEnabled(FilterActivity.this, mLocationManager);
         });
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                // Nothing to do here
-            }
+        dialog.setNegativeButton(R.string.cancel, (paramDialogInterface, paramInt) -> {
+            // Nothing to do here
         });
         dialog.show();
     }

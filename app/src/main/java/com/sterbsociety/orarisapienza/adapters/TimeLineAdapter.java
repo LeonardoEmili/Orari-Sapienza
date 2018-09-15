@@ -15,6 +15,7 @@ import com.sterbsociety.orarisapienza.views.TimelineView;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 import com.sterbsociety.orarisapienza.utils.LineType;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,7 +33,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
 
     public TimeLineAdapter(List<TimeLineModel> feedList, int currentClassroomIndex) {
         mFeedList = feedList;
-        this.currentClassroomIndex = currentClassroomIndex;
+        TimeLineAdapter.currentClassroomIndex = currentClassroomIndex;
+        SimpleViewHolder.index = 1;
     }
 
     @Override
@@ -60,8 +62,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
         final TimeLineModel timeLineModel = mFeedList.get(position);
 
         holder.classroom.setText(timeLineModel.getClassroom().getName());
-        holder.startHour.setText(timeLineModel.getStartDate());
-        holder.endHour.setText(timeLineModel.getEndDate());
+        holder.startHour.setText(AppUtils.getSimpleDate(timeLineModel.getStartDate()));
+        holder.endHour.setText(AppUtils.getSimpleDate(timeLineModel.getEndDate()));
 
         if (holder instanceof SpecialViewHolder) {
             // We want to display it as the current element.
@@ -104,7 +106,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
     static class SimpleViewHolder extends BaseTimeLineViewHolder {
 
         TextView timeLineIndex;
-        static int index = 1;
+        static int index;
 
         SimpleViewHolder(@NonNull View itemView) {
             super(itemView);

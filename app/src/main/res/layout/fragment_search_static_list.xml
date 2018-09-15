@@ -13,6 +13,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:foreground="?android:attr/selectableItemBackground"
+        android:backgroundTint="@android:color/white"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal"

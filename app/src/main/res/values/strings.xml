@@ -145,7 +145,7 @@
     <string name="lesson">Course</string>
     <string name="classroom">Class</string>
     <string name="favourites">Favourites</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
     <string name="add_to_favs">ADD TO FAVOURITES</string>
     <string name="status">Status:</string>
     <string name="_course">Course:</string>
@@ -157,22 +157,30 @@
     <string name="where_to_study">Where to study?</string>
     <string name="set_study_time">SET STUDY TIME</string>
     <string name="use_current_gps_pos">Use current GPS position</string>
-    <string name="search_it_now">CREATE PLAN</string>
     <string name="your_position">Your position</string>
     <string name="create_plan">Create plan</string>
     <string name="place_not_selected">No place selected, by default Sapienza Campus will considered as place of study.</string>
-    <string name="ok" translatable="false">Ok</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="_no" translatable="false">No</string>
     <string name="study_plan">Study plan</string>
     <string name="save_it">Save it</string>
     <string name="from">from</string>
-    <string name="_up_to">up to</string>
     <string name="_from">"from "</string>
     <string name="_up_to_">" up to "</string>
     <string name="_special_" translatable="false">" - "</string>
-    <string name="vote_the_app">Vote the App!</string>
-    <string name="no_thanks">No, thanks</string>
-    <string name="rate">Vote</string>
-    <string name="study_plan_currupted">Your Study Plan is corrupted. It can\'t be used in app</string>
+    <string name="study_plan_corrupt">Your Study Plan is corrupted. It can\'t be used in app</string>
+    <string name="query_example">For example Aula P1 …</string>
+    <string name="whooops" translatable="false">WHOOOPS!</string>
+    <string name="no_internet_connection">NO INTERNET CONNECTION</string>
+    <string name="enable_it_for_a_more_accurate_study_plan_calculation">Enable it for a more accurate study plan calculation.</string>
+    <string name="active_study_plan">Active Study Plan</string>
+    <string name="you_haven_t_created_a_study_plan_yet">You haven\'t created a study plan yet</string>
+    <string name="you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan">You can do it by going back to previous page and create your custom profile at Study plan</string>
+    <string name="study_plan_created">Your study plan has been successfully created!</string>
+    <string name="delete_study_plan">Delete study plan</string>
+    <string name="delete_study_plan_hint">Are you sure you want to permanently delete your current Study Plan?</string>
+    <string name="study_plan_deleted">Study plan successfully eliminated</string>
+    <string name="selected_dates_are_incompatibles">It is not possible to create a plan with the chosen dates</string>
+    <string name="dates_error">Error in choosing dates</string>
 
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dinosaur_wrapper"
+    android:id="@+id/study_plan_layout_wrapper"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/img_view"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_160sdp"
+        android:layout_height="@dimen/_170sdp"
         android:layout_gravity="center"
         android:contentDescription="@string/image" />
 
@@ -17,30 +17,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_margin="@dimen/_8sdp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/whooops"
-        android:textSize="@dimen/_26sdp"
+        android:text="@string/you_haven_t_created_a_study_plan_yet"
+        android:textAlignment="center"
+        android:textSize="@dimen/_18sdp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="@dimen/_18sdp"
+        android:layout_marginEnd="@dimen/_18sdp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/no_internet_connection"
-        android:textSize="@dimen/_17sdp"
+        android:text="@string/you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan"
         android:textAlignment="center"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:fontFamily="sans-serif-condensed"
-        android:text="@string/enable_it_for_a_more_accurate_study_plan_calculation"
         android:textSize="@dimen/_12sdp" />
 
 </LinearLayout>

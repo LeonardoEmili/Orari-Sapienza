@@ -82,7 +82,6 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_margin="@dimen/_24sdp"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             android:background="@color/picker_button_background_selected"
             android:text="SET STUDY TIME" />

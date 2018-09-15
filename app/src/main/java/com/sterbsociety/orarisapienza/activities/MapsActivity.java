@@ -10,7 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +24,7 @@ import com.airbnb.android.airmapview.AirMapView;
 import com.airbnb.android.airmapview.DefaultAirMapViewBuilder;
 import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 
+import com.bumptech.glide.Glide;
 import com.github.florent37.rxgps.RxGps;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,15 +38,18 @@ import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isSameStudyPlanRequestAsBefore;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.sendSilentReport;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapInitializedListener {
@@ -54,18 +59,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     private MyDoubleDateAndTimePickerDialog.Builder mPickerDialog;
     private Date tab0date, tab1date;
     private Button myButton;
-    private SimpleDateFormat simpleDateFormat;
     private Location lastLocation;
     private AirMapMarker<?> lastAirMapMarker;
     private RxGps rxGps;
     private StudyPlanPresenter studyPlanPresenter;
-    public boolean isPlaceSelected;
+    public boolean isPlaceSelected, errorDialogMustBeDisplayed;
     public BuildingListViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyThemeNoActionBar(MapsActivity.this);
+        applyThemeNoActionBar(MapsActivity.this);
+        setLocale(MapsActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -95,10 +100,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                     tab0date = dates.get(0);
                     tab1date = dates.get(1);
 
-                    studyPlanPresenter.setDates(tab0date, tab1date, simpleDateFormat);
+                    // I don't think it's necessary, but better to be sure.
+                    if (tab0date == null || tab1date == null) {
+                        return;
+                    }
+
+                    if (tab0date.after(tab1date) || (getFullDateFormatter().format(tab0date).equals(getFullDateFormatter().format(tab1date)))) {
+                        errorDialogMustBeDisplayed = true;
+                    } else {
+                        errorDialogMustBeDisplayed = false;
+                        studyPlanPresenter.setDates(tab0date, tab1date, getFullDateFormatter());
+                    }
                 });
 
-        studyPlanPresenter.setDates(startDate, endDate, simpleDateFormat);
+        studyPlanPresenter.setDates(startDate, endDate, getFullDateFormatter());
 
     }
 
@@ -120,8 +135,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     // todo tested crash: phone with api level 22 crash with GIF
     private void initActivity() {
 
-        AppUtils.setLocale(MapsActivity.this);
-
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
@@ -129,16 +142,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         myButton = findViewById(R.id.button1);
         mapView = findViewById(R.id.map_view);
-        RelativeLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
+        final LinearLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
 
         if (NetworkStatus.getInstance().isOnline(this)) {
             DefaultAirMapViewBuilder mapViewBuilder = new DefaultAirMapViewBuilder(this);
             mapView.setOnMapInitializedListener(this);
             mapView.initialize(getSupportFragmentManager());
             alterNativeLayout.setVisibility(View.GONE);
+        } else {
+            ImageView imageView = alterNativeLayout.findViewById(R.id.img_view);
+            Glide.with(this).asGif().load(R.drawable.pika).into(imageView);
         }
 
-        simpleDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
         studyPlanPresenter = new StudyPlanPresenter();
 
         initSearchViewLayout();
@@ -152,7 +167,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         mAdapter = new BuildingListViewAdapter(this, AppUtils.getFavouriteBuildingList());
 
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticListSupportFragment());
-        searchViewLayout.setHint(getString(R.string.where_to_study));
+        searchViewLayout.setCollapsedHint(getString(R.string.where_to_study));
+        searchViewLayout.setExpandedHint(getString(R.string.query_example));
 
         searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
             @Override
@@ -261,9 +277,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     }
 
     private void launchStudyPlanActivity() {
-        Intent i = new Intent(this, StudyPlanActivity.class);
-        i.putExtra(AppUtils.DEFAULT_KEY, studyPlanPresenter);
-        startActivityForResult(i, STUDY_PLAN);
+        if (errorDialogMustBeDisplayed) {
+
+        } else {
+            Intent i = new Intent(this, StudyPlanActivity.class);
+            i.putExtra(AppUtils.DEFAULT_KEY, studyPlanPresenter);
+            startActivityForResult(i, STUDY_PLAN);
+        }
     }
 
     public void useGPSPosition() {
@@ -272,7 +292,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
             getAccuratePosition();
         }
         if (lastLocation != null) {
-            setMarker(lastLocation.getLatitude(), lastLocation.getLongitude(), lastLocation.hashCode(), "");
+            setMarker(lastLocation.getLatitude(), lastLocation.getLongitude(), lastLocation.hashCode(), getString(R.string.your_position));
             studyPlanPresenter.setGpsLocation(lastLocation);
             studyPlanPresenter.setBuilding(null);
         }
@@ -315,17 +335,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     }
 
     public void createStudyPlan(View view) {
-        if (isPlaceSelected) {
+        if (isPlaceSelected && !errorDialogMustBeDisplayed) {
             launchStudyPlanActivity();
         } else {
-            new AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.place_not_selected))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.ok), (dialog, id) -> {
-                        launchStudyPlanActivity();
-                    })
-                    .setNegativeButton(getString(R.string.cancel), null)
-                    .show();
+            if (errorDialogMustBeDisplayed) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.dates_error))
+                        .setMessage(getString(R.string.selected_dates_are_incompatibles))
+                        .setCancelable(false)
+                        .setNeutralButton(getString(R.string.ok), null)
+                        .show();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.place_not_selected))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok), (dialog, id) -> launchStudyPlanActivity())
+                        .setNegativeButton(getString(R.string.cancel), null)
+                        .show();
+            }
         }
     }
 }

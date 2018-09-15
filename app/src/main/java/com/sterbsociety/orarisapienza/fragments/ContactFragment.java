@@ -65,24 +65,9 @@ public class ContactFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
 
-        view.findViewById(R.id.feedback_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), FeedbackActivity.class));
-            }
-        });
-        view.findViewById(R.id.bug_report_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), BugReportActivity.class));
-            }
-        });
-        view.findViewById(R.id.dev_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), DevsActivity.class));
-            }
-        });
+        view.findViewById(R.id.feedback_btn).setOnClickListener(view13 -> startActivity(new Intent(getActivity(), FeedbackActivity.class)));
+        view.findViewById(R.id.bug_report_btn).setOnClickListener(view12 -> startActivity(new Intent(getActivity(), BugReportActivity.class)));
+        view.findViewById(R.id.dev_btn).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), DevsActivity.class)));
         return view;
     }
 

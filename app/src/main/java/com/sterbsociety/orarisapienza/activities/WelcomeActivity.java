@@ -35,6 +35,8 @@ import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.areUpdatesAllowed;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -83,8 +85,8 @@ public class WelcomeActivity extends AppCompatActivity {
         // This is a flag used for checking if the DB exists in local storage.
         databaseExists = getDatabasePath(DatabaseHelper.DATABASE_NAME).exists();
 
-        AppUtils.loadSettings(this);
-        AppUtils.setLocale(this);
+        loadSettings(this);
+        setLocale(this);
 
         authUser();
 
@@ -130,12 +132,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private void getAuthentication() {
 
         if (NetworkStatus.getInstance().isOnline(this)) {
-            mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        isAuthenticated = true;
-                    }
+            mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    isAuthenticated = true;
                 }
             });
         }
@@ -150,16 +149,13 @@ public class WelcomeActivity extends AppCompatActivity {
         onlineDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        mRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (!isAuthenticated) {
-                    getAuthentication();
-                    mHandler.postDelayed(mRunnable, 2000);
-                } else {
-                    mHandler.removeCallbacks(mRunnable);
-                    updateDataSnapshot();
-                }
+        mRunnable = () -> {
+            if (!isAuthenticated) {
+                getAuthentication();
+                mHandler.postDelayed(mRunnable, 2000);
+            } else {
+                mHandler.removeCallbacks(mRunnable);
+                updateDataSnapshot();
             }
         };
 

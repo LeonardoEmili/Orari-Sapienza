@@ -30,6 +30,9 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import org.codechimp.apprater.AppRater;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
+
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         ContactFragment.OnFragmentInteractionListener, ChangeFragmentListener {
@@ -45,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyThemeNoActionBar(MainActivity.this);
+        applyThemeNoActionBar(MainActivity.this);
+        setLocale(MainActivity.this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -91,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
      * This method is used to set the Toolbar and the buttons in the Activity.
      */
     private void initActivity() {
-
-        AppUtils.setLocale(MainActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -152,15 +154,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 new AlertDialog.Builder(this)
                         .setMessage(AppUtils.getStringByLocal(this, R.string.confirm_exit))
                         .setCancelable(false)
-                        .setPositiveButton(AppUtils.getStringByLocal(this, R.string.yes), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                MainActivity.this.finish();
-                                System.exit(0);
-                            }
+                        .setPositiveButton(AppUtils.getStringByLocal(this, R.string.yes), (dialog, id) -> {
+                            MainActivity.this.finish();
+                            System.exit(0);
                         })
                         .setNegativeButton("No", null)
                         .show();
-
             } else {
                 MainActivity.this.finish();
                 System.exit(0);

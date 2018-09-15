@@ -20,7 +20,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        app:cardBackgroundColor="@color/lightGray"
+        app:cardBackgroundColor="?attr/myCardColor"
         app:cardCornerRadius="6dp"
         app:contentPadding="15dp">
 
@@ -36,7 +36,6 @@
                 android:id="@+id/timeline_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Aula P1"
                 android:textColor="@color/coolBlack"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
@@ -51,20 +50,21 @@
                     android:id="@+id/start_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="17:20"
+                    android:textColor="@color/darkGray"
                     android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_special_"
+                    android:textColor="@color/darkGray"
                     android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/end_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="22:15"
+                    android:textColor="@color/darkGray"
                     android:textSize="@dimen/_12sdp" />
 
             </LinearLayout>

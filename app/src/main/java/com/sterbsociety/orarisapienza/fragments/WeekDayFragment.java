@@ -57,16 +57,17 @@ public abstract class WeekDayFragment extends Fragment {
     private void initFragment(View rootView) {
 
         // We don't need to set locale inside fragments if this has already done by it's "parent" activity.
+        final Drawable mIcon = getResources().getDrawable(R.drawable.ic_search_cool_black_24dp);
 
         // GUI stuff for improving the UX
         if (!AppUtils.isDarkTheme()) {
             frameLayout.setBackgroundColor(getResources().getColor(R.color.whiteSmoke));
         } else {
             sortableCourseTableView.setHeaderBackgroundColor(AppUtils.getToolbarColor());
+            mIcon.setTint(getResources().getColor(android.R.color.white));
         }
 
         mTextView = rootView.findViewById(R.id.search_help_hint);
-        final Drawable mIcon = getResources().getDrawable(R.drawable.ic_search_cool_black_24dp);
 
         final String mText = getResources().getString(R.string.timetables_help_msg);
         final int startIndex = mText.indexOf(SPAN_PLACEHOLDER);

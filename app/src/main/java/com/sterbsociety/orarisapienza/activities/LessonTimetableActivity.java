@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setToolbarColor;
 
 public class LessonTimetableActivity extends AppCompatActivity {
@@ -39,7 +41,8 @@ public class LessonTimetableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyThemeNoActionBar(LessonTimetableActivity.this);
+        applyThemeNoActionBar(LessonTimetableActivity.this);
+        setLocale(LessonTimetableActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_timetable);
         initActivity();
@@ -54,8 +57,6 @@ public class LessonTimetableActivity extends AppCompatActivity {
     }
 
     private void initActivity() {
-
-        AppUtils.setLocale(LessonTimetableActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -89,18 +90,15 @@ public class LessonTimetableActivity extends AppCompatActivity {
         searchView.setVoiceSearch(false);
         final SearchViewAdapter searchViewAdapter = new SearchViewAdapter(this, AppUtils.getCoursesList());
         searchView.setAdapter(searchViewAdapter);
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        searchView.setOnItemClickListener((adapterView, view, position, id) -> {
 
-                Course course = (Course) adapterView.getItemAtPosition(position);
-                AppUtils.addCourseToFavourites(LessonTimetableActivity.this, course, searchViewAdapter, position);
+            Course course = (Course) adapterView.getItemAtPosition(position);
+            AppUtils.addCourseToFavourites(LessonTimetableActivity.this, course, searchViewAdapter, position);
 
-                displayTableView(course);
+            displayTableView(course);
 
-                searchView.closeSearch();
-                Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + course.getId());
-            }
+            searchView.closeSearch();
+            Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + course.getId());
         });
     }
 

@@ -11,9 +11,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.TimeLineAdapter;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
@@ -24,8 +26,10 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomList;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveStudyPlan;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class StudyPlanActivity extends AppCompatActivity {
 
@@ -34,7 +38,8 @@ public class StudyPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyThemeNoActionBar(StudyPlanActivity.this);
+        applyThemeNoActionBar(StudyPlanActivity.this);
+        setLocale(StudyPlanActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_plan);
 
@@ -42,8 +47,6 @@ public class StudyPlanActivity extends AppCompatActivity {
     }
 
     private void initActivity() {
-
-        AppUtils.setLocale(StudyPlanActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -78,16 +81,17 @@ public class StudyPlanActivity extends AppCompatActivity {
         // Each TimeLine model should have a date and a classroom
         studyPlan = new StudyPlan();
         List<TimeLineModel> dataList = new ArrayList<>();
-        dataList.add(new TimeLineModel("07:00", "07:30", getClassroomList().get(0)));
-        dataList.add(new TimeLineModel("08:00", "10:20", getClassroomList().get(3)));
-        dataList.add(new TimeLineModel("11:30", "12:00", getClassroomList().get(6)));
-        dataList.add(new TimeLineModel("12:10", "12:20", getClassroomList().get(9)));
-        dataList.add(new TimeLineModel("12:30", "14:20", getClassroomList().get(12)));
-        dataList.add(new TimeLineModel("14:30", "15:30", getClassroomList().get(15)));
-        dataList.add(new TimeLineModel("16:00", "17:00", getClassroomList().get(18)));
-        dataList.add(new TimeLineModel("17:30", "18:20", getClassroomList().get(21)));
-        dataList.add(new TimeLineModel("19:00", "20:00", getClassroomList().get(24)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 07:00", "Fri, 14 Sep, 2018 07:30", getClassroomList().get(0)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 08:00", "Fri, 14 Sep, 2018 10:20", getClassroomList().get(3)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 11:30", "Fri, 14 Sep, 2018 12:00", getClassroomList().get(6)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 12:10", "Fri, 14 Sep, 2018 12:20", getClassroomList().get(9)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 12:30", "Fri, 14 Sep, 2018 14:20", getClassroomList().get(12)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 14:30", "Fri, 14 Sep, 2018 15:30", getClassroomList().get(15)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 16:00", "Fri, 14 Sep, 2018 17:00", getClassroomList().get(18)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 17:30", "Fri, 14 Sep, 2018 18:20", getClassroomList().get(21)));
+        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 19:00", "Fri, 14 Sep, 2018 20:00", getClassroomList().get(24)));
         studyPlan.setDataList(dataList);
+        System.out.println(studyPlanPresenter.getStartDate() + "  " +  studyPlanPresenter.getEndDate());
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
     }
 
@@ -120,6 +124,9 @@ public class StudyPlanActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         if (outcome) {
             setResult(Activity.RESULT_OK, returnIntent);
+            StyleableToast.makeText(this,
+                    getResources().getString(R.string.study_plan_created),
+                    Toast.LENGTH_LONG, R.style.successToast).show();
             finish();
         } else {
             setResult(Activity.RESULT_CANCELED, returnIntent);

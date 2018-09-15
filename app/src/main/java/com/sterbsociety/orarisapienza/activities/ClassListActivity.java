@@ -86,12 +86,12 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
                 if (menuPosition == 0) {
 
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
-                    String classID = mDataList.get(adapterPosition).getCode();
+                    Classroom classroom = mDataList.get(adapterPosition);
                     if (mTextView.getCompoundDrawables()[2] != null) {
-                        AppUtils.removeClassFromFavourites(ClassListActivity.this, classID);
+                        AppUtils.removeClassFromFavourites(ClassListActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     } else {
-                        AppUtils.addClassToFavourites(ClassListActivity.this, classID);
+                        AppUtils.addClassroomToFavourites(ClassListActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.ic_starred), null);
                     }
                 } else {

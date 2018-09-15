@@ -15,7 +15,9 @@ import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.hideSoftKeyboard;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class FeedbackActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
@@ -25,15 +27,14 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnFocusC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyTheme(FeedbackActivity.this);
+        applyTheme(FeedbackActivity.this);
+        setLocale(FeedbackActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         initActivity();
     }
 
     private void initActivity() {
-
-        AppUtils.setLocale(FeedbackActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -47,23 +48,15 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnFocusC
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         final LinearLayout linearLayout = findViewById(R.id.main_wrapper);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linearLayout.requestFocus();
-            }
-        });
+        linearLayout.setOnClickListener(view -> linearLayout.requestFocus());
 
         userText = findViewById(R.id.user_text);
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
 
-        View.OnFocusChangeListener mListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b)
-                    hideSoftKeyboard(FeedbackActivity.this, view);
-            }
+        View.OnFocusChangeListener mListener = (view, b) -> {
+            if (!b)
+                hideSoftKeyboard(FeedbackActivity.this, view);
         };
 
         userText.setOnFocusChangeListener(mListener);

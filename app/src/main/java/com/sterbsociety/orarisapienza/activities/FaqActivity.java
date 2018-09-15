@@ -16,6 +16,9 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
+
 public class FaqActivity extends AppCompatActivity {
 
     private static final int FAQ_ENTRIES = 8;
@@ -27,7 +30,8 @@ public class FaqActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyTheme(FaqActivity.this);
+        applyTheme(FaqActivity.this);
+        setLocale(FaqActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
 
@@ -46,8 +50,6 @@ public class FaqActivity extends AppCompatActivity {
 
 
     private void initActivity() {
-
-        AppUtils.setLocale(FaqActivity.this);
 
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
@@ -80,45 +82,41 @@ public class FaqActivity extends AppCompatActivity {
             LinearLayout currentQuestion = (LinearLayout) questionList.get(i);
             final ImageView mImageView = (ImageView)currentQuestion.getChildAt(0);
 
-            currentQuestion.setOnClickListener(new View.OnClickListener() {
+            currentQuestion.setOnClickListener(view -> {
 
-                @Override
-                public void onClick(View view) {
+                // Only if previous animation has finished other can restart.
+                if (flags[index]) return;
 
-                    // Only if previous animation has finished other can restart.
-                    if (flags[index]) return;
+                flags[index] = true;
 
-                    flags[index] = true;
-
-                    ExpandCollapseAnimation animation;
-                    if (currentAnswer.getVisibility() == View.VISIBLE) {
-                        mImageView.setImageResource(R.drawable.ic_show_more);
-                        animation = new ExpandCollapseAnimation(currentAnswer, ANIMATION_DURATION, COLLAPSE_ACTION);
-                    }
-                    else {
-                        mImageView.setImageResource(R.drawable.ic_show_less);
-                        animation = new ExpandCollapseAnimation(currentAnswer, ANIMATION_DURATION, EXPAND_ACTION);
-                    }
-
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            // nothing to do here
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            flags[index] = false;
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                            // nothing to do here
-                        }
-                    });
-
-                    currentAnswer.startAnimation(animation);
+                ExpandCollapseAnimation animation;
+                if (currentAnswer.getVisibility() == View.VISIBLE) {
+                    mImageView.setImageResource(R.drawable.ic_show_more);
+                    animation = new ExpandCollapseAnimation(currentAnswer, ANIMATION_DURATION, COLLAPSE_ACTION);
                 }
+                else {
+                    mImageView.setImageResource(R.drawable.ic_show_less);
+                    animation = new ExpandCollapseAnimation(currentAnswer, ANIMATION_DURATION, EXPAND_ACTION);
+                }
+
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        // nothing to do here
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        flags[index] = false;
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                        // nothing to do here
+                    }
+                });
+
+                currentAnswer.startAnimation(animation);
             });
             // End of Q&A list setup
         }

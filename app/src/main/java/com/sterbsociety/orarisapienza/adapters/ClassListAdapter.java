@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.ViewHolder> {

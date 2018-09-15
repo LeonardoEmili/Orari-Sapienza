@@ -108,11 +108,8 @@ public class MyDoubleDateAndTimePickerDialog extends BaseDialog {
 
         final View sheetContentLayout = view.findViewById(R.id.sheetContentLayout);
         if (sheetContentLayout != null) {
-            sheetContentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            sheetContentLayout.setOnClickListener(v -> {
 
-                }
             });
             if (backgroundColor != null) {
                 sheetContentLayout.setBackgroundColor(backgroundColor);
@@ -133,22 +130,12 @@ public class MyDoubleDateAndTimePickerDialog extends BaseDialog {
         if (tab0Text != null) {
             buttonTab0.setText(tab0Text);
         }
-        buttonTab0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayTab0();
-            }
-        });
+        buttonTab0.setOnClickListener(view13 -> displayTab0());
 
         if (tab1Text != null) {
             buttonTab1.setText(tab1Text);
         }
-        buttonTab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayTab1();
-            }
-        });
+        buttonTab1.setOnClickListener(view12 -> displayTab1());
 
         final TextView buttonOk = view.findViewById(R.id.buttonOk);
         if (buttonOk != null) {
@@ -160,15 +147,12 @@ public class MyDoubleDateAndTimePickerDialog extends BaseDialog {
         }
 
         if (buttonOk != null) {
-            buttonOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isTab0Visible()) {
-                        displayTab1();
-                    } else {
-                        okClicked = true;
-                        close();
-                    }
+            buttonOk.setOnClickListener(view1 -> {
+                if (isTab0Visible()) {
+                    displayTab1();
+                } else {
+                    okClicked = true;
+                    close();
                 }
             });
         }
@@ -238,12 +222,9 @@ public class MyDoubleDateAndTimePickerDialog extends BaseDialog {
         }
 
         if (secondDateAfterFirst) {
-            pickerTab0.addOnDateChangedListener(new MySingleDateAndTimePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(String displayed, Date date) {
-                    pickerTab1.setMinDate(date);
-                    pickerTab1.checkPickersMinMax();
-                }
+            pickerTab0.addOnDateChangedListener((displayed, date) -> {
+                pickerTab1.setMinDate(date);
+                pickerTab1.checkPickersMinMax();
             });
         }
     }

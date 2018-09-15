@@ -52,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/timeline_class"
                     android:layout_marginTop="@dimen/_2sdp"
+                    android:textColor="@color/darkGray"
                     android:text="Viale dell'universitá, 23"
                     android:textSize="@dimen/_12sdp" />
 

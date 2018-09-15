@@ -7,14 +7,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -24,7 +23,6 @@ import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
@@ -35,22 +33,21 @@ import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class FavouritesActivity extends AppCompatActivity  implements SwipeItemClickListener {
+import static com.sterbsociety.orarisapienza.utils.AppUtils.DEFAULT_KEY;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
-    private CoordinatorLayout mainWrapper;
+public class FavouritesActivity extends AppCompatActivity implements SwipeItemClickListener {
+
     private SwipeMenuRecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.ItemDecoration mItemDecoration;
-    private LinearLayout mAdsContainer;
-    private AdView mAdView;
-    private AdRequest mAdRequest;
     protected ClassListAdapter mAdapter;
-    protected ArrayList<Classroom> mDataList;
+    protected ArrayList<Classroom> mDataList, backupList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyTheme(FavouritesActivity.this);
+        applyTheme(FavouritesActivity.this);
+        setLocale(FavouritesActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
         initActivity();
@@ -60,27 +57,25 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
 
     private void initActivity() {
 
-        AppUtils.setLocale(FavouritesActivity.this);
-
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(getString(R.string.favourite_classroom));
         }
 
-        mAdsContainer = findViewById(R.id.ad_container);
+        final LinearLayout mAdsContainer = findViewById(R.id.ad_container);
 
         // AdMob App ID: ca-app-pub-9817701892167034~2496155654
         String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         String deviceId = AppUtils.hash(androidId).toUpperCase();
 
-        mAdView = new AdView(getApplicationContext());
+        final AdView mAdView = new AdView(getApplicationContext());
         mAdView.setAdSize(AdSize.BANNER);
         mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        mAdRequest = new AdRequest.Builder()
+        AdRequest mAdRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice(deviceId)
                 .build();
@@ -91,16 +86,17 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
 
     private void initClassListView() {
 
-        mainWrapper = findViewById(R.id.main_content);
+        CoordinatorLayout mainWrapper = findViewById(R.id.main_content);
 
         // This method handles click inside the layout
         AppUtils.setupUIElements(this, mainWrapper);
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(this);
-        mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        final RecyclerView.ItemDecoration mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
         mDataList = AppUtils.getFavouriteClassroomList();
+        backupList = new ArrayList<>(mDataList);
         mAdapter = new ClassListAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -116,48 +112,32 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
 
     private final SwipeMenuCreator swipeMenuCreator = (swipeLeftMenu, swipeRightMenu, viewType) -> {
         int width = getResources().getDimensionPixelSize(R.dimen._64sdp);
-
         int height = ViewGroup.LayoutParams.MATCH_PARENT;
-
-        {
-            SwipeMenuItem starItem = new SwipeMenuItem(FavouritesActivity.this)
-                    .setBackground(R.drawable.selector_yellow)
-                    .setImage(R.drawable.ic_star)
-                    .setWidth(width)
-                    .setHeight(height);
-            swipeRightMenu.addMenuItem(starItem);
-
-            SwipeMenuItem addItem = new SwipeMenuItem(FavouritesActivity.this)
-                    .setBackground(R.drawable.selector_green)
-                    .setImage(R.drawable.ic_info)
-                    .setText("Info")
-                    .setTextColor(Color.WHITE)
-                    .setWidth(width)
-                    .setHeight(height);
-            swipeRightMenu.addMenuItem(addItem);
-        }
+        final SwipeMenuItem starItem = new SwipeMenuItem(FavouritesActivity.this)
+                .setBackground(R.drawable.selector_yellow)
+                .setImage(R.drawable.ic_star)
+                .setWidth(width)
+                .setHeight(height);
+        swipeRightMenu.addMenuItem(starItem);
     };
 
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge) {
             menuBridge.closeMenu();
-
             int direction = menuBridge.getDirection();
             int adapterPosition = menuBridge.getAdapterPosition();
             int menuPosition = menuBridge.getPosition();
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
                 //noinspection StatementWithEmptyBody
                 if (menuPosition == 0) {
-
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
-                    String classID = mDataList.get(adapterPosition).getCode();
+                    Classroom classroom = mDataList.get(adapterPosition);
                     if (mTextView.getCompoundDrawables()[2] != null) {
-                        AppUtils.removeClassFromFavourites(FavouritesActivity.this, classID);
+                        AppUtils.removeClassFromFavourites(FavouritesActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                    }
-                    else {
-                        AppUtils.addClassToFavourites(FavouritesActivity.this, classID);
+                    } else {
+                        AppUtils.addClassroomToFavourites(FavouritesActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.ic_starred), null);
                     }
                 } else {
@@ -169,13 +149,15 @@ public class FavouritesActivity extends AppCompatActivity  implements SwipeItemC
     };
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Toast.makeText(this, "You clicked the element number: "+position, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, ClassDetailActivity.class);
+        i.putExtra(DEFAULT_KEY, backupList.get(position));
+        startActivity(i);
     }
 }

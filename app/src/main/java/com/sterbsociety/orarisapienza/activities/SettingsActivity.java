@@ -23,6 +23,9 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
+
 /**
  * See "http://developer.android.com/design/patterns/settings.html"
  * Android Design: Settings for design guidelines and the
@@ -58,10 +61,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        AppUtils.applyTheme(SettingsActivity.this);
+        applyTheme(SettingsActivity.this);
+        setLocale(SettingsActivity.this);
         super.onCreate(savedInstanceState);
 
-        AppUtils.setLocale(SettingsActivity.this);
         AppUtils.hideSystemUI(getWindow().getDecorView());
         setupActionBar();
 
@@ -205,51 +208,48 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    return true;
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
+        } else if (preference instanceof RingtonePreference) {
+            // For ringtone preferences, look up the correct display value
+            // using RingtoneManager.
+            if (TextUtils.isEmpty(stringValue)) {
+                return true;
 
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        if (name.contains(".ogg"))
-                            preference.setSummary(name.substring(0, name.length()-4));
-                        else
-                            preference.setSummary(name);
-                    }
-                }
             } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
+                Ringtone ringtone = RingtoneManager.getRingtone(
+                        preference.getContext(), Uri.parse(stringValue));
+
+                if (ringtone == null) {
+                    // Clear the summary if there was a lookup error.
+                    preference.setSummary(null);
+                } else {
+                    // Set the summary to reflect the new ringtone display
+                    // name.
+                    String name = ringtone.getTitle(preference.getContext());
+                    if (name.contains(".ogg"))
+                        preference.setSummary(name.substring(0, name.length()-4));
+                    else
+                        preference.setSummary(name);
+                }
             }
-            return true;
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
         }
+        return true;
     };
 
     @Override

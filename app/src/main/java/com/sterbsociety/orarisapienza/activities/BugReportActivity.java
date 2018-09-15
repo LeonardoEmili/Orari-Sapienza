@@ -78,26 +78,18 @@ public class BugReportActivity extends AppCompatActivity {
         }
 
         final LinearLayout linearLayout = findViewById(R.id.main_wrap);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linearLayout.requestFocus();
-            }
-        });
+        linearLayout.setOnClickListener(view -> linearLayout.requestFocus());
 
         findViewById(R.id.wrapper_main);
         editText = findViewById(R.id.edit_text);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (!b) {
-                    AppUtils.hideSoftKeyboard(BugReportActivity.this, view);
-                    if (editText.getText().toString().trim().length() < MINIMUM_DESCRIPTION_LENGTH) {
-                        editText.setError(getResources().getString(R.string.error));
-                    }
-                } else {
-                    editText.setError(null);
+        editText.setOnFocusChangeListener((view, b) -> {
+            if (!b) {
+                AppUtils.hideSoftKeyboard(BugReportActivity.this, view);
+                if (editText.getText().toString().trim().length() < MINIMUM_DESCRIPTION_LENGTH) {
+                    editText.setError(getResources().getString(R.string.error));
                 }
+            } else {
+                editText.setError(null);
             }
         });
 
@@ -109,35 +101,21 @@ public class BugReportActivity extends AppCompatActivity {
 
         // This library helps us for retrieving these useful info, more info at:
         // https://github.com/jaredrummler/AndroidDeviceNames
-        DeviceName.with(BugReportActivity.this).request(new DeviceName.Callback() {
-            @Override
-            public void onFinished(DeviceName.DeviceInfo info, Exception error) {
-                String mText = "\n\n" +
-                        appVersion    + ": "  + AppUtils.APP_VERSION        + "\n" +
-                        manufacturer  + ": "  + info.manufacturer           + "\n" +
-                        deviceName    + info.marketName             + "\n" +
-                        deviceModel   + info.model                  + "\n" +
-                        versionOS     + Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")";
-                editText.setText(mText, TextView.BufferType.EDITABLE);
-            }
+        DeviceName.with(BugReportActivity.this).request((info, error) -> {
+            String mText = "\n\n" +
+                    appVersion    + ": "  + AppUtils.APP_VERSION        + "\n" +
+                    manufacturer  + ": "  + info.manufacturer           + "\n" +
+                    deviceName    + info.marketName             + "\n" +
+                    deviceModel   + info.model                  + "\n" +
+                    versionOS     + Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")";
+            editText.setText(mText, TextView.BufferType.EDITABLE);
         });
 
         linear = findViewById(R.id.linear);
 
-        attachImageListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppUtils.pickImage(BugReportActivity.this);
+        attachImageListener = view -> AppUtils.pickImage(BugReportActivity.this);
 
-            }
-        };
-
-        removeImageListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog(view);
-            }
-        };
+        removeImageListener = view -> showAlertDialog(view);
 
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
@@ -289,18 +267,12 @@ public class BugReportActivity extends AppCompatActivity {
         builder.setTitle(getResources().getString(R.string.attachment_remove));
         builder.setMessage(getResources().getString(R.string.attachment_remove_question));
         builder.setPositiveButton(getResources().getString(R.string.confirm),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        linear.removeViewAt(index);
-                        mAttachmentList.remove(index);
-                    }
+                (dialog, which) -> {
+                    linear.removeViewAt(index);
+                    mAttachmentList.remove(index);
                 });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Nothing to do here if the user clicks on cancel.
-            }
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+            // Nothing to do here if the user clicks on cancel.
         });
 
         AlertDialog dialog = builder.create();

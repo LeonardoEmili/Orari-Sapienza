@@ -1,6 +1,5 @@
 package com.sterbsociety.orarisapienza.utils;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +19,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -35,12 +33,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.MailTask;
 import com.sterbsociety.orarisapienza.R;
-import com.sterbsociety.orarisapienza.activities.BugReportActivity;
-import com.sterbsociety.orarisapienza.activities.MainActivity;
 import com.sterbsociety.orarisapienza.activities.SettingsActivity;
 import com.sterbsociety.orarisapienza.activities.StudyPlanActivity;
 import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
@@ -63,7 +58,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -105,12 +99,9 @@ public class AppUtils {
 
         // Set up touch listener for non-text box views to hide keyboard.
         if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                @SuppressLint("ClickableViewAccessibility")
-                public boolean onTouch(View v, MotionEvent event) {
-                    AppUtils.hideSoftKeyboard(mActivity, mView);
-                    return false;
-                }
+            view.setOnTouchListener((v, event) -> {
+                AppUtils.hideSoftKeyboard(mActivity, mView);
+                return false;
             });
         }
 
@@ -274,7 +265,6 @@ public class AppUtils {
 
         // After we have parsed everything we check if the Study Plan is still valid.
         checkStudyPlanIntegrity(activity);
-        System.out.println(currentStudyPlan);
     }
 
     private static ArrayList<Classroom> classroomList, favouriteClassroomList;
@@ -338,13 +328,12 @@ public class AppUtils {
         if (studyPlan == null) {
             return;
         }
-        System.out.println(new GsonBuilder().create().toJson(studyPlan));
         try {
             for (TimeLineModel model : studyPlan.getDataList()) {
                 int buildingIndex = model.getClassroom().getBuildingIndex();
                 if (!buildingList.get(buildingIndex).getCode().equals(model.getClassroom().getBuildingCode())) {
                     clearCachedStudyPlan(activity);
-                    StyleableToast.makeText(activity, getStringByLocal(activity, R.string.study_plan_currupted),
+                    StyleableToast.makeText(activity, getStringByLocal(activity, R.string.study_plan_corrupt),
                             Toast.LENGTH_LONG, R.style.errorToast).show();
                     return;
                 }
@@ -413,15 +402,17 @@ public class AppUtils {
         }
     }
 
-    public static void addClassToFavourites(Activity activity, String classId) {
+    public static void addClassroomToFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.add(classId);
+        mFavouriteClassSet.add(classroom.getCode());
+        favouriteClassroomList.add(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
-    public static void removeClassFromFavourites(Activity activity, String classId) {
+    public static void removeClassFromFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.remove(classId);
+        mFavouriteClassSet.remove(classroom.getCode());
+        favouriteClassroomList.remove(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
@@ -565,20 +556,12 @@ public class AppUtils {
                         // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        mDecorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                // Note that system bars will only be "visible" if none of the
-                // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    // The system bars are visible.
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideSystemUI(mDecorView);
-                        }
-                    }, 2000);
-                }
+        mDecorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            // Note that system bars will only be "visible" if none of the
+            // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                // The system bars are visible.
+                new Handler().postDelayed(() -> hideSystemUI(mDecorView), 2000);
             }
         });
     }
@@ -743,12 +726,7 @@ public class AppUtils {
 
         // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
         ArrayList<String> dirtySortedFavouriteCourses = new ArrayList<>(mFavouriteCourseSet);
-        Collections.sort(dirtySortedFavouriteCourses, new Comparator<String>() {
-            @Override
-            public int compare(String c1, String c2) {
-                return Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]);
-            }
-        });
+        Collections.sort(dirtySortedFavouriteCourses, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
 
         // This is responsible for cleaning buildingCodes from their dirty indexes.
         ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
@@ -1019,7 +997,7 @@ public class AppUtils {
         }
     }
 
-    private static void clearCachedStudyPlan(Activity activity) {
+    public static void clearCachedStudyPlan(Activity activity) {
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().remove(KEY_PREF_STUDY_PLAN).apply();
         currentStudyPlan = null;
     }
@@ -1033,4 +1011,25 @@ public class AppUtils {
     }
 
     public static final int STUDY_PLAN = 79;
+
+    private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
+
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+
+    public static SimpleDateFormat getFullDateFormatter() {
+        return fullDateFormat;
+    }
+
+    public static SimpleDateFormat getSimpleDateFormat() {
+        return simpleDateFormat;
+    }
+
+    public static String getSimpleDate(@NonNull String fullDate) {
+        try {
+            return simpleDateFormat.format(fullDateFormat.parse(fullDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return fullDate.substring(fullDate.length()-5, fullDate.length());
+        }
+    }
 }
