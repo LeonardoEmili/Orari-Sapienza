@@ -22,6 +22,7 @@ import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -125,6 +126,11 @@ public class LessonTimetableActivity extends AppCompatActivity {
             int scrollIndex = map.get(classroomCode);   // We go ahead with this index until we find 0
             final List<Integer> lessonList = AppUtils.MATRIX.get(classroomCode);  // List with integers
             final int lessonIndex = lessonList.get(scrollIndex);    // This is the index for the lesson
+            if (lessonIndex == 0) {
+                // Just to be sure that some lesson index is not 0
+                continue;
+            }
+            System.out.println(lessonIndex);
             final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");  // We retrieve lesson's info
             final String day = getDayByIndex(lessonIndex);
             final String startLesson = getHourByIndex(scrollIndex);
@@ -132,6 +138,8 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 scrollIndex++;
             }
             scrollIndex--;
+
+            System.out.println(Arrays.toString(lessonParts));
             scheduledLessons.get(scrollIndex / 157).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[2], lessonParts[3]));
         }
     }

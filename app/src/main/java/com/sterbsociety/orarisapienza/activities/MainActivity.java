@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         if (isDBAvailable()) {
             parseDatabase(this);
         } else {
+            Log.e("not presente", "ee");
             // todo show alert box and close the App
         }
         initActivity();

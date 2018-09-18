@@ -693,8 +693,7 @@ public class AppUtils {
         DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
     }
 
-    private static ArrayList<Course> courseList, mFavouriteCourseList;
-
+    private static ArrayList<Course> courseList, mFavouriteCourseList = new ArrayList<>();
 
     public static List<Course> getCoursesList() {
         return courseList;
