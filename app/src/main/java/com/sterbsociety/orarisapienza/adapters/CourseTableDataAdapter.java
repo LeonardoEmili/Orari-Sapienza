@@ -17,7 +17,7 @@ import de.codecrafters.tableview.toolkit.LongPressAwareTableDataAdapter;
 
 public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesson> {
 
-    private static final int TEXT_SIZE = 15;
+    private static final int TEXT_SIZE = 14;
 
     public CourseTableDataAdapter(final Context context, final List<Lesson> data, final TableView<Lesson> tableView) {
         super(context, data, tableView);
@@ -61,12 +61,12 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
         final TextView textView = new TextView(getContext());
         textView.setText(startHour);
         textView.setPadding(30, 12, 20, 4);
-        textView.setTextSize(TEXT_SIZE);
+        textView.setTextSize(TEXT_SIZE+1);
         linearLayout.addView(textView);
         final TextView textView2 = new TextView(getContext());
         textView2.setText(endHour);
         textView2.setPadding(30, 4, 20, 12);
-        textView2.setTextSize(TEXT_SIZE);
+        textView2.setTextSize(TEXT_SIZE+1);
         linearLayout.addView(textView2);
         return linearLayout;
     }

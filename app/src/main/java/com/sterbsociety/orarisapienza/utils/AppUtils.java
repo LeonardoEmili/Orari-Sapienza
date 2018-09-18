@@ -1123,6 +1123,18 @@ public class AppUtils {
 
 
     public static String getHourByIndex(int index) {
-        return "12:00";
+        return String.format("%02d",(415+index*5)/60)+":"+String.format("%02d", (415+index*5)%60);
     }
+
+    public static String getClassroomName(String code){
+        for (Building b:AppUtils.getBuildingList()){
+            if (b.getCode().equals(code.substring(0,6))){
+                for (Classroom c:b.getAule()){
+                    if(c.getCode().equals(code.substring(6))){return c.getName();}
+                }
+            }
+        }
+        return code;
+    }
+
 }

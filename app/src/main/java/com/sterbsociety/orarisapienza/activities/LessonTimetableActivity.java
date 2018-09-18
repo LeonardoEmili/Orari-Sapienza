@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
@@ -106,8 +107,8 @@ public class LessonTimetableActivity extends AppCompatActivity {
 
     /**
      * @param course is the course selected by the user
-     * Inside here is the logic of retrieving correct course details such
-     * as lessons and timetables from DB.
+     *               Inside here is the logic of retrieving correct course details such
+     *               as lessons and timetables from DB.
      */
     private void readDataFromDB(Course course) {
         scheduledLessons = new ArrayList<>();
@@ -126,13 +127,12 @@ public class LessonTimetableActivity extends AppCompatActivity {
             final int lessonIndex = lessonList.get(scrollIndex);    // This is the index for the lesson
             final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");  // We retrieve lesson's info
             final String day = getDayByIndex(lessonIndex);
-            final String startLesson = getHourByIndex(scrollIndex); // todo create method
-            while (lessonList.get(scrollIndex) != 0) {
+            final String startLesson = getHourByIndex(scrollIndex);
+            while (scrollIndex != 785 && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
             }
             scrollIndex--;
-            // todo pass as first argument to new Lesson not the classroomCode but instead classRoomName (maybe we need a map to be put in utils)
-            scheduledLessons.get(scrollIndex / 157).add(new Lesson(classroomCode, course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[0], lessonParts[3]));
+            scheduledLessons.get(scrollIndex / 157).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[0], lessonParts[3]));
         }
     }
 
