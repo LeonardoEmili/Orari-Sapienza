@@ -12,6 +12,7 @@ import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +39,6 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         super.notifyDataSetChanged();
     }
 
-    // todo put conditions in AND with FilterActivity conditions
     public void filterClassroomsByQuery(String query) {
 
         mDataList.clear();
@@ -54,6 +54,73 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void applyOtherFilters() {
+        final boolean[] dayIndexArray = AppUtils.getSelectedDayBtnIndex();
+        final int startHour = AppUtils.getMinHour();
+        final int endHour = AppUtils.getMaxHour();
+        Iterator<Classroom> iterator = mDataList.iterator();
+        while (iterator.hasNext()) {
+            Classroom currentClassroom = iterator.next();
+            if (!isClassroomAvailableForCertainRangeOfTime(dayIndexArray, startHour, endHour, currentClassroom)) {
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * @param indexArray is the array of days formed by the user request, each day requested is true
+     * @param startHour  is the start hour from when the user wants to check classrooms
+     * @param endHour    is the end hour from when the user wants to check classrooms
+     * @return result of user's request, true if this classroom is available, else return false
+     */
+    private boolean isClassroomAvailableForCertainRangeOfTime(boolean[] indexArray, int startHour, int endHour, Classroom classroom) {
+        for (int dayIndex = 0; dayIndex < indexArray.length; dayIndex++) {
+            if (indexArray[dayIndex]) {
+                // Inside here we have to check for the daily availability, startHour and endHour are simple ints (eg. 14:20 -> 14)
+                int startHourIndex = dayIndex + startHour * 5;      // 5 is random
+                final int endHourIndex = dayIndex + endHour * 5;    // 5 is random
+                // Down here we get the array of ints related to the classroom we are checking for
+                int[] classroomRow = new int[42];
+                while (startHourIndex <= endHourIndex) {
+                    if (classroomRow[startHourIndex] != -1) {
+                        // This means that classroom is now occupied
+                        return false;
+                    }
+                    // It goes for 5 minutes ahead
+                    startHourIndex++;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param indexArray is the array of days formed by the user request, each day requested is true
+     * @param startHour  is the start hour from when the user wants to check classrooms
+     * @param endHour    is the end hour from when the user wants to check classrooms
+     * @return result of user's request, true if this classroom is available, else return false
+     */
+    private boolean isClassroomOccupiedForCertainRangeOfTime(boolean[] indexArray, int startHour, int endHour, Classroom classroom) {
+        for (int dayIndex = 0; dayIndex < indexArray.length; dayIndex++) {
+            if (indexArray[dayIndex]) {
+                // Inside here we have to check for the daily availability, startHour and endHour are simple ints (eg. 14:20 -> 14)
+                int startHourIndex = dayIndex + startHour * 5;      // 5 is random
+                final int endHourIndex = dayIndex + endHour * 5;    // 5 is random
+                // Down here we get the array of ints related to the classroom we are checking for
+                int[] classroomRow = new int[42];
+                while (startHourIndex <= endHourIndex) {
+                    if (classroomRow[startHourIndex] == -1) {
+                        // This means that classroom is now available
+                        return false;
+                    }
+                    // It goes for 5 minutes ahead
+                    startHourIndex++;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -77,7 +144,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         } else {
             holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
-        if ((position%2)==0)
+        if ((position % 2) == 0)
             holder.background.setColor(redColor);
         else
             holder.background.setColor(greenColor);

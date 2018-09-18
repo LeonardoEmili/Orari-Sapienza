@@ -11,22 +11,27 @@ public class Building implements Parcelable {
 
     private String name;
     private String code;
-    private iVec2 pos;
+    public iVec2 pos;
     private String location;
-    private ArrayList<Classroom> classrooms;
+    public ArrayList<Classroom> aule;
     private String[] other;
+    public String maps;
 
     public Building(String name, String code, iVec2 pos, String location) {
-        this.classrooms = new ArrayList<>();
-        this.name = name;
-        this.code = code;
+        this(name, code);
         this.pos = pos;
         this.location = location;
     }
 
     public Building(String name, String code) {
+        this();
         this.name = name;
         this.code = code;
+    }
+
+    public Building() {
+        // Required empty public constructor
+        this.aule = new ArrayList<>();
     }
 
     public void fillOther(String[] array) {
@@ -34,9 +39,13 @@ public class Building implements Parcelable {
     }
 
     public void printAule() {
-        for (Classroom classroom : this.classrooms) {
+        for (Classroom classroom : this.aule) {
             classroom.printInfo();
         }
+    }
+
+    public ArrayList<Classroom> getAule() {
+        return this.aule;
     }
 
     public double getLat() {
@@ -75,7 +84,7 @@ public class Building implements Parcelable {
         out.writeString(code);
         out.writeParcelable(pos, flags);
         out.writeString(location);
-        out.writeList(classrooms);
+        out.writeList(aule);
         out.writeStringArray(other);
     }
 
@@ -98,7 +107,7 @@ public class Building implements Parcelable {
         code = in.readString();
         pos = in.readParcelable(iVec2.class.getClassLoader());
         location = in.readString();
-        in.readList(classrooms, Classroom.class.getClassLoader());
+        in.readList(aule, Classroom.class.getClassLoader());
         other = in.createStringArray();
     }
 }

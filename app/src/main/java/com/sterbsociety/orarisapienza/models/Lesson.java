@@ -1,6 +1,5 @@
 package com.sterbsociety.orarisapienza.models;
 
-// todo should be removed
 public class Lesson {
 
     private String classRoom;
@@ -12,7 +11,7 @@ public class Lesson {
     private String startLesson;
     private String subjectName;
 
-    public Lesson(String classRoom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName) {
+    public Lesson(String classRoom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year) {
         this.classRoom = classRoom;
         this.courseId = courseId;
         this.courseName = courseName;
@@ -21,6 +20,10 @@ public class Lesson {
         this.professor = professor;
         this.startLesson = startLesson;
         this.subjectName = subjectName;
+    }
+
+    public Lesson(String classRoom, String courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year) {
+        this(classRoom, Integer.parseInt(courseId), courseName, day, endLesson, professor, startLesson, subjectName, year);
     }
 
     public Lesson() {}

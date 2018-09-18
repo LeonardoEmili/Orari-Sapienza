@@ -11,6 +11,10 @@ public class iVec2 implements Parcelable {
     private double x;
     private double y;
 
+    public iVec2() {
+        // Required empty public constructor
+    }
+
     public iVec2(double x,double y) {
         this.x=x;
         this.y=y;

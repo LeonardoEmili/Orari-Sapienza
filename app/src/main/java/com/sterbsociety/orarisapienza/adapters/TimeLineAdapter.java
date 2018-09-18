@@ -15,7 +15,6 @@ import com.sterbsociety.orarisapienza.views.TimelineView;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 import com.sterbsociety.orarisapienza.utils.LineType;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 

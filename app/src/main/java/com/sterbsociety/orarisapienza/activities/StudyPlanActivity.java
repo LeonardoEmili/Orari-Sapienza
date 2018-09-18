@@ -81,17 +81,16 @@ public class StudyPlanActivity extends AppCompatActivity {
         // Each TimeLine model should have a date and a classroom
         studyPlan = new StudyPlan();
         List<TimeLineModel> dataList = new ArrayList<>();
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 07:00", "Fri, 14 Sep, 2018 07:30", getClassroomList().get(0)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 08:00", "Fri, 14 Sep, 2018 10:20", getClassroomList().get(3)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 11:30", "Fri, 14 Sep, 2018 12:00", getClassroomList().get(6)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 12:10", "Fri, 14 Sep, 2018 12:20", getClassroomList().get(9)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 12:30", "Fri, 14 Sep, 2018 14:20", getClassroomList().get(12)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 14:30", "Fri, 14 Sep, 2018 15:30", getClassroomList().get(15)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 16:00", "Fri, 14 Sep, 2018 17:00", getClassroomList().get(18)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 17:30", "Fri, 14 Sep, 2018 18:20", getClassroomList().get(21)));
-        dataList.add(new TimeLineModel("Fri, 14 Sep, 2018 19:00", "Fri, 14 Sep, 2018 20:00", getClassroomList().get(24)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 07:00", "Sun, 16 Sep, 2018 07:30", getClassroomList().get(0)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 08:00", "Sun, 16 Sep, 2018 10:20", getClassroomList().get(3)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 11:30", "Sun, 16 Sep, 2018 12:00", getClassroomList().get(6)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 12:10", "Sun, 16 Sep, 2018 12:20", getClassroomList().get(9)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 12:30", "Sun, 16 Sep, 2018 14:20", getClassroomList().get(12)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 14:30", "Sun, 16 Sep, 2018 15:30", getClassroomList().get(15)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 16:00", "Sun, 16 Sep, 2018 17:00", getClassroomList().get(18)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 17:30", "Sun, 16 Sep, 2018 18:20", getClassroomList().get(21)));
+        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 19:00", "Sun, 16 Sep, 2018 20:00", getClassroomList().get(24)));
         studyPlan.setDataList(dataList);
-        System.out.println(studyPlanPresenter.getStartDate() + "  " +  studyPlanPresenter.getEndDate());
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
     }
 

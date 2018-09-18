@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +30,8 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import org.codechimp.apprater.AppRater;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.parseDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (isDBAvailable()) {
+            parseDatabase(this);
+        } else {
+            // todo show alert box and close the App
+        }
         initActivity();
 
         // DOCS here: https://github.com/codechimp-org/AppRater
@@ -80,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     @Override
     public void onResume() {
         super.onResume();
-
         if (AppUtils.isRebootScheduled()) {
             AppUtils.reboot(MainActivity.this, mStartIntent);
         } else if (!mStartTheme == AppUtils.isDarkTheme()) {
@@ -88,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
             AppUtils.reboot(MainActivity.this, mStartIntent);
         }
         mutateFavouriteImg();
-
     }
 
     /**

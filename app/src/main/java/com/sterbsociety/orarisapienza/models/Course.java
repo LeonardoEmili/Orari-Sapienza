@@ -1,14 +1,13 @@
 package com.sterbsociety.orarisapienza.models;
 
-// todo ref to Facoltá?
 public class Course {
 
-    private String name;
-    private String id;
+    private String name, id, courseKey;
 
-    public Course(String name, String id) {
+    public Course(String name, String id, String courseKey) {
         this.name = name;
         this.id = id;
+        this.courseKey = courseKey;
     }
 
     public String getName() {
@@ -21,5 +20,13 @@ public class Course {
 
     public String getFullName() {
         return id + " - " + name;
+    }
+
+    public String getCourseKey() {
+        return courseKey;
+    }
+
+    public void setCourseKey(String courseKey) {
+        this.courseKey = courseKey;
     }
 }

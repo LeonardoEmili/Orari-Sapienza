@@ -27,7 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sterbsociety.orarisapienza.DatabaseHelper;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.SliderAdapter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
@@ -83,7 +82,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void initBaseActivity() {
 
         // This is a flag used for checking if the DB exists in local storage.
-        databaseExists = getDatabasePath(DatabaseHelper.DATABASE_NAME).exists();
+        databaseExists = getDatabasePath(AppUtils.DATABASE_NAME).exists();
 
         loadSettings(this);
         setLocale(this);
@@ -108,7 +107,8 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentDataSnapshot = dataSnapshot;
                 if (!databaseExists && areUpdatesAllowed()) {
-                    DatabaseHelper.createDatabase(WelcomeActivity.this, currentDataSnapshot);
+                    AppUtils.saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                    //DatabaseHelper.createDatabase(WelcomeActivity.this, currentDataSnapshot);
                     databaseExists = true;
                     mProgressDialog.dismiss();
                     if (!isFirstTimeStartApp) {

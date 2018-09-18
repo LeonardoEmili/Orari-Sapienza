@@ -9,8 +9,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
@@ -24,10 +22,13 @@ import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setToolbarColor;
 
@@ -95,53 +96,52 @@ public class LessonTimetableActivity extends AppCompatActivity {
             Course course = (Course) adapterView.getItemAtPosition(position);
             AppUtils.addCourseToFavourites(LessonTimetableActivity.this, course, searchViewAdapter, position);
 
-            displayTableView(course);
+            readDataFromDB(course);
+            displayTableView();
 
             searchView.closeSearch();
             Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + course.getId());
         });
     }
 
-    private void displayTableView(Course course) {
-
-        // ---------------------CREATE DATA LIST----------------------------------
-
-        // Here we have to retrieve the course data by getting the name
-        List<Lesson> fakeDailySchedule = new ArrayList<>();
-
-        fakeDailySchedule.add(new Lesson("Aula A", 26654, "Informatica", "mon", "12:00", "Sterbini", "09:00", "Fondamenti di programmazione"));
-        fakeDailySchedule.add(new Lesson("Aula B", 26655, "Informatica e pokemon del mondo di sterbini con la s", "mon", "11:00", "Sterbini", "08:00", "Biologia"));
-        fakeDailySchedule.add(new Lesson("Aula C", 26652, "Informatica", "mon", "10:00", "Sterbini", "07:00", "Storia"));
-        fakeDailySchedule.add(new Lesson("Aula D", 26651, "Informatica", "mon", "09:00", "Sterbini", "06:00", "Matematica"));
-        fakeDailySchedule.add(new Lesson("Aula E", 266565, "Informatica", "mon", "12:00", "Sterbini", "05:00", "Filosofia"));
-        fakeDailySchedule.add(new Lesson("Aula F", 26651, "Informatica", "mon", "10:00", "Sterbini", "04:00", "Algebra"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-        fakeDailySchedule.add(new Lesson("Aula G", 26659, "Informatica", "mon", "11:00", "Sterbini", "03:00", "Grammatica"));
-
+    /**
+     * @param course is the course selected by the user
+     * Inside here is the logic of retrieving correct course details such
+     * as lessons and timetables from DB.
+     */
+    private void readDataFromDB(Course course) {
         scheduledLessons = new ArrayList<>();
-        scheduledLessons.add(fakeDailySchedule);
-        scheduledLessons.add(fakeDailySchedule);
-        scheduledLessons.add(fakeDailySchedule);
-        scheduledLessons.add(fakeDailySchedule);
-        scheduledLessons.add(fakeDailySchedule);
+        scheduledLessons.add(new ArrayList<>());    // Monday
+        scheduledLessons.add(new ArrayList<>());    // Tuesday
+        scheduledLessons.add(new ArrayList<>());    // Wednesday
+        scheduledLessons.add(new ArrayList<>());    // Thursday
+        scheduledLessons.add(new ArrayList<>());    // Friday
 
-        // ---------------------END OF DATA LIST----------------------------------
+        final HashMap<String, Integer> map = AppUtils.TIMETABLES.get(course.getCourseKey());
+        for (String classroomCode : map.keySet()) {
 
+            // Foreach lesson inside this course
+            int scrollIndex = map.get(classroomCode);   // We go ahead with this index until we find 0
+            final List<Integer> lessonList = AppUtils.MATRIX.get(classroomCode);  // List with integers
+            final int lessonIndex = lessonList.get(scrollIndex);    // This is the index for the lesson
+            final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");  // We retrieve lesson's info
+            final String day = getDayByIndex(lessonIndex);
+            final String startLesson = getHourByIndex(scrollIndex); // todo create method
+            while (lessonList.get(scrollIndex) != 0) {
+                scrollIndex++;
+            }
+            scrollIndex--;
+            // todo pass as first argument to new Lesson not the classroomCode but instead classRoomName (maybe we need a map to be put in utils)
+            scheduledLessons.get(scrollIndex / 157).add(new Lesson(classroomCode, course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[0], lessonParts[3]));
+        }
+    }
 
+    private void displayTableView() {
         // The lines below show the TableView and hides the welcome text.
         isTableVisible = true;
 
         final List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        for (Fragment fragment: fragmentList) {
+        for (Fragment fragment : fragmentList) {
             final WeekDayFragment mFragment = (WeekDayFragment) fragment;
             mFragment.displayTableView();
         }
@@ -172,7 +172,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

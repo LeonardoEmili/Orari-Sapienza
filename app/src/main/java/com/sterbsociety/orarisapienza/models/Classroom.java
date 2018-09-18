@@ -12,27 +12,33 @@ import android.os.Parcelable;
 public class Classroom implements Parcelable {
 
     private String name, code;
-    private int numberOfSeats;
+    private int sits;   //numberOfSeats
     private double appeal;
     private String buildingCode;
-
-    // todo buildingIndex has to be always given to this object as a light reference to its building
     private int buildingIndex;
 
-    public Classroom(String name, String id, int numberOfSeats, Building building, int buildingIndex) {
-        this(name, id, numberOfSeats, building);
+    public Classroom(String name, String code, int sits, Building building, int buildingIndex) {
+        this(name, code, sits, building);
         this.buildingIndex = buildingIndex;
     }
 
-    public Classroom(String name, String id, int numberOfSeats, Building building) {
-        this(name, id, numberOfSeats);
+    public Classroom(String name, String code, int sits, Building building) {
+        this(name, code, sits);
         this.buildingCode = building.getCode();
     }
 
-    public Classroom(String name, String id, int numberOfSeats) {
+    public Classroom(String name, String code, int sits) {
         this.name = name;
-        this.code = id;
-        this.numberOfSeats = numberOfSeats;
+        this.code = code;
+        this.sits = sits;
+    }
+
+    public Classroom() {
+        // Required empty public constructor
+    }
+
+    public void setBuildingCode(String buildingCode) {
+        this.buildingCode = buildingCode;
     }
 
     public String getBuildingCode() {
@@ -43,12 +49,24 @@ public class Classroom implements Parcelable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getCode() {
         return code;
     }
 
-    public int getNumberOfSeats() {
-        return numberOfSeats;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public int getSits() {
+        return sits;
+    }
+
+    public void setSits(int sits) {
+        this.sits = sits;
     }
 
     public double getAppeal() {
@@ -85,7 +103,7 @@ public class Classroom implements Parcelable {
         System.out.print("   | ");
         System.out.println(this.name);
         System.out.print("       | ");
-        System.out.println(this.numberOfSeats);
+        System.out.println(this.sits);
         System.out.print("       | ");
         System.out.println(this.code);
     }
@@ -100,7 +118,7 @@ public class Classroom implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(name);
         out.writeString(code);
-        out.writeInt(numberOfSeats);
+        out.writeInt(sits);
         out.writeDouble(appeal);
         out.writeString(buildingCode);
         out.writeInt(buildingIndex);
@@ -123,7 +141,7 @@ public class Classroom implements Parcelable {
     private Classroom(Parcel in) {
         this.name = in.readString();
         this.code = in.readString();
-        this.numberOfSeats = in.readInt();
+        this.sits = in.readInt();
         this.appeal = in.readDouble();
         this.buildingCode = in.readString();
         this.buildingIndex = in.readInt();

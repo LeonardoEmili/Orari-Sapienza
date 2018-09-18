@@ -7,8 +7,8 @@
     android:background="#16000000"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:ignore="ContentDescription"
-    tools:context=".activities.FilterActivity">
+    tools:context=".activities.FilterActivity"
+    tools:ignore="ContentDescription">
 
     <RelativeLayout
         android:id="@+id/top_bar"
@@ -158,10 +158,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/availability"
         android:background="@drawable/back_light_gray"
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="9"
-        android:baselineAligned="false">
+        android:weightSum="9">
 
         <LinearLayout
             android:id="@+id/vacant"
@@ -173,7 +173,8 @@
             android:focusable="true"
             android:foreground="@drawable/ripple_effect_secondary"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="@dimen/_40sdp"
@@ -452,10 +453,10 @@
             android:layout_marginEnd="@dimen/_20sdp"
             android:background="@color/colorSecondary"
             android:elevation="4dp"
+            android:onClick="applyFilters"
             android:text="@string/apply"
             android:textAllCaps="false"
             android:textColor="#fff"
-            android:onClick="applyFilters"
             android:textSize="15sp" />
 
     </LinearLayout>

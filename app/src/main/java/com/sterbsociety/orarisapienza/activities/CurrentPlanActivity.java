@@ -69,12 +69,20 @@ public class CurrentPlanActivity extends AppCompatActivity {
             alterNativeLayout.setVisibility(View.GONE);
             final StudyPlan studyPlan = AppUtils.getStudyPlan();
             final RecyclerView mRecyclerView = findViewById(R.id.recyclerView);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-            mRecyclerView.setHasFixedSize(true);
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
             final List<TimeLineModel> mDataList = studyPlan.getDataList();
+            int currentClassPosition = getCurrentTimeLineIndex(mDataList);
 
-            final TimeLineAdapter mTimeLineAdapter = new TimeLineAdapter(mDataList, getCurrentTimeLineIndex(mDataList));
+            if (currentClassPosition != -1) {
+                layoutManager.scrollToPosition(currentClassPosition);
+            }
+
+            mRecyclerView.smoothScrollToPosition(currentClassPosition);
+            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setHasFixedSize(true);
+
+            final TimeLineAdapter mTimeLineAdapter = new TimeLineAdapter(mDataList, currentClassPosition);
             mRecyclerView.setAdapter(mTimeLineAdapter);
 
             AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");

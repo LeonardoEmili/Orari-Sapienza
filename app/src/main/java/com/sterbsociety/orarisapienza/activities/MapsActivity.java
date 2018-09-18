@@ -38,7 +38,6 @@ import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,7 +47,6 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isSameStudyPlanRequestAsBefore;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.sendSilentReport;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
@@ -58,7 +56,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     public SearchViewLayout searchViewLayout;
     private MyDoubleDateAndTimePickerDialog.Builder mPickerDialog;
     private Date tab0date, tab1date;
-    private Button myButton;
+    private Button firstButton, secondButton;
     private Location lastLocation;
     private AirMapMarker<?> lastAirMapMarker;
     private RxGps rxGps;
@@ -132,7 +130,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         }
     }
 
-    // todo tested crash: phone with api level 22 crash with GIF
     private void initActivity() {
 
         // This is needed for hiding the bottom navigation bar.
@@ -140,7 +137,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        myButton = findViewById(R.id.button1);
+        firstButton = findViewById(R.id.button1);
+        secondButton = findViewById(R.id.button2);
         mapView = findViewById(R.id.map_view);
         final LinearLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
 
@@ -163,7 +161,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         searchViewLayout = findViewById(R.id.search_view_container);
 
-        AppUtils.createFakeBuildingsList();
         mAdapter = new BuildingListViewAdapter(this, AppUtils.getFavouriteBuildingList());
 
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticListSupportFragment());
@@ -174,14 +171,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
             @Override
             public void onStart(boolean expanded) {
                 if (!expanded) {
-                    myButton.setVisibility(View.VISIBLE);
+                    firstButton.setVisibility(View.VISIBLE);
+                    secondButton.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFinish(boolean expanded) {
                 if (expanded) {
-                    myButton.setVisibility(View.GONE);
+                    firstButton.setVisibility(View.GONE);
+                    secondButton.setVisibility(View.GONE);
                 }
             }
         });

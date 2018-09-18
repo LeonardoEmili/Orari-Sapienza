@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
@@ -84,7 +83,6 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
             int menuPosition = menuBridge.getPosition();
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
                 if (menuPosition == 0) {
-
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
                     Classroom classroom = mDataList.get(adapterPosition);
                     if (mTextView.getCompoundDrawables()[2] != null) {
@@ -160,19 +158,9 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case AppUtils.GPS_ACCESS:
-                if (resultCode == RESULT_OK)
-                    Toast.makeText(this, "granted", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(this, "NOT GRANTED", Toast.LENGTH_SHORT).show();
-                break;
-
-            case AppUtils.FILTER_ACTIVITY:
-                if (resultCode == RESULT_OK) {
-                    AppUtils.updateFilters(data);
-                }
-                break;
+        if (requestCode == AppUtils.FILTER_ACTIVITY && resultCode == RESULT_OK) {
+            AppUtils.updateCachedFilters(data);
+            //mAdapter.applyOtherFilters();
         }
     }
 

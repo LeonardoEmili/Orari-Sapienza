@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.MailTask;
@@ -42,10 +43,15 @@ import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.models.Course;
+import com.sterbsociety.orarisapienza.models.POJO;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
 import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -59,6 +65,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -75,6 +82,7 @@ public class AppUtils {
     private static final int PICK_FROM_GALLERY = 1;
     public static final String APP_VERSION = "1.0";
     public static final String DEFAULT_KEY = "KEY";
+    public static final String DATABASE_NAME = "courses.db";
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
@@ -222,7 +230,7 @@ public class AppUtils {
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp;
-    private static String sCurrentRingtone, currentLanguage, currentStudyPlan;
+    private static String sCurrentRingtone, currentLanguage, currentStudyPlan, currentDBVersion;
     private static Set<String> mFavouriteClassSet, mFavouriteCourseSet, mFavouriteBuildingSetCodes;
 
     public static void loadSettings(Activity activity) {
@@ -252,45 +260,12 @@ public class AppUtils {
         }
 
         readGeneralPreferences(activity);
-
-        // Here we have to parse all the information.
-        // These have to be parsing.
-        createFakeCoursesList();
-
-
-        createFakeBuildingsList();
-        // After parsing buildings, we parse classrooms
-        createFakeClassroomList();
-        parseFavouriteClassroomsList();
-
-        // After we have parsed everything we check if the Study Plan is still valid.
-        checkStudyPlanIntegrity(activity);
     }
 
     private static ArrayList<Classroom> classroomList, favouriteClassroomList;
 
     public static ArrayList<Classroom> getFavouriteClassroomList() {
         return favouriteClassroomList;
-    }
-
-    private static void parseFavouriteClassroomsList() {
-        favouriteClassroomList = new ArrayList<>();
-        for (Classroom classroom : classroomList) {
-            if (mFavouriteClassSet.contains(classroom.getCode()))
-                favouriteClassroomList.add(classroom);
-        }
-    }
-
-    private static void createFakeClassroomList() {
-        classroomList = new ArrayList<>();
-        int classroomIndex = 0;
-        for (int i = 0; i < buildingList.size(); i++) {
-            // Suppose a medium of 20 classrooms per building
-            for (int j = 0; j < 20; j++) {
-                classroomList.add(new Classroom("Aula " + classroomIndex, "" + classroomIndex, 42, buildingList.get(i), i));
-                classroomIndex++;
-            }
-        }
     }
 
     public static ArrayList<Classroom> getClassroomList() {
@@ -313,6 +288,7 @@ public class AppUtils {
         SharedPreferences sharedPreferences = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE);
         mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<>()));
         firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
+        currentDBVersion = sharedPreferences.getString(DB_KEY, null);
 
         mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<>()));
         mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<>()));
@@ -599,6 +575,10 @@ public class AppUtils {
 
     public static final int GPS_RESULT = 77;
 
+    public static boolean isGPSEnabled(Activity activity) {
+        return isGPSEnabled(activity, null);
+    }
+
     @SuppressWarnings("ConstantConditions")
     public static boolean isGPSEnabled(Activity activity, LocationManager locationManager) {
         try {
@@ -704,7 +684,7 @@ public class AppUtils {
 
     public final static int FILTER_ACTIVITY = 111;
 
-    public static void updateFilters(Intent data) {
+    public static void updateCachedFilters(Intent data) {
 
         SELECTED_DAY_BTN_INDEX = data.getBooleanArrayExtra(KEY_FILTER_DAY);
         SELECTED_CLASS_BTN_INDEX = data.getIntExtra(KEY_FILTER_AVAILABILITY, SELECTED_CLASS_BTN_INDEX);
@@ -715,43 +695,6 @@ public class AppUtils {
 
     private static ArrayList<Course> courseList, mFavouriteCourseList;
 
-    private static void createFakeCoursesList() {
-
-        // These lines below emulate a parse from file.
-        final ArrayDeque<Course> resultList = new ArrayDeque<>();
-        for (int i = 0; i < 30; i++) {
-            Course course = new Course("Course lorem" + i, 26654 + i + "");
-            resultList.add(course);
-        }
-
-        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
-        ArrayList<String> dirtySortedFavouriteCourses = new ArrayList<>(mFavouriteCourseSet);
-        Collections.sort(dirtySortedFavouriteCourses, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
-
-        // This is responsible for cleaning buildingCodes from their dirty indexes.
-        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
-        for (String dirtyCode : dirtySortedFavouriteCourses) {
-            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
-        }
-
-        // Inside here we put each building in accordance to their code's position.
-        Course[] tmpFavourites = new Course[mFavouriteCourseSet.size()];
-
-        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
-        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
-        Iterator<Course> iterator = resultList.iterator();
-        while (iterator.hasNext()) {
-            Course course = iterator.next();
-            if (hasAlreadyBeenSearchedByUser(course.getId())) {
-                tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getId())] = course;
-                iterator.remove();
-            }
-        }
-
-        mFavouriteCourseList = new ArrayList<>(Arrays.asList(tmpFavourites));
-        courseList = new ArrayList<>(mFavouriteCourseList);
-        courseList.addAll(resultList);
-    }
 
     public static List<Course> getCoursesList() {
         return courseList;
@@ -889,44 +832,6 @@ public class AppUtils {
 
     private static ArrayList<Building> buildingList, mFavouriteBuildingList;
 
-    public static void createFakeBuildingsList() {
-
-        // These lines below emulate a parse from file.
-        final ArrayDeque<Building> resultList = new ArrayDeque<>();
-        for (int i = 0; i < 100; i++) {
-            Building building = new Building("Palazzo lorem" + i, 31415 + i + "", new iVec2(41.904472 + 0.40 * i, 12.512889 + 0.40 * i), "Viale universitá, 2" + i);
-            resultList.add(building);
-        }
-
-        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
-        ArrayList<String> dirtySortedFavouriteCodes = new ArrayList<>(mFavouriteBuildingSetCodes);
-        Collections.sort(dirtySortedFavouriteCodes, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
-
-        // This is responsible for cleaning buildingCodes from their dirty indexes.
-        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
-        for (String dirtyCode : dirtySortedFavouriteCodes) {
-            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
-        }
-
-        // Inside here we put each building in accordance to their code's position.
-        Building[] tmpFavourites = new Building[mFavouriteBuildingSetCodes.size()];
-
-        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
-        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
-        Iterator<Building> iterator = resultList.iterator();
-        while (iterator.hasNext()) {
-            Building building = iterator.next();
-            if (isFavouriteBuilding(building.getCode())) {
-                tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.getCode())] = building;
-                iterator.remove();
-            }
-        }
-
-        mFavouriteBuildingList = new ArrayList<>(Arrays.asList(tmpFavourites));
-        buildingList = new ArrayList<>(mFavouriteBuildingList);
-        buildingList.addAll(resultList);
-    }
-
     public static ArrayList<Building> getBuildingList() {
         return buildingList;
     }
@@ -1029,7 +934,195 @@ public class AppUtils {
             return simpleDateFormat.format(fullDateFormat.parse(fullDate));
         } catch (ParseException e) {
             e.printStackTrace();
-            return fullDate.substring(fullDate.length()-5, fullDate.length());
+            return fullDate.substring(fullDate.length() - 5, fullDate.length());
         }
+    }
+
+    public static String getCurrentDBVersion() {
+        return currentDBVersion;
+    }
+
+    private static boolean isDBAvailable;
+
+    public static boolean isDBAvailable() {
+        if (isDBAvailable)
+            return true;
+        return currentDBVersion != null;
+    }
+
+    private static final String DB_KEY = "finalDB";
+
+    public static void saveDatabase(Activity activity, DataSnapshot dataSnapshot) {
+        try {
+            POJO pojo = dataSnapshot.child(DB_KEY).getValue(POJO.class);
+            FileOutputStream outputStream;
+            outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
+            outputStream.write(new Gson().toJson(pojo).getBytes());
+            outputStream.close();
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, (String) dataSnapshot.child("version").getValue()).apply();
+            isDBAvailable = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseDatabase(Activity activity) {
+        try {
+            FileInputStream fis = activity.openFileInput(DATABASE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
+            parseData(activity, database);
+            // We create another HashMap to allow JVM to garbageCollect the database instance
+            MATRIX = new HashMap<>(database.matrix);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // This is the mega matrix which holds info inside each cell
+    public static HashMap<String, List<Integer>> MATRIX = new HashMap<>();
+
+    public static HashMap<String, HashMap<String, Integer>> TIMETABLES = new HashMap<>();
+
+    public static List<String> LESSON_LIST = new ArrayList<>();
+
+    /**
+     * @param arrayList is the list of buildings from DB
+     */
+    private static void parseBuildingList(ArrayList<Building> arrayList) {
+
+        final ArrayDeque<Building> resultList = new ArrayDeque<>(arrayList);
+
+        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
+        ArrayList<String> dirtySortedFavouriteCodes = new ArrayList<>(mFavouriteBuildingSetCodes);
+        Collections.sort(dirtySortedFavouriteCodes, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
+
+        // This is responsible for cleaning buildingCodes from their dirty indexes.
+        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
+        for (String dirtyCode : dirtySortedFavouriteCodes) {
+            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+        }
+
+        // Inside here we put each building in accordance to their code's position.
+        Building[] tmpFavourites = new Building[mFavouriteBuildingSetCodes.size()];
+
+        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
+        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+        Iterator<Building> iterator = resultList.iterator();
+        while (iterator.hasNext()) {
+            Building building = iterator.next();
+            if (isFavouriteBuilding(building.getCode())) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.getCode())] = building;
+                iterator.remove();
+            }
+        }
+
+        mFavouriteBuildingList = new ArrayList<>(Arrays.asList(tmpFavourites));
+        buildingList = new ArrayList<>(mFavouriteBuildingList);
+        buildingList.addAll(resultList);
+    }
+
+    /**
+     * This method re-elaborates classrooms in order to provide each one of them each info
+     * and a light-reference to their relative building.
+     */
+    private static void parseClassroomList() {
+        classroomList = new ArrayList<>();
+        for (int i = 0; i < buildingList.size(); i++) {
+            final Building building = buildingList.get(i);
+            for (int j = 0; j < building.getAule().size(); j++) {
+                final Classroom POJOClassroom = building.getAule().get(j);
+                classroomList.add(new Classroom(POJOClassroom.getName(), POJOClassroom.getCode(), POJOClassroom.getSits(), building, i));
+            }
+        }
+        // Down here we parse class favourites
+        favouriteClassroomList = new ArrayList<>();
+        for (Classroom classroom : classroomList) {
+            if (mFavouriteClassSet.contains(classroom.getCode()))
+                favouriteClassroomList.add(classroom);
+        }
+    }
+
+    /**
+     * @param map is the map of courses ("courseName":[lesson0, lesson1, lesson2, lesson3, ...])
+     */
+    private static void parseCourseList(HashMap<String, HashMap<String, Integer>> map) {
+
+        final ArrayDeque<Course> resultList = new ArrayDeque<>();
+        for (String courseKey : map.keySet()) {
+            final String[] parts = courseKey.split("_");
+            Course course = new Course(parts[0], parts[1], courseKey);
+            resultList.add(course);
+        }
+
+        // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
+        ArrayList<String> dirtySortedFavouriteCourses = new ArrayList<>(mFavouriteCourseSet);
+        Collections.sort(dirtySortedFavouriteCourses, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
+
+        // This is responsible for cleaning buildingCodes from their dirty indexes.
+        ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
+        for (String dirtyCode : dirtySortedFavouriteCourses) {
+            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+        }
+
+        // Inside here we put each building in accordance to their code's position.
+        Course[] tmpFavourites = new Course[mFavouriteCourseSet.size()];
+
+        // Note that Iterator.remove() is the only safe way to modify a collection during iteration
+        // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+        Iterator<Course> iterator = resultList.iterator();
+        while (iterator.hasNext()) {
+            Course course = iterator.next();
+            if (hasAlreadyBeenSearchedByUser(course.getId())) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getId())] = course;
+                iterator.remove();
+            }
+        }
+
+        mFavouriteCourseList = new ArrayList<>(Arrays.asList(tmpFavourites));
+        courseList = new ArrayList<>(mFavouriteCourseList);
+        courseList.addAll(resultList);
+        TIMETABLES = new HashMap<>(map);
+    }
+
+    private static void parseData(Activity activity, POJO database) {
+
+        parseBuildingList(database.smap.getBuildings());
+
+        // After parsing buildings, we parse classrooms
+        parseClassroomList();
+        parseCourseList(database.timeTables);
+
+        // After we have parsed everything we check if the Study Plan is still valid.
+        checkStudyPlanIntegrity(activity);
+
+        LESSON_LIST = new ArrayList<>(database.alist);
+    }
+
+    public static String getDayByIndex(int index) {
+        int i = index/157;
+        switch (i) {
+            case 1:
+                return "tue";
+            case 2:
+                return "wed";
+            case 3:
+                return "thu";
+            case 4:
+                return "fri";
+            default:
+                return "mon";
+        }
+    }
+
+
+    public static String getHourByIndex(int index) {
+        return "12:00";
     }
 }
