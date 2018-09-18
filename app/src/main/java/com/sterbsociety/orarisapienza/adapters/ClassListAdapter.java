@@ -139,7 +139,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
 
         final Classroom classroom = mDataList.get(position);
 
-        if (mClassFavourites.contains(classroom.getCode())) {
+        if (mClassFavourites.contains(classroom.getBuildingCode() + "-" + classroom.getCode())) {
             holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, starImg, null);
         } else {
             holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

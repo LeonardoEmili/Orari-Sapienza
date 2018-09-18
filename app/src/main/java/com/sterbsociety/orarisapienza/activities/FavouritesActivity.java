@@ -132,7 +132,7 @@ public class FavouritesActivity extends AppCompatActivity implements SwipeItemCl
                 //noinspection StatementWithEmptyBody
                 if (menuPosition == 0) {
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
-                    Classroom classroom = mDataList.get(adapterPosition);
+                    Classroom classroom = backupList.get(adapterPosition);
                     if (mTextView.getCompoundDrawables()[2] != null) {
                         AppUtils.removeClassFromFavourites(FavouritesActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

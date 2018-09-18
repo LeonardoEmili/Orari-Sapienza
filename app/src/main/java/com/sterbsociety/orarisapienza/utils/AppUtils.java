@@ -380,14 +380,14 @@ public class AppUtils {
 
     public static void addClassroomToFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.add(classroom.getCode());
+        mFavouriteClassSet.add(classroom.getBuildingCode()+"-"+classroom.getCode());
         favouriteClassroomList.add(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
     public static void removeClassFromFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.remove(classroom.getCode());
+        mFavouriteClassSet.remove(classroom.getBuildingCode()+"-"+classroom.getCode());
         favouriteClassroomList.remove(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
@@ -1044,8 +1044,9 @@ public class AppUtils {
         // Down here we parse class favourites
         favouriteClassroomList = new ArrayList<>();
         for (Classroom classroom : classroomList) {
-            if (mFavouriteClassSet.contains(classroom.getCode()))
+            if (mFavouriteClassSet.contains(classroom.getBuildingCode()+"-"+classroom.getCode())) {
                 favouriteClassroomList.add(classroom);
+            }
         }
     }
 
@@ -1136,5 +1137,4 @@ public class AppUtils {
         }
         return code;
     }
-
 }
