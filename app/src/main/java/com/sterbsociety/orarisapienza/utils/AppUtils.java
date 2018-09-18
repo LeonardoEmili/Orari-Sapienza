@@ -380,14 +380,14 @@ public class AppUtils {
 
     public static void addClassroomToFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.add(classroom.getBuildingCode()+"-"+classroom.getCode());
+        mFavouriteClassSet.add(classroom.getBuildingCode() + "-" + classroom.getCode());
         favouriteClassroomList.add(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
 
     public static void removeClassFromFavourites(Activity activity, Classroom classroom) {
 
-        mFavouriteClassSet.remove(classroom.getBuildingCode()+"-"+classroom.getCode());
+        mFavouriteClassSet.remove(classroom.getBuildingCode() + "-" + classroom.getCode());
         favouriteClassroomList.remove(classroom);
         activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_CLASS_FAVOURITES, mFavouriteClassSet).apply();
     }
@@ -1044,7 +1044,7 @@ public class AppUtils {
         // Down here we parse class favourites
         favouriteClassroomList = new ArrayList<>();
         for (Classroom classroom : classroomList) {
-            if (mFavouriteClassSet.contains(classroom.getBuildingCode()+"-"+classroom.getCode())) {
+            if (mFavouriteClassSet.contains(classroom.getBuildingCode() + "-" + classroom.getCode())) {
                 favouriteClassroomList.add(classroom);
             }
         }
@@ -1107,7 +1107,7 @@ public class AppUtils {
     }
 
     public static String getDayByIndex(int index) {
-        int i = index/157;
+        int i = index / 157;
         switch (i) {
             case 1:
                 return "tue";
@@ -1124,14 +1124,18 @@ public class AppUtils {
 
 
     public static String getHourByIndex(int index) {
-        return String.format("%02d",(415+index*5)/60)+":"+String.format("%02d", (415+index*5)%60);
+        return String.format("%02d", (415 + index * 5) / 60) + ":" + String.format("%02d", (415 + index * 5) % 60);
     }
 
-    public static String getClassroomName(String code){
-        for (Building b:AppUtils.getBuildingList()){
-            if (b.getCode().equals(code.substring(0,6))){
-                for (Classroom c:b.getAule()){
-                    if(c.getCode().equals(code.substring(6))){return c.getName();}
+    public static String getClassroomName(String code) {
+        final String myBuildingCode = code.split("-")[0];
+        final String myClassCode = code.split("-")[1];
+        for (Building b : AppUtils.getBuildingList()) {
+            if (myBuildingCode.equals(b.getCode())) {
+                for (Classroom c : b.getAule()) {
+                    if (myClassCode.equals(c.getCode())) {
+                        return c.getName();
+                    }
                 }
             }
         }
