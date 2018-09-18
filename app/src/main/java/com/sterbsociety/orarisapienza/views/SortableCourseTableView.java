@@ -46,6 +46,8 @@ public class SortableCourseTableView extends SortableTableView<Lesson> {
         setColumnComparator(0, CourseComparator.getCourseTimeComparator());
         setColumnComparator(1, CourseComparator.getCourseNameComparator());
         setColumnComparator(2, CourseComparator.getCourseClassComparator());
+
+        sort(0);
     }
 
 }

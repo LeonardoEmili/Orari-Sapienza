@@ -30,13 +30,13 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBa
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isTableVisible;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setToolbarColor;
 
 public class LessonTimetableActivity extends AppCompatActivity {
 
     private MaterialSearchView searchView;
-    private static boolean isTableVisible;
     private static List<List<Lesson>> scheduledLessons;
 
 
@@ -132,7 +132,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 scrollIndex++;
             }
             scrollIndex--;
-            scheduledLessons.get(scrollIndex / 157).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[0], lessonParts[3]));
+            scheduledLessons.get(scrollIndex / 157).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), lessonParts[4], startLesson, lessonParts[2], lessonParts[3]));
         }
     }
 
@@ -147,10 +147,6 @@ public class LessonTimetableActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean isIsTableVisible() {
-        return isTableVisible;
-    }
-
     public static List<Lesson> getScheduledLessonsForDay(int index) {
 
         return scheduledLessons.get(index);
@@ -159,7 +155,6 @@ public class LessonTimetableActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        isTableVisible = false;
     }
 
     @Override
@@ -167,6 +162,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
         if (searchView.isSearchOpen()) {
             searchView.closeSearch();
         } else {
+            isTableVisible = false;
             finish();
         }
     }

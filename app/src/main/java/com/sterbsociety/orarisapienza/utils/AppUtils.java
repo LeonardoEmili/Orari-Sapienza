@@ -1124,7 +1124,9 @@ public class AppUtils {
 
 
     public static String getHourByIndex(int index) {
-        return String.format("%02d", (415 + index * 5) / 60) + ":" + String.format("%02d", (415 + index * 5) % 60);
+        return String.format(Locale.getDefault(), "%02d", (420 + index % 157 * 5) / 60)
+                + ":" +
+                String.format(Locale.getDefault(), "%02d", (420 + index % 157 * 5) % 60);
     }
 
     public static String getClassroomName(String code) {
@@ -1141,4 +1143,6 @@ public class AppUtils {
         }
         return code;
     }
+
+    public static boolean isTableVisible;
 }

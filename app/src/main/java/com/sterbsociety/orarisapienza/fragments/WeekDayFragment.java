@@ -27,8 +27,6 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.List;
 
-import static com.sterbsociety.orarisapienza.activities.LessonTimetableActivity.isIsTableVisible;
-
 public abstract class WeekDayFragment extends Fragment {
 
     private final static String SPAN_PLACEHOLDER = "x";
@@ -85,7 +83,7 @@ public abstract class WeekDayFragment extends Fragment {
         // We set up an itemOnClickListener
         sortableCourseTableView.addDataClickListener(new CourseClickListener());
 
-        if (isIsTableVisible()) {
+        if (AppUtils.isTableVisible) {
             displayTableView();
         }
     }
