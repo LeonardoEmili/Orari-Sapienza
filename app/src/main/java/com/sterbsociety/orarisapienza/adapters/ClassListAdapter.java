@@ -111,7 +111,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
 
                 tmpList = filterClassroomListByQuery(tmpList, query);
 
-                if (distanceRadius != 1 && location != null) {
+                if (distanceRadius != -1 && location != null) {
                     tmpList = filterClassroomListByDistance(tmpList, location, distanceRadius);
                 }
                 mDataList.addAll(tmpList);
@@ -174,13 +174,18 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     }
 
     private ArrayList<Classroom> filterClassroomListByDistance(ArrayList<Classroom> list, @NonNull Location currentLocation, int distanceRadius) {
+
+        if (distanceRadius == 21) {
+            return list;
+        }
         final double currentLatitude = currentLocation.getLatitude();
         final double currentLongitude = currentLocation.getLongitude();
+        final int realDistanceInMeters = distanceRadius * 100;
         final Iterator<Classroom> iterator = list.iterator();
         while (iterator.hasNext()) {
             final Classroom classroom = iterator.next();
             final Building building = getRealBuilding(classroom);
-            if (haversine(currentLatitude, currentLongitude, building.getLat(), building.getLong()) > distanceRadius) {
+            if (haversine(currentLatitude, currentLongitude, building.getLat(), building.getLong()) > realDistanceInMeters) {
                 iterator.remove();
             }
         }
