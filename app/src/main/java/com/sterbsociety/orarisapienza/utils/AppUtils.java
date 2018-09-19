@@ -57,6 +57,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
@@ -74,6 +75,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
@@ -622,7 +624,7 @@ public class AppUtils {
         return SELECTED_CLASS_BTN_INDEX;
     }
 
-    private static boolean[] SELECTED_DAY_BTN_INDEX;
+    public static boolean[] SELECTED_DAY_BTN_INDEX;
     private static int CURRENT_DAY = -1;
 
     private static void initDate() {
@@ -680,16 +682,11 @@ public class AppUtils {
         return SELECTED_DAY_BTN_INDEX;
     }
 
-    private static int MIN_HOUR = 7;
-    private static int MAX_HOUR = 22;
+    public final static int MIN_HOUR = 7;
+    public final static int MAX_HOUR = 20;
 
-    public static int getMinHour() {
-        return MIN_HOUR;
-    }
-
-    public static int getMaxHour() {
-        return MAX_HOUR;
-    }
+    public static int CACHED_MIN_HOUR = 10;
+    public static int CACHED_MAX_HOUR = 14;
 
     // This value is just a custom bizarre value that means 'no distance limit' (half of 42 xD).
     private static int DISTANCE_FROM_CURRENT_POSITION = 21;
@@ -706,12 +703,21 @@ public class AppUtils {
 
     public final static int FILTER_ACTIVITY = 111;
 
+    public static void initClassroomFilters() {
+        SELECTED_DAY_BTN_INDEX = new boolean[5];
+        SELECTED_DAY_BTN_INDEX[getCurrentWeekDayIndex()] = true;
+        SELECTED_CLASS_BTN_INDEX = 0;
+        CACHED_MIN_HOUR = 10;
+        CACHED_MAX_HOUR = 14;
+        DISTANCE_FROM_CURRENT_POSITION = 21;
+    }
+
     public static void updateCachedFilters(Intent data) {
 
         SELECTED_DAY_BTN_INDEX = data.getBooleanArrayExtra(KEY_FILTER_DAY);
         SELECTED_CLASS_BTN_INDEX = data.getIntExtra(KEY_FILTER_AVAILABILITY, SELECTED_CLASS_BTN_INDEX);
-        MIN_HOUR = data.getIntExtra(KEY_FILTER_MIN_HOUR, MIN_HOUR);
-        MAX_HOUR = data.getIntExtra(KEY_FILTER_MAX_HOUR, MAX_HOUR);
+        CACHED_MIN_HOUR = data.getIntExtra(KEY_FILTER_MIN_HOUR, MIN_HOUR);
+        CACHED_MAX_HOUR = data.getIntExtra(KEY_FILTER_MAX_HOUR, MAX_HOUR);
         DISTANCE_FROM_CURRENT_POSITION = data.getIntExtra(KEY_FILTER_DISTANCE, DISTANCE_FROM_CURRENT_POSITION);
     }
 
@@ -913,8 +919,7 @@ public class AppUtils {
             return;
         }
         try {
-            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
-            final Date expirationDate = simpleDateFormat.parse(new Gson().fromJson(currentStudyPlan, StudyPlan.class).getEndRequestDate());
+            final Date expirationDate = fullDateFormat.parse(new Gson().fromJson(currentStudyPlan, StudyPlan.class).getEndRequestDate());
             if (expirationDate.before(new Date())) {
                 clearCachedStudyPlan(activity);
             }
@@ -1225,15 +1230,20 @@ public class AppUtils {
                 + getStringByLocal(activity, R.string.of) + getStringByLocal(activity, courseResource) + ". ";
     }
 
-    public static int getCurrentTimeInt() {
-        String hour = simpleDateFormat.format(new Date());
-        int dayIndex = getCurrentDayIndex();
-        return (dayIndex * 157) + (Integer.parseInt(hour.split(":")[0]) - 7) * 12 + (Integer.parseInt(hour.split(":")[1]) / 5);
+    public static String hourToString(int hour) {
+        if (String.valueOf(hour).length() == 1) {
+            return "0" + hour + ":00";
+        }
+        return hour + ":00";
     }
 
-    public static int timeToInt() {
+    public static int getCurrentTimeToInt() {
         String h = simpleDateFormat.format(new Date());
         int day = getCurrentDayIndex();
+        return timeToInt(h, day);
+    }
+
+    public static int timeToInt(String h, int day) {
         int dayVar = day * 157;//day index
         int var = Math.min(157, Integer.parseInt(h.split(":")[0]) - 7) * 12 + (Integer.parseInt(h.split(":")[1]) / 5);//hour parsing
         if (var < 0) {
@@ -1244,5 +1254,80 @@ public class AppUtils {
             return dayVar + var;//a right value, day+hour index in our array
         }
         return 0;//index out of bound
+    }
+
+    public static double haversine(double lat1, double lon1, double lat2, double lon2) {
+        final double R = 6372.8;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return R * c * 1000;
+    }
+
+    private static DateFormat basicDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+    private static Date minHour, maxHour;
+
+    @Nullable
+    public static Date getMinHour() {
+        try {
+            if (minHour == null) {
+                minHour = basicDateFormat.parse("07:00");
+            }
+            return minHour;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Nullable
+    public static Date getMaxHour() {
+        try {
+            if (maxHour == null) {
+                maxHour = basicDateFormat.parse("20:00");
+            }
+            return maxHour;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static int dayToInt(String day) {
+        switch (day.toLowerCase()) {
+            case ("mon"):
+                return 0;
+            case ("tue"):
+                return 1;
+            case ("wed"):
+                return 2;
+            case ("thu"):
+                return 3;
+            case ("fri"):
+                return 4;
+            case ("sat"):
+                return 5;
+            case ("sun"):
+                return 6;
+        }
+        return -1;
+    }
+
+    public static Classroom getClassroom(String code) {
+        final String myBuildingCode = code.split("-")[0];
+        final String myClassCode = code.split("-")[1];
+        for (Building b : buildingList) {
+            if (myBuildingCode.equals(b.getCode())) {
+                for (Classroom c : b.getAule()) {
+                    if (myClassCode.equals(c.getCode())) {
+                        return c;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

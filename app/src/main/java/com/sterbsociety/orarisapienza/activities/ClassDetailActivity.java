@@ -86,7 +86,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         buildingAddress.setText(mainBuilding.getLocation());
 
         // We retrieve the index of the current / most close in future lesson in this classroom
-        int scrollIndex = AppUtils.timeToInt();
+        int scrollIndex = AppUtils.getCurrentTimeToInt();
         final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getBuildingCode() + "-" + classroom.getCode());  // List with integers
         final int lessonIndex = lessonList.get(scrollIndex);
 

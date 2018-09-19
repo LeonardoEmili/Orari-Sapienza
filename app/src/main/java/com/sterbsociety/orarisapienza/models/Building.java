@@ -103,6 +103,7 @@ public class Building implements Parcelable {
     };
 
     private Building(Parcel in) {
+        this();
         name = in.readString();
         code = in.readString();
         pos = in.readParcelable(iVec2.class.getClassLoader());

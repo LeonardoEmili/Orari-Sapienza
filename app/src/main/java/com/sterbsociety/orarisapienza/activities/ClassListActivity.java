@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -9,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
@@ -27,10 +31,13 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.SELECTED_DAY_BTN_INDEX;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.askForGPSPermission;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getDistanceFromCurrentPosition;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getSelectedClassBtnIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.updateCachedFilters;
 
 public class ClassListActivity extends AppCompatActivity implements SwipeItemClickListener {
 
@@ -40,7 +47,9 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.ItemDecoration mItemDecoration;
     protected ClassListAdapter mAdapter;
-    protected ArrayList<Classroom> mDataList;
+    //protected ArrayList<Classroom> mDataList;
+    private static Location lastLocation;
+    private String lastQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +86,13 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge) {
             menuBridge.closeMenu();
-
             int direction = menuBridge.getDirection();
             int adapterPosition = menuBridge.getAdapterPosition();
             int menuPosition = menuBridge.getPosition();
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
                 if (menuPosition == 0) {
                     TextView mTextView = Objects.requireNonNull(mRecyclerView.findViewHolderForAdapterPosition(adapterPosition)).itemView.findViewById(R.id.tv_classroom);
-                    Classroom classroom = mDataList.get(adapterPosition);
+                    Classroom classroom = mAdapter.getClassroom(adapterPosition);
                     if (mTextView.getCompoundDrawables()[2] != null) {
                         AppUtils.removeClassFromFavourites(ClassListActivity.this, classroom);
                         mTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -119,12 +127,13 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
         // This method handles click inside the layout
         AppUtils.setupUIElements(this, mainWrapper);
+        AppUtils.initClassroomFilters();
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mItemDecoration = new DefaultItemDecoration(ActivityCompat.getColor(this, R.color.divider_color));
 
-        mDataList = AppUtils.getClassroomList();
+        //mDataList = AppUtils.getClassroomList();
         mAdapter = new ClassListAdapter(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -135,18 +144,22 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged(mDataList);
+        //mAdapter.notifyDataSetChanged(mDataList);
+        mAdapter.filterClassroomList();
+        mAdapter.notifyDataSetChanged();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                mAdapter.filterClassroomsByQuery(query);
+                mAdapter.filterClassroomListOnlyByQuery(query);
+                lastQuery = query;
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mAdapter.filterClassroomsByQuery(newText);
+                mAdapter.filterClassroomListOnlyByQuery(newText);
+                lastQuery = newText;
                 return true;
             }
         });
@@ -157,13 +170,11 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == AppUtils.FILTER_ACTIVITY && resultCode == RESULT_OK) {
-            AppUtils.updateCachedFilters(data);
-            //mAdapter.applyOtherFilters();
+            updateCachedFilters(data);
+            mAdapter.filterClassroomList(SELECTED_DAY_BTN_INDEX, getSelectedClassBtnIndex(), lastQuery, getDistanceFromCurrentPosition(), lastLocation);
         }
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -183,5 +194,9 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         Intent i = new Intent(this, ClassDetailActivity.class);
         i.putExtra(AppUtils.DEFAULT_KEY, mAdapter.getClassroom(position));
         startActivity(i);
+    }
+
+    public static void setLastLocation(@NonNull Location location) {
+        lastLocation = location;
     }
 }

@@ -18,13 +18,13 @@ public class StudyPlanPresenter implements Parcelable {
     private Building building;
 
     /**
-     *  Since the user is allowed to fast create the plan by skipping settings,
-     *  we can check these values and if they're both -1 then we have to
-     *  create a study plan inside the campus.
+     * Since the user is allowed to fast create the plan by skipping settings,
+     * we can check these values and if they're both -1 then we have to
+     * create a study plan inside the campus.
      */
     public StudyPlanPresenter() {
-        latitude = -1;
-        longitude = -1;
+        latitude = 41.9014632;
+        longitude = 12.5101352;
     }
 
     public StudyPlanPresenter(String startDate, String endDate, double latitude, double longitude, Building building) {
@@ -119,5 +119,17 @@ public class StudyPlanPresenter implements Parcelable {
         latitude = in.readDouble();
         longitude = in.readDouble();
         building = in.readParcelable(Building.class.getClassLoader());
+    }
+
+    public String[] getHours() {
+        String[] startDateParts = getStartDate().split(",*\\s+");
+        String[] endDateParts = getEndDate().split(",*\\s+");
+        return new String[]{startDateParts[4], endDateParts[4]};
+    }
+
+    public String[] getDays() {
+        String[] startDateParts = getStartDate().split(",*\\s+");
+        String[] endDateParts = getEndDate().split(",*\\s+");
+        return new String[]{startDateParts[0], endDateParts[0]};
     }
 }

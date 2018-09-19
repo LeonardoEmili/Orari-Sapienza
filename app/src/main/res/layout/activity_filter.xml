@@ -366,7 +366,7 @@
         android:background="#fff"
         android:paddingStart="@dimen/_15sdp"
         android:paddingEnd="@dimen/_10sdp"
-        app:rsb_max="22"
+        app:rsb_max="20"
         app:rsb_min="7"
         app:rsb_mode="range"
         app:rsb_progress_color="@color/colorSecondary"

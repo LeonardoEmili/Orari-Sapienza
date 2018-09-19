@@ -127,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         showHomeFragment();
 
         AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
-
-        Log.d("Distance", AppUtils.distance(41.904472, 12.512889, 41.902917, 12.511694) + "");
     }
 
     /**

@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Animatable;
-import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.florent37.rxgps.RxGps;
 import com.jaygoo.widget.OnRangeChangedListener;
@@ -41,7 +41,6 @@ public class FilterActivity extends AppCompatActivity {
     boolean[] activeToggleBtn, cachedDayIndex;
     private TextView[] dayButtonArray;
     private int cachedAvailabilityIndex, cachedMinHour, cachedMaxHour, cachedDistance;
-    private Location lastLocation;
     private RxGps rxGps;
 
     @Override
@@ -60,8 +59,8 @@ public class FilterActivity extends AppCompatActivity {
         System.arraycopy(tempArray, 0, cachedDayIndex, 0, tempArray.length);
 
         cachedAvailabilityIndex = AppUtils.getSelectedClassBtnIndex();
-        cachedMinHour = AppUtils.getMinHour();
-        cachedMaxHour = AppUtils.getMaxHour();
+        cachedMinHour = AppUtils.CACHED_MIN_HOUR;
+        cachedMaxHour = AppUtils.CACHED_MAX_HOUR;
         cachedDistance = AppUtils.getDistanceFromCurrentPosition();
 
         initGPS();
@@ -90,7 +89,8 @@ public class FilterActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(location -> {
                     if (location != null) {
-                        lastLocation = location;
+                        ClassListActivity.setLastLocation(location);
+                        Toast.makeText(this, "location low", Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> {
                     needToObfuscateView = true;
@@ -101,7 +101,6 @@ public class FilterActivity extends AppCompatActivity {
             needActiveBtn = true;
             needToObfuscateView = true;
         }
-
         getAccuratePosition();
     }
 
@@ -112,7 +111,8 @@ public class FilterActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(location -> {
                     if (location != null) {
-                        lastLocation = location;
+                        ClassListActivity.setLastLocation(location);
+                        Toast.makeText(this, "location hight", Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> {
                     if (throwable instanceof RxGps.PermissionException) {
@@ -274,7 +274,6 @@ public class FilterActivity extends AppCompatActivity {
     private void clearView() {
         distanceText.setTextColor(getResources().getColor(R.color.coolBlack));
         upToText.setText(R.string.up_to);
-        Log.e(FilterActivity.class.getSimpleName(), "clearView");
         distanceFrom.setVisibility(View.VISIBLE);
         rangeSeekBar2.setProgressColor(getResources().getColor(R.color.colorSecondary));
         rangeSeekBar2.setEnabled(true);
@@ -300,10 +299,11 @@ public class FilterActivity extends AppCompatActivity {
         float currentValue = (float) (Math.round(leftValue * 10)) / 100;
         String stringValue = currentValue + " km";
         cachedDistance = (int) leftValue;
-        if (currentValue == (float) 2.1)
+        if (currentValue == (float) 2.1) {
             distanceFrom.setText(getResources().getString(R.string.infinity));
-        else
+        } else {
             distanceFrom.setText(stringValue);
+        }
     }
 
 

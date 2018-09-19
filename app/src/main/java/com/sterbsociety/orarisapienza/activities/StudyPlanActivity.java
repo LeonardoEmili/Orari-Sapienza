@@ -18,10 +18,12 @@ import com.google.gson.GsonBuilder;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.TimeLineAdapter;
+import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
 import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
+import com.sterbsociety.orarisapienza.utils.StudyPlanBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,6 @@ public class StudyPlanActivity extends AppCompatActivity {
         setLocale(StudyPlanActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_plan);
-
         initActivity();
     }
 
@@ -77,23 +78,22 @@ public class StudyPlanActivity extends AppCompatActivity {
     }
 
     private void setFakeData(StudyPlanPresenter studyPlanPresenter) {
-
         // Each TimeLine model should have a date and a classroom
         studyPlan = new StudyPlan();
+        StudyPlanBuilder spBuilder = new StudyPlanBuilder(AppUtils.getBuildingList(), AppUtils.MATRIX, AppUtils.LESSON_LIST);
         List<TimeLineModel> dataList = new ArrayList<>();
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 07:00", "Sun, 16 Sep, 2018 07:30", getClassroomList().get(0)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 08:00", "Sun, 16 Sep, 2018 10:20", getClassroomList().get(3)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 11:30", "Sun, 16 Sep, 2018 12:00", getClassroomList().get(6)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 12:10", "Sun, 16 Sep, 2018 12:20", getClassroomList().get(9)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 12:30", "Sun, 16 Sep, 2018 14:20", getClassroomList().get(12)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 14:30", "Sun, 16 Sep, 2018 15:30", getClassroomList().get(15)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 16:00", "Sun, 16 Sep, 2018 17:00", getClassroomList().get(18)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 17:30", "Sun, 16 Sep, 2018 18:20", getClassroomList().get(21)));
-        dataList.add(new TimeLineModel("Sun, 16 Sep, 2018 19:00", "Sun, 16 Sep, 2018 20:00", getClassroomList().get(24)));
+        int start, end;
+        String startDate = studyPlanPresenter.getStartDate().substring(3, 18), endDate = studyPlanPresenter.getEndDate().substring(3, 18);
+        start = AppUtils.timeToInt(studyPlanPresenter.getHours()[0], AppUtils.dayToInt(studyPlanPresenter.getDays()[0]));
+        end = AppUtils.timeToInt(studyPlanPresenter.getHours()[1], AppUtils.dayToInt(studyPlanPresenter.getDays()[1]));
+        Building startBuilding = studyPlanPresenter.getBuilding();
+        spBuilder.createProgramInt(start, end, startBuilding);
+        for (String[] s : spBuilder.getProgram()) {
+            dataList.add(new TimeLineModel(s[0] + startDate + s[1], s[0] + startDate + s[2], AppUtils.getClassroom(s[3])));
+        }
         studyPlan.setDataList(dataList);
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

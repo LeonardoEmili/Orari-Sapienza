@@ -3,28 +3,42 @@ package com.sterbsociety.orarisapienza.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.location.Location;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.sterbsociety.orarisapienza.utils.AppUtils.CACHED_MAX_HOUR;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.CACHED_MIN_HOUR;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getCurrentWeekDayIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.haversine;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.hourToString;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.timeToInt;
 
 public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.ViewHolder> {
 
-    private List<Classroom> mDataList;
+    private ArrayList<Classroom> mDataList, backupList;
     private static Set<String> mClassFavourites;
     private static Drawable starImg;
-    private int redColor, greenColor;
+    private int redColor, greenColor, blackColor;
+    private int currentTimeIndex;
+    private Date now;
 
     public ClassListAdapter(Context context) {
         super(context);
@@ -32,6 +46,10 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         starImg = context.getResources().getDrawable(R.drawable.ic_starred);
         redColor = context.getResources().getColor(R.color.red_normal);
         greenColor = context.getResources().getColor(R.color.green_normal);
+        blackColor = context.getResources().getColor(R.color.coolBlack);
+        mDataList = new ArrayList<>();
+        currentTimeIndex = AppUtils.getCurrentTimeToInt();
+        now = new Date();
     }
 
     public void notifyDataSetChanged(List<Classroom> dataList) {
@@ -39,88 +57,134 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         super.notifyDataSetChanged();
     }
 
-    public void filterClassroomsByQuery(String query) {
+    private ArrayList<Classroom> filterClassroomListByQuery(ArrayList<Classroom> list, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+        final Iterator<Classroom> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            final Classroom classroom = iterator.next();
+            final String buildingName = getRealBuilding(classroom).getName().toLowerCase();
+            if (!classroom.getName().toLowerCase().contains(lowerCaseQuery)
+                    && !buildingName.contains(lowerCaseQuery) && classroom.getCode().contains(lowerCaseQuery)) {
+                iterator.remove();
+            }
+        }
+        return list;
+    }
 
+    public void filterClassroomListOnlyByQuery(String query) {
         mDataList.clear();
         final String lowerCaseQuery = query.toLowerCase();
-        final List<Classroom> dataList = AppUtils.getClassroomList();
-
-        for (Classroom model : dataList) {
-            final String className = model.getName().toLowerCase();
-            final String buildingName = AppUtils.getRealBuilding(model).getName().toLowerCase();
-            final String classId = model.getCode();
-            if (className.contains(lowerCaseQuery) || buildingName.contains(lowerCaseQuery) || classId.contains(lowerCaseQuery)) {
+        if (backupList == null) {
+            // This happens only the first time, if the user hasn't completed a full research,
+            // then it can only filter the whole list (which shows by default only free classroom in the current day)
+            backupList = new ArrayList<>(AppUtils.getClassroomList());
+            searchForAvailableClassrooms(backupList, getCurrentWeekDayIndex());
+        }
+        for (Classroom model : backupList) {
+            final Building building = getRealBuilding(model);
+            if (model.getName().toLowerCase().contains(lowerCaseQuery) || building.getName().toLowerCase().contains(lowerCaseQuery)
+                    || building.getCode().toLowerCase().contains(lowerCaseQuery)) {
                 mDataList.add(model);
             }
         }
         notifyDataSetChanged();
     }
 
-    public void applyOtherFilters() {
-        final boolean[] dayIndexArray = AppUtils.getSelectedDayBtnIndex();
-        final int startHour = AppUtils.getMinHour();
-        final int endHour = AppUtils.getMaxHour();
-        Iterator<Classroom> iterator = mDataList.iterator();
+    public void filterClassroomList() {
+        final boolean[] tmpArray = new boolean[5];
+        tmpArray[getCurrentWeekDayIndex()] = true;
+        filterClassroomList(tmpArray, 0, "", -1, null);
+    }
+
+    public void filterClassroomList(boolean[] dayIndexArray, int onlyAvailable, String query, int distanceRadius, @Nullable Location location) {
+        mDataList.clear();
+        for (int dayIndex = 0; dayIndex < dayIndexArray.length; dayIndex++) {
+            if (dayIndexArray[dayIndex]) {
+                // Foreach day request by the user
+                ArrayList<Classroom> tmpList = new ArrayList<>(AppUtils.getClassroomList());
+
+                if (onlyAvailable == 0) {
+                    searchForAvailableClassrooms(tmpList, dayIndex);
+                } else if (onlyAvailable == 1) {
+                    searchForOccupiedClassrooms(tmpList, dayIndex);
+                }
+
+                tmpList = filterClassroomListByQuery(tmpList, query);
+
+                if (distanceRadius != 1 && location != null) {
+                    tmpList = filterClassroomListByDistance(tmpList, location, distanceRadius);
+                }
+                mDataList.addAll(tmpList);
+            }
+        }
+        backupList = new ArrayList<>(mDataList);
+        notifyDataSetChanged();
+    }
+
+    private void searchForAvailableClassrooms(List<Classroom> list, int dayIndex) {
+        final Iterator<Classroom> iterator = list.iterator();
+        final int minIndex = timeToInt(hourToString(CACHED_MIN_HOUR), dayIndex);
+        final int maxIndex = timeToInt(hourToString(CACHED_MAX_HOUR), dayIndex);
         while (iterator.hasNext()) {
-            Classroom currentClassroom = iterator.next();
-            if (!isClassroomAvailableForCertainRangeOfTime(dayIndexArray, startHour, endHour, currentClassroom)) {
+            int scrollIndex = minIndex;
+            final Classroom classroom = iterator.next();
+            final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());
+            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) == 0) {
+                iterator.remove();
+            } else {
+                boolean toBeRemoved = false;
+                while (scrollIndex <= maxIndex) {
+                    if (lessonList.get(scrollIndex) == 0) {
+                        toBeRemoved = true;
+                        break;
+                    }
+                    scrollIndex++;
+                }
+                if (toBeRemoved) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    private void searchForOccupiedClassrooms(List<Classroom> list, int dayIndex) {
+        final Iterator<Classroom> iterator = list.iterator();
+        final int minIndex = timeToInt(hourToString(CACHED_MIN_HOUR), dayIndex);
+        final int maxIndex = timeToInt(hourToString(CACHED_MAX_HOUR), dayIndex);
+        while (iterator.hasNext()) {
+            int scrollIndex = minIndex;
+            final Classroom classroom = iterator.next();
+            final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());
+            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) != 0) {
+                iterator.remove();
+            } else {
+                boolean toBeRemoved = false;
+                while (scrollIndex <= maxIndex) {
+                    if (lessonList.get(scrollIndex) != 0) {
+                        toBeRemoved = true;
+                        break;
+                    }
+                    scrollIndex++;
+                }
+                if (toBeRemoved) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    private ArrayList<Classroom> filterClassroomListByDistance(ArrayList<Classroom> list, @NonNull Location currentLocation, int distanceRadius) {
+        final double currentLatitude = currentLocation.getLatitude();
+        final double currentLongitude = currentLocation.getLongitude();
+        final Iterator<Classroom> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            final Classroom classroom = iterator.next();
+            final Building building = getRealBuilding(classroom);
+            if (haversine(currentLatitude, currentLongitude, building.getLat(), building.getLong()) > distanceRadius) {
                 iterator.remove();
             }
         }
-    }
-
-    /**
-     * @param indexArray is the array of days formed by the user request, each day requested is true
-     * @param startHour  is the start hour from when the user wants to check classrooms
-     * @param endHour    is the end hour from when the user wants to check classrooms
-     * @return result of user's request, true if this classroom is available, else return false
-     */
-    private boolean isClassroomAvailableForCertainRangeOfTime(boolean[] indexArray, int startHour, int endHour, Classroom classroom) {
-        for (int dayIndex = 0; dayIndex < indexArray.length; dayIndex++) {
-            if (indexArray[dayIndex]) {
-                // Inside here we have to check for the daily availability, startHour and endHour are simple ints (eg. 14:20 -> 14)
-                int startHourIndex = dayIndex + startHour * 5;      // 5 is random
-                final int endHourIndex = dayIndex + endHour * 5;    // 5 is random
-                // Down here we get the array of ints related to the classroom we are checking for
-                int[] classroomRow = new int[42];
-                while (startHourIndex <= endHourIndex) {
-                    if (classroomRow[startHourIndex] != -1) {
-                        // This means that classroom is now occupied
-                        return false;
-                    }
-                    // It goes for 5 minutes ahead
-                    startHourIndex++;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param indexArray is the array of days formed by the user request, each day requested is true
-     * @param startHour  is the start hour from when the user wants to check classrooms
-     * @param endHour    is the end hour from when the user wants to check classrooms
-     * @return result of user's request, true if this classroom is available, else return false
-     */
-    private boolean isClassroomOccupiedForCertainRangeOfTime(boolean[] indexArray, int startHour, int endHour, Classroom classroom) {
-        for (int dayIndex = 0; dayIndex < indexArray.length; dayIndex++) {
-            if (indexArray[dayIndex]) {
-                // Inside here we have to check for the daily availability, startHour and endHour are simple ints (eg. 14:20 -> 14)
-                int startHourIndex = dayIndex + startHour * 5;      // 5 is random
-                final int endHourIndex = dayIndex + endHour * 5;    // 5 is random
-                // Down here we get the array of ints related to the classroom we are checking for
-                int[] classroomRow = new int[42];
-                while (startHourIndex <= endHourIndex) {
-                    if (classroomRow[startHourIndex] == -1) {
-                        // This means that classroom is now available
-                        return false;
-                    }
-                    // It goes for 5 minutes ahead
-                    startHourIndex++;
-                }
-            }
-        }
-        return true;
+        return list;
     }
 
     public Classroom getClassroom(int index) {
@@ -148,12 +212,22 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         } else {
             holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
-        if ((position % 2) == 0)
-            holder.background.setColor(redColor);
-        else
-            holder.background.setColor(greenColor);
+        Date minHour;
+        Date maxHour;
+        if ((minHour = AppUtils.getMinHour()) == null || (maxHour = AppUtils.getMaxHour()) == null) {
+            // If somehow the date parse would fail, we're safe.
+            holder.background.setColor(blackColor);
+        } else {
+            if (now.before(minHour) || now.after(maxHour)) {
+                holder.background.setColor(blackColor);
+            } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
+                holder.background.setColor(redColor);
+            } else {
+                holder.background.setColor(greenColor);
+            }
+        }
         holder.classroom.setText(classroom.getName());
-        holder.building.setText(AppUtils.getRealBuilding(classroom).getName());
+        holder.building.setText(getRealBuilding(classroom).getName());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
