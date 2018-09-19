@@ -123,6 +123,10 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         return true;
     }
 
+    public Classroom getClassroom(int index) {
+        return mDataList.get(index);
+    }
+
     @Override
     public int getItemCount() {
         return mDataList == null ? 0 : mDataList.size();

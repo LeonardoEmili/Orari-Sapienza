@@ -3,10 +3,6 @@ package com.sterbsociety.orarisapienza.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.sterbsociety.orarisapienza.utils.AppUtils;
-
-import java.util.Date;
-
 /**
  * This class implements Parcelable, which is a way of Android to serialize an Object.
  * Doc about it here: http://www.vogella.com/tutorials/AndroidParcelable/article.html
@@ -81,11 +77,6 @@ public class Classroom implements Parcelable {
         this.appeal = appeal;
     }
 
-    public String getCurrentClass() {
-        // todo add reference to db ? maybe ?
-        return "Fondamenti di programmazione";
-    }
-
     public int getBuildingIndex() {
         return buildingIndex;
     }
@@ -94,8 +85,8 @@ public class Classroom implements Parcelable {
         this.buildingIndex = buildingIndex;
     }
 
-    public String getCurrentClassTime() {
-        return "10:30 - 13:00";
+    public String getFullCode() {
+        return buildingCode + "-" + code;
     }
 
     public void printInfo() {

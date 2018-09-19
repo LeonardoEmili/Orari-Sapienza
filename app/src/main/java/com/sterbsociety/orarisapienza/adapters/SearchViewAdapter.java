@@ -117,7 +117,7 @@ public class SearchViewAdapter extends BaseAdapter implements Filterable {
 
         viewHolder.textView.setText(course.getFullName());
 
-        if (AppUtils.hasAlreadyBeenSearchedByUser(course.getId())) {
+        if (AppUtils.hasAlreadyBeenSearchedByUser(course.getFullName())) {
             viewHolder.imageView.setImageDrawable(historyImg);
         } else {
             viewHolder.imageView.setImageDrawable(searchImg);

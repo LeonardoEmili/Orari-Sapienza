@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,7 +28,6 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import java.util.List;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addClassroomToFavourites;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
 
@@ -86,11 +84,19 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         className.setText(classroom.getName());
         buildingName.setText(mainBuilding.getName());
         buildingAddress.setText(mainBuilding.getLocation());
+
+        // We retrieve the index of the current / most close in future lesson in this classroom
         int scrollIndex = AppUtils.timeToInt();
         final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getBuildingCode() + "-" + classroom.getCode());  // List with integers
         final int lessonIndex = lessonList.get(scrollIndex);
-        Log.e("status", lessonIndex + "");
-        Log.e("classcode", classroom.getBuildingCode() + "-" + classroom.getCode());
+
+        // ----------LOGS-----------------
+
+        Log.e("timeToInt", scrollIndex+"");
+        Log.e("lessonIndex", lessonIndex + "");
+        Log.e("classroomCode", classroom.getFullCode());
+
+        // --------END OF LOGS------------
         if (lessonIndex == 0) {
             // Then the classroom is available
             classStatus.setText(R.string.available);
@@ -101,17 +107,17 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             professor.setVisibility(View.GONE);
             currentLesson.setVisibility(View.GONE);
         } else {
+            final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");
             classStatus.setText(R.string.occupied);
-            String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");
             currentLesson.setText(lessonParts[2]);
             currentProfessor.setText(lessonParts[4]);
-            Log.e("e", AppUtils.LESSON_LIST.get(lessonIndex));
+            Log.e("lesson", AppUtils.LESSON_LIST.get(lessonIndex));
             final String startHour = getHourByIndex(scrollIndex);
             while (scrollIndex != 785 && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
             }
             scrollIndex--;
-            classTimetable.setText(startHour + " - " + getHourByIndex(scrollIndex));
+            classTimetable.setText(getString(R.string.lesson_timetable, startHour, getHourByIndex(scrollIndex)));
             // UX stuff - This is responsible for aligning lesson to its relative currentLesson
             ViewTreeObserver viewTreeObserver = currentLesson.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {

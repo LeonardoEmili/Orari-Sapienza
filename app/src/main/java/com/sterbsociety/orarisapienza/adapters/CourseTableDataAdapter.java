@@ -1,13 +1,11 @@
 package com.sterbsociety.orarisapienza.adapters;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.models.Lesson;
 
 import java.util.List;

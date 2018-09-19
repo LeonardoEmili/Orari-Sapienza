@@ -181,7 +181,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     @Override
     public void onItemClick(View itemView, int position) {
         Intent i = new Intent(this, ClassDetailActivity.class);
-        i.putExtra(AppUtils.DEFAULT_KEY, mDataList.get(position));
+        i.putExtra(AppUtils.DEFAULT_KEY, mAdapter.getClassroom(position));
         startActivity(i);
     }
 }

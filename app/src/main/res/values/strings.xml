@@ -191,6 +191,7 @@
     <string name="available">Available</string>
     <string name="occupied">Occupied</string>
     <string name="not_available">Not available</string>
+    <string name="lesson_timetable" translatable="false">%1$s - %2$s</string>
 
     <string name="first">First</string>
     <string name="second">Second</string>

@@ -725,9 +725,9 @@ public class AppUtils {
         return new ArrayList<>(mFavouriteCourseList);
     }
 
-    public static boolean hasAlreadyBeenSearchedByUser(String courseId) {
+    public static boolean hasAlreadyBeenSearchedByUser(String courseCode) {
         for (String favouriteCourseId : mFavouriteCourseSet) {
-            if (favouriteCourseId.split("/")[1].equals(courseId))
+            if (favouriteCourseId.split("/")[1].equals(courseCode))
                 return true;
         }
         return false;
@@ -751,7 +751,7 @@ public class AppUtils {
 
     public static void addCourseToFavourites(Activity activity, Course course, SearchViewAdapter searchViewAdapter, int index) {
 
-        final String courseCode = course.getId();
+        final String courseCode = course.getFullName();
 
         // todo may be useful to limit user history max to 10 or less
         if (!hasAlreadyBeenSearchedByUser(courseCode)) {
@@ -938,9 +938,9 @@ public class AppUtils {
 
     public static final int STUDY_PLAN = 79;
 
-    private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
+    private static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("E, d MMM, yyyy HH:mm", Locale.ENGLISH);
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 
     public static SimpleDateFormat getFullDateFormatter() {
         return fullDateFormat;
@@ -1115,8 +1115,8 @@ public class AppUtils {
         Iterator<Course> iterator = resultList.iterator();
         while (iterator.hasNext()) {
             Course course = iterator.next();
-            if (hasAlreadyBeenSearchedByUser(course.getId())) {
-                tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getId())] = course;
+            if (hasAlreadyBeenSearchedByUser(course.getFullName())) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getFullName())] = course;
                 iterator.remove();
             }
         }
@@ -1234,14 +1234,15 @@ public class AppUtils {
     public static int timeToInt() {
         String h = simpleDateFormat.format(new Date());
         int day = getCurrentDayIndex();
-        int dayVar = day * 157;
-        int var = Math.min(157, Integer.parseInt(h.split(":")[0]) - 7) * 12 + (Integer.parseInt(h.split(":")[1]) / 5);
+        int dayVar = day * 157;//day index
+        int var = Math.min(157, Integer.parseInt(h.split(":")[0]) - 7) * 12 + (Integer.parseInt(h.split(":")[1]) / 5);//hour parsing
         if (var < 0) {
-            return Math.min(dayVar, 628) % 628;
+            return Math.min(dayVar, 629) % 629;
+            //if hour is 00<h<07 than retun minimum  between dayvar and 628 (7:05 of friday,the maximum that day can assume in our week) %628 to get 0 if dayvar is superior(saturday,sunday)
         }
         if (dayVar + var < 785) {
-            return dayVar + var;
+            return dayVar + var;//a right value, day+hour index in our array
         }
-        return 0;
+        return 0;//index out of bound
     }
 }
