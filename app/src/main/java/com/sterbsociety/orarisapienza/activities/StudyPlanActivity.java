@@ -65,7 +65,7 @@ public class StudyPlanActivity extends AppCompatActivity {
 
         // Here we get the user requests about where and when
         Intent i = getIntent();
-        final StudyPlanPresenter studyPlanPresenter= i.getParcelableExtra(AppUtils.DEFAULT_KEY);
+        final StudyPlanPresenter studyPlanPresenter = i.getParcelableExtra(AppUtils.DEFAULT_KEY);
 
         // Here we should retrieve the real data by elaborating data in the studyPlanPresenter;
         setFakeData(studyPlanPresenter);

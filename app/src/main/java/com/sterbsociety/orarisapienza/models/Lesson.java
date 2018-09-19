@@ -10,8 +10,10 @@ public class Lesson {
     private String professor;
     private String startLesson;
     private String subjectName;
+    private String year;
+    private String channel;
 
-    public Lesson(String classRoom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year) {
+    public Lesson(String classRoom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
         this.classRoom = classRoom;
         this.courseId = courseId;
         this.courseName = courseName;
@@ -20,10 +22,12 @@ public class Lesson {
         this.professor = professor;
         this.startLesson = startLesson;
         this.subjectName = subjectName;
+        this.year = year;
+        this.channel = channel;
     }
 
-    public Lesson(String classRoom, String courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year) {
-        this(classRoom, Integer.parseInt(courseId), courseName, day, endLesson, professor, startLesson, subjectName, year);
+    public Lesson(String classRoom, String courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
+        this(classRoom, Integer.parseInt(courseId), courseName, day, endLesson, professor, startLesson, subjectName, year, channel);
     }
 
     public Lesson() {}
@@ -99,5 +103,13 @@ public class Lesson {
             ex.printStackTrace();
         }
         return 24;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public String getYear() {
+        return year;
     }
 }

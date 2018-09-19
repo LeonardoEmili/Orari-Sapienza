@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +29,9 @@ import com.sterbsociety.orarisapienza.adapters.SliderAdapter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
-import static com.sterbsociety.orarisapienza.utils.AppUtils.areUpdatesAllowed;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.KEY_VERSION;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isCurrentDatabaseOutDated;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
@@ -51,6 +50,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Handler mHandler;
     private Runnable mRunnable;
     private AlertDialog mProgressDialog;
+    private ValueEventListener versionControlListener, databaseDownloadListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +65,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         } else if (databaseExists) {
             super.onCreate(savedInstanceState);
-            startMainActivity();
-
+            if (!NetworkStatus.getInstance().isOnline(this)) {
+                startMainActivity();
+            }
         } else {
             super.onCreate(savedInstanceState);
-
             // From API 21 it's allowed, this will make the status bar transparent
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             mProgressDialog.show();
@@ -82,40 +82,35 @@ public class WelcomeActivity extends AppCompatActivity {
     private void initBaseActivity() {
 
         // This is a flag used for checking if the DB exists in local storage.
-        databaseExists = getDatabasePath(AppUtils.DATABASE_NAME).exists();
+        databaseExists = isDBAvailable(this);
 
         loadSettings(this);
         setLocale(this);
-
-        authUser();
 
         mProgressDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage(getResources().getString(R.string.updating))
                 .build();
-    }
 
-    /**
-     * Data stored in a Firebase Realtime Database is retrieved by attaching an
-     * asynchronous listener to a database reference.
-     * Visit DOC at: https://firebase.google.com/docs/database/admin/retrieve-data
-     */
-    private void updateDataSnapshot() {
-
-        onlineDatabase.addValueEventListener(new ValueEventListener() {
+        versionControlListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentDataSnapshot = dataSnapshot;
-                if (!databaseExists && areUpdatesAllowed()) {
-                    AppUtils.saveDatabase(WelcomeActivity.this, currentDataSnapshot);
-                    //DatabaseHelper.createDatabase(WelcomeActivity.this, currentDataSnapshot);
-                    databaseExists = true;
-                    mProgressDialog.dismiss();
-                    if (!isFirstTimeStartApp) {
-                        startMainActivity();
-                    } else if (isButtonClicked) {
+                try {
+                    if (isCurrentDatabaseOutDated(dataSnapshot)) {
+                        onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
+                        databaseExists = false;
+                        mProgressDialog.show();
+                        updateDatabase();
+                    } else {
                         startMainActivity();
                     }
+                } catch (Exception ex) {
+                    // If error is thrown then db is always updated
+                    ex.printStackTrace();
+                    onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
+                    databaseExists = false;
+                    mProgressDialog.show();
+                    updateDatabase();
                 }
             }
 
@@ -123,7 +118,41 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, databaseError.getMessage());
             }
-        });
+        };
+
+        databaseDownloadListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentDataSnapshot = dataSnapshot;
+                AppUtils.saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                databaseExists = true;
+                mProgressDialog.dismiss();
+                if (!isFirstTimeStartApp) {
+                    startMainActivity();
+                } else if (isButtonClicked) {
+                    startMainActivity();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, databaseError.getMessage());
+            }
+        };
+        authUser();
+    }
+
+    /**
+     * Data stored in a Firebase Realtime Database is retrieved by attaching an
+     * asynchronous listener to a database reference.
+     * Visit DOC at: https://firebase.google.com/docs/database/admin/retrieve-data
+     */
+    private void updateDatabase() {
+        if (databaseExists) {
+            onlineDatabase.child(KEY_VERSION).addValueEventListener(versionControlListener);
+        } else {
+            onlineDatabase.addValueEventListener(databaseDownloadListener);
+        }
     }
 
     /**
@@ -152,10 +181,10 @@ public class WelcomeActivity extends AppCompatActivity {
         mRunnable = () -> {
             if (!isAuthenticated) {
                 getAuthentication();
-                mHandler.postDelayed(mRunnable, 2000);
+                mHandler.postDelayed(mRunnable, 1000);
             } else {
                 mHandler.removeCallbacks(mRunnable);
-                updateDataSnapshot();
+                updateDatabase();
             }
         };
 
@@ -165,7 +194,7 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             // This only happens if user has logged in in previous sessions.
             isAuthenticated = true;
-            updateDataSnapshot();
+            updateDatabase();
         }
     }
 
@@ -246,14 +275,13 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-
         AppUtils.setFirstTimeStartApp(this);
+        mProgressDialog.dismiss();
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
         finish();
     }
 
     public void startMainActivity(View v) {
-
         isButtonClicked = true;
         if (databaseExists) {
             startMainActivity();

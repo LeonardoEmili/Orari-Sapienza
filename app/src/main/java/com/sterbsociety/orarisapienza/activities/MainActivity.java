@@ -30,7 +30,6 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import org.codechimp.apprater.AppRater;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.getCurrentDBVersion;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.parseDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (isDBAvailable()) {
+        if (isDBAvailable(this)) {
             parseDatabase(this);
         } else {
             Log.e("not presente", "ee");

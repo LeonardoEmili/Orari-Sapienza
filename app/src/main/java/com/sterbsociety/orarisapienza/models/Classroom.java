@@ -3,6 +3,10 @@ package com.sterbsociety.orarisapienza.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sterbsociety.orarisapienza.utils.AppUtils;
+
+import java.util.Date;
+
 /**
  * This class implements Parcelable, which is a way of Android to serialize an Object.
  * Doc about it here: http://www.vogella.com/tutorials/AndroidParcelable/article.html
@@ -88,11 +92,6 @@ public class Classroom implements Parcelable {
 
     public void setBuildingIndex(int buildingIndex) {
         this.buildingIndex = buildingIndex;
-    }
-
-    // Returns available/occupied
-    public String getStatus() {
-        return "Occupata";
     }
 
     public String getCurrentClassTime() {

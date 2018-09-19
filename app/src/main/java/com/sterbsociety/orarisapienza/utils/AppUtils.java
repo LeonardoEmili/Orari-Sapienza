@@ -70,6 +70,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
@@ -652,6 +653,27 @@ public class AppUtils {
         return CURRENT_DAY;
     }
 
+    public static int getCurrentDayIndex() {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        switch (day) {
+            case Calendar.MONDAY:
+                return 0;
+            case Calendar.TUESDAY:
+                return 1;
+            case Calendar.WEDNESDAY:
+                return 2;
+            case Calendar.THURSDAY:
+                return 3;
+            case Calendar.FRIDAY:
+                return 4;
+            case Calendar.SATURDAY:
+                return 5;
+            default:
+                return 6;
+        }
+    }
+
     public static boolean[] getSelectedDayBtnIndex() {
         if (SELECTED_DAY_BTN_INDEX == null)
             initDate();
@@ -941,12 +963,24 @@ public class AppUtils {
         return currentDBVersion;
     }
 
+    public static boolean isCurrentDatabaseOutDated(DataSnapshot dataSnapshot) {
+        try {
+            int onlineVersion = Integer.parseInt(Objects.requireNonNull(dataSnapshot.getValue(String.class)).replaceAll("\\.", ""));
+            return Integer.parseInt(currentDBVersion.replaceAll("\\.", "")) < onlineVersion;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return true;
+        }
+    }
+
     private static boolean isDBAvailable;
 
-    public static boolean isDBAvailable() {
+    public static boolean isDBAvailable(Activity activity) {
         if (isDBAvailable)
             return true;
-        return currentDBVersion != null;
+        if (currentDBVersion != null)
+            return true;
+        return (currentDBVersion = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).getString(DB_KEY, null)) != null;
     }
 
     private static final String DB_KEY = "finalDB";
@@ -958,12 +992,14 @@ public class AppUtils {
             outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
             outputStream.write(new Gson().toJson(pojo).getBytes());
             outputStream.close();
-            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, (String) dataSnapshot.child("version").getValue()).apply();
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, dataSnapshot.child(KEY_VERSION).getValue(String.class)).apply();
             isDBAvailable = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public static final String KEY_VERSION = "version";
 
     public static void parseDatabase(Activity activity) {
         try {
@@ -1144,4 +1180,68 @@ public class AppUtils {
     }
 
     public static boolean isTableVisible;
+
+    public static String getLiteralYearByNumber(Activity activity, String courseYear) {
+        final int yearIndex = Character.getNumericValue(courseYear.charAt(0));
+        final String courseType = courseYear.substring(1);
+        int yearResource, courseResource;
+        switch (yearIndex) {
+            case 2:
+                yearResource = R.string.second;
+                break;
+            case 3:
+                yearResource = R.string.third;
+                break;
+            case 4:
+                yearResource = R.string.third;
+                break;
+            case 5:
+                yearResource = R.string.fifth;
+                break;
+            case 6:
+                yearResource = R.string.sixth;
+                break;
+            case 7:
+                yearResource = R.string.seventh;
+                break;
+            case 8:
+                yearResource = R.string.eighth;
+                break;
+            case 9:
+                yearResource = R.string.ninth;
+                break;
+            default:
+                yearResource = R.string.first;
+        }
+
+        Toast.makeText(activity, courseType, Toast.LENGTH_SHORT).show();
+        if (courseType.toLowerCase().equals("m")) {
+            courseResource = R.string.master_degree;
+        } else {
+            // Else it's a three-year degree
+            courseResource = R.string.first_level_degree;
+        }
+        return getStringByLocal(activity, yearResource) + getStringByLocal(activity, R.string.year)
+                + getStringByLocal(activity, R.string.of) + getStringByLocal(activity, courseResource) + ". ";
+    }
+
+    public static int getCurrentTimeInt() {
+        String hour = simpleDateFormat.format(new Date());
+        int dayIndex = getCurrentDayIndex();
+        return (dayIndex * 157) + (Integer.parseInt(hour.split(":")[0]) - 7) * 12 + (Integer.parseInt(hour.split(":")[1]) / 5);
+    }
+
+    public static int timeToInt() {
+        String h = simpleDateFormat.format(new Date());
+        int day = getCurrentDayIndex();
+        int dayVar = day * 157;
+        int var = Math.min(157, Integer.parseInt(h.split(":")[0]) - 7) * 12 + (Integer.parseInt(h.split(":")[1]) / 5);
+        if (var < 0) {
+            return Math.min(dayVar, 628) % 628;
+        }
+        if (dayVar + var < 785) {
+            return dayVar + var;
+        }
+        return 0;
+    }
 }

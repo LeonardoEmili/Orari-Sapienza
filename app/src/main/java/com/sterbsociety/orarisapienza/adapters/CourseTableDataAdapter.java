@@ -60,12 +60,12 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         final TextView textView = new TextView(getContext());
         textView.setText(startHour);
-        textView.setPadding(30, 12, 20, 4);
+        textView.setPadding(30, 12, 20, 3);
         textView.setTextSize(TEXT_SIZE+1);
         linearLayout.addView(textView);
         final TextView textView2 = new TextView(getContext());
         textView2.setText(endHour);
-        textView2.setPadding(30, 4, 20, 12);
+        textView2.setPadding(30, 3, 20, 12);
         textView2.setTextSize(TEXT_SIZE+1);
         linearLayout.addView(textView2);
         return linearLayout;

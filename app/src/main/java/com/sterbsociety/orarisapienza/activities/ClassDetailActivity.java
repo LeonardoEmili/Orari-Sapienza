@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,15 +26,19 @@ import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import java.util.List;
+
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addClassroomToFavourites;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
 
 public class ClassDetailActivity extends AppCompatActivity implements OnMapInitializedListener {
 
     private AirMapView mapView;
     private Classroom classroom;
-    private Button favouritesButton;
     private Building mainBuilding;
+    private boolean isFavouriteButtonVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +71,10 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         final TextView classStatus = findViewById(R.id.current_status);
         final TextView currentLesson = findViewById(R.id.current_lesson);
         final TextView classTimetable = findViewById(R.id.class_timetable);
-        favouritesButton = findViewById(R.id.add_to_fav);
+        final TextView lesson = findViewById(R.id.lesson);
+        final TextView time = findViewById(R.id.time);
+        final TextView professor = findViewById(R.id.professor);
+        final TextView currentProfessor = findViewById(R.id.current_professor);
 
         Intent i = getIntent();
         classroom = i.getParcelableExtra(AppUtils.DEFAULT_KEY);
@@ -75,12 +86,48 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         className.setText(classroom.getName());
         buildingName.setText(mainBuilding.getName());
         buildingAddress.setText(mainBuilding.getLocation());
-        classStatus.setText(classroom.getStatus());
-        currentLesson.setText(classroom.getCurrentClass());
-        classTimetable.setText(classroom.getCurrentClassTime());
+        int scrollIndex = AppUtils.timeToInt();
+        final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getBuildingCode() + "-" + classroom.getCode());  // List with integers
+        final int lessonIndex = lessonList.get(scrollIndex);
+        Log.e("status", lessonIndex + "");
+        Log.e("classcode", classroom.getBuildingCode() + "-" + classroom.getCode());
+        if (lessonIndex == 0) {
+            // Then the classroom is available
+            classStatus.setText(R.string.available);
+            currentLesson.setVisibility(View.GONE);
+            classTimetable.setVisibility(View.GONE);
+            lesson.setVisibility(View.GONE);
+            time.setVisibility(View.GONE);
+            professor.setVisibility(View.GONE);
+            currentLesson.setVisibility(View.GONE);
+        } else {
+            classStatus.setText(R.string.occupied);
+            String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");
+            currentLesson.setText(lessonParts[2]);
+            currentProfessor.setText(lessonParts[4]);
+            Log.e("e", AppUtils.LESSON_LIST.get(lessonIndex));
+            final String startHour = getHourByIndex(scrollIndex);
+            while (scrollIndex != 785 && lessonList.get(scrollIndex) == lessonIndex) {
+                scrollIndex++;
+            }
+            scrollIndex--;
+            classTimetable.setText(startHour + " - " + getHourByIndex(scrollIndex));
+            // UX stuff - This is responsible for aligning lesson to its relative currentLesson
+            ViewTreeObserver viewTreeObserver = currentLesson.getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        currentLesson.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        lesson.setHeight(currentLesson.getHeight());
+                    }
+                });
+            }
+        }
 
-        if (AppUtils.getFavouriteClassSet().contains(classroom.getCode()))
-            favouritesButton.setVisibility(View.GONE);
+        if (!AppUtils.getFavouriteClassSet().contains(classroom.getBuildingCode() + "-" + classroom.getCode())) {
+            isFavouriteButtonVisible = true;
+        }
 
         // GUI stuff for improving the UX
         if (AppUtils.isDarkTheme()) {
@@ -90,15 +137,35 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             buildingAddress.setTextColor(white);
             currentLesson.setTextColor(white);
             classTimetable.setTextColor(white);
-            ((TextView)findViewById(R.id.status)).setTextColor(white);
-            ((TextView)findViewById(R.id.lesson)).setTextColor(white);
-            ((TextView)findViewById(R.id.time)).setTextColor(white);
+            ((TextView) findViewById(R.id.status)).setTextColor(white);
+            ((TextView) findViewById(R.id.lesson)).setTextColor(white);
+            ((TextView) findViewById(R.id.time)).setTextColor(white);
         }
 
         final DefaultAirMapViewBuilder mapViewBuilder = new DefaultAirMapViewBuilder(this);
         mapView = findViewById(R.id.map_view);
         mapView.setOnMapInitializedListener(this);
         mapView.initialize(getSupportFragmentManager(), mapViewBuilder.builder().withOptions(new AirGoogleMapOptions(new GoogleMapOptions().liteMode(true))).build());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isFavouriteButtonVisible) {
+            getMenuInflater().inflate(R.menu.menu_class_detail, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.add_button:
+                addClassroomToFavourites(this, classroom);
+                item.setVisible(false);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -121,8 +188,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         mapView.setMyLocationEnabled(false);
     }
 
-    public void addToFavourites(View view) {
+    private void addToFavourites() {
         addClassroomToFavourites(this, classroom);
-        favouritesButton.setVisibility(View.GONE);
     }
 }

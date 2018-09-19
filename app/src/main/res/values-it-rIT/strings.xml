@@ -106,8 +106,8 @@
     <string name="add_to_favs">AGGIUNGI AI PREFERITI</string>
     <string name="status">Stato:</string>
     <string name="_course">Corso:</string>
-    <string name="_time">Ora:</string>
-    <string name="updating">Aggiornamento...</string>
+    <string name="_time">Orario:</string>
+    <string name="updating">Aggiornamento…</string>
     <string name="data_not_sync_wait_please">Dati aule non sincronizzati.\\nAttendere prego.</string>
     <string name="from_">Dalle</string>
     <string name="to_">Alle</string>
@@ -136,4 +136,22 @@
     <string name="delete_study_plan">Cancella piano di studi</string>
     <string name="selected_dates_are_incompatibles">Non é possibile creare un piano di studio con le date selezionate</string>
     <string name="dates_error">Errore nella scelta degli orari</string>
+    <string name="first">Primo</string>
+    <string name="second">Secondo</string>
+    <string name="third">Terzo</string>
+    <string name="fourth">Quarto</string>
+    <string name="fifth">Quinto</string>
+    <string name="sixth">Sesto</string>
+    <string name="seventh">Settimo</string>
+    <string name="eighth">Ottavo</string>
+    <string name="ninth">Nono</string>
+    <string name="year">" anno "</string>
+    <string name="of">"di "</string>
+    <string name="first_level_degree">Triennale</string>
+    <string name="master_degree">Magistrale</string>
+    <string name="channel">"Canale: "</string>
+    <string name="select_course">Seleziona il tuo corso</string>
+    <string name="available">Libera</string>
+    <string name="occupied">Occupata</string>
+    <string name="not_available">Non disponibile</string>
 </resources>
