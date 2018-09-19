@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -1317,17 +1318,12 @@ public class AppUtils {
     }
 
     public static Classroom getClassroom(String code) {
-        final String myBuildingCode = code.split("-")[0];
-        final String myClassCode = code.split("-")[1];
-        for (Building b : buildingList) {
-            if (myBuildingCode.equals(b.getCode())) {
-                for (Classroom c : b.getAule()) {
-                    if (myClassCode.equals(c.getCode())) {
-                        return c;
-                    }
-                }
+        for (Classroom classroom : classroomList) {
+            if (classroom.getFullCode().equals(code)) {
+                return classroom;
             }
         }
+        Log.e("classroom", "not found");
         return null;
     }
 }
