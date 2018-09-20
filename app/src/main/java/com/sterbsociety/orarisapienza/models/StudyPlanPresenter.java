@@ -4,6 +4,8 @@ import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sterbsociety.orarisapienza.utils.AppUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -59,6 +61,9 @@ public class StudyPlanPresenter implements Parcelable {
     }
 
     public Building getBuilding() {
+        if (building == null) {
+            return AppUtils.getNearestBuilding(latitude, longitude);
+        }
         return building;
     }
 

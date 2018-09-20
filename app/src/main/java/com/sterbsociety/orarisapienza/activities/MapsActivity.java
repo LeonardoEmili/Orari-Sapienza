@@ -63,15 +63,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     private StudyPlanPresenter studyPlanPresenter;
     public boolean isPlaceSelected, errorDialogMustBeDisplayed;
     public BuildingListViewAdapter mAdapter;
+    public ImageView clearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         applyThemeNoActionBar(MapsActivity.this);
         setLocale(MapsActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         initActivity();
         initGps();
     }
@@ -81,16 +80,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        final Calendar calendar = Calendar.getInstance();
-        final Date startDate = calendar.getTime();
-        calendar.add(Calendar.HOUR, 4);
-        final Date endDate = calendar.getTime();
-
+        final Date[] bestDates = AppUtils.getBestDates();
         mPickerDialog = new MyDoubleDateAndTimePickerDialog.Builder(this)
                 .curved()
                 .minutesStep(15)
-                .tab0Date(startDate)
-                .tab1Date(endDate)
+                .tab0Date(bestDates[0])
+                .tab1Date(bestDates[1])
+                .minDateRange(bestDates[0])
                 .tab0Text(getString(R.string.from_))
                 .tab1Text(getString(R.string.to_))
                 .listener(dates -> {
@@ -98,7 +94,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                     tab0date = dates.get(0);
                     tab1date = dates.get(1);
 
-                    // I don't think it's necessary, but better to be sure.
+                    // I don't think it's necessary, but it's better to be sure.
                     if (tab0date == null || tab1date == null) {
                         return;
                     }
@@ -111,7 +107,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                     }
                 });
 
-        studyPlanPresenter.setDates(startDate, endDate, getFullDateFormatter());
+        studyPlanPresenter.setDates(bestDates[0], bestDates[1], getFullDateFormatter());
 
     }
 
@@ -139,6 +135,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         firstButton = findViewById(R.id.button1);
         secondButton = findViewById(R.id.button2);
+        clearButton = findViewById(R.id.search_clear_search);
         mapView = findViewById(R.id.map_view);
         final LinearLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
 
@@ -153,7 +150,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         }
 
         studyPlanPresenter = new StudyPlanPresenter();
-
         initSearchViewLayout();
     }
 
@@ -315,7 +311,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
         rxGps = new RxGps(this);
         rxGps.lastLocation()
-
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(location -> {
@@ -330,7 +325,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                         Log.e(MapsActivity.class.getSimpleName(), throwable.getMessage());
                     }
                 });
-        //getAccuratePosition();
     }
 
     public void createStudyPlan(View view) {
@@ -352,6 +346,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                         .setNegativeButton(getString(R.string.cancel), null)
                         .show();
             }
+        }
+    }
+
+    public void clearSearchQuery(View view) {
+        clearButton.setVisibility(View.GONE);
+        searchViewLayout.setCollapsedHint(getString(R.string.where_to_study));
+        isPlaceSelected = false;
+        if (lastAirMapMarker != null) {
+            mapView.removeMarker(lastAirMapMarker);
         }
     }
 }

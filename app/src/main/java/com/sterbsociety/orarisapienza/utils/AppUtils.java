@@ -1323,7 +1323,56 @@ public class AppUtils {
                 return classroom;
             }
         }
-        Log.e("classroom", "not found");
         return null;
+    }
+
+    public static Building getNearestBuilding(double latitude, double longitude) {
+        double distance, minimum = 10000.0;
+        Building nearestBuilding = null;
+        for (Building building : buildingList) {
+            distance = haversine(latitude, longitude, building.getLat(), building.getLong());
+            if (distance < minimum) {
+                minimum = distance;
+                nearestBuilding = building;
+            }
+        }
+        return nearestBuilding;
+    }
+
+    public static Date[] getBestDates() {
+        final Calendar calendar = Calendar.getInstance();
+        final Date maxHour, minHour;
+        if ((maxHour = getMaxHour()) == null || (minHour = getMinHour()) == null) {
+            calendar.set(Calendar.HOUR_OF_DAY, 7);
+            switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+                case Calendar.FRIDAY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 3);
+                    break;
+                case Calendar.SATURDAY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 2);
+                    break;
+                default:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1);
+                    break;
+            }
+        } else {
+            // Inside here we are safe from the monster of ParseException.
+            final Date now = new Date();
+            if (now.before(minHour) || now.after(maxHour)) {
+                calendar.set(Calendar.HOUR_OF_DAY, 7);
+                if (now.after(maxHour)) {
+                    calendar.add(Calendar.DAY_OF_WEEK, 1);
+                }
+            }
+            final int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (day == Calendar.SATURDAY) {
+                calendar.add(Calendar.DAY_OF_WEEK, 2);
+            } else if (day == Calendar.SUNDAY) {
+                calendar.add(Calendar.DAY_OF_WEEK, 1);
+            }
+        }
+        final Date startDate = calendar.getTime();
+        calendar.add(Calendar.HOUR_OF_DAY, 4);
+        return new Date[] {startDate, calendar.getTime()};
     }
 }

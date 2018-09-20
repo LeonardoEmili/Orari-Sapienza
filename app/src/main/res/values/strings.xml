@@ -73,6 +73,7 @@
     <string name="sync_desc">By enabling this you will allow the app to auto sync itself.</string>
     <string name="sync_title">Automatically check for updates</string>
     <string name="lang_title">Current language</string>
+    <string name="current_postion">Current position</string>
     <string name="animations_title">Show animations</string>
     <string name="exit_box_desc">Show confirm dialog before exiting.</string>
     <string name="exit_box_title">Confirm exit</string>

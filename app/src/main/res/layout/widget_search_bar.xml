@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <view xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_view_container"
     class="xyz.sahildave.widget.SearchViewLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:context=".activities.MapsActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/search_box_collapsed"
@@ -53,12 +55,27 @@
                     android:id="@+id/search_box_collapsed_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:gravity="center_vertical"
                     android:textColor="@color/searchbox_text_color"
                     android:textColorHint="@color/darkGray"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/search_clear_search"
+                android:layout_width="@dimen/search_box_icon_size"
+                android:layout_height="@dimen/search_box_icon_size"
+                android:layout_margin="@dimen/search_box_icon_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:clickable="true"
+                android:padding="@dimen/search_box_search_icon_padding"
+                android:src="@drawable/ic_close"
+                android:onClick="clearSearchQuery"
+                android:visibility="gone"
+                android:tint="@color/searchbox_icon_tint" />
 
         </LinearLayout>
 

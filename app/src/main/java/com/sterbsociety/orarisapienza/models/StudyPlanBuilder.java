@@ -1,32 +1,30 @@
-package com.sterbsociety.orarisapienza.utils;
+package com.sterbsociety.orarisapienza.models;
 
-import com.sterbsociety.orarisapienza.models.Building;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class StudyPlanBuilder {
-    private ArrayList<String[]> program = new ArrayList<>();
-    private ArrayList<Building> buildings;
-    private HashMap<String, List<Integer>> dataMatrix;
-    private List<String> alist;
-    private ArrayList<Building> checked = new ArrayList<>();
-    private ArrayList<Building> nearby = new ArrayList<>();
-    int radius = 500;
 
-    public StudyPlanBuilder(ArrayList<Building> buildings, HashMap<String, List<Integer>> dataMatrix, List<String> alist) {
-        this.buildings = buildings;
-        this.dataMatrix = dataMatrix;
-        this.alist = alist;
+    private ArrayList<String[]> program;
+    private ArrayList<Building> buildings, checked, nearby;
+    private HashMap<String, List<Integer>> dataMatrix;
+    private List<String> alist; // todo do we need this?
+    private int radius = 500;
+
+    public StudyPlanBuilder() {
+        this.buildings = AppUtils.getBuildingList();
+        this.dataMatrix = AppUtils.MATRIX;
+        this.alist = AppUtils.LESSON_LIST;
+        this.program = new ArrayList<>();
+        this.checked = new ArrayList<>();
+        this.nearby = new ArrayList<>();
     }
 
     public void add(String classroom, String time) {
         this.program.add(new String[]{classroom, time});
-    }
-
-    public void remove(int i) {
-        this.program.remove(i);
     }
 
     public String[] get(int i) {
@@ -68,7 +66,6 @@ public class StudyPlanBuilder {
         } else {
             findNextRoom(start, end, changeBuilding(building));
         }
-
     }
 
     private Building changeBuilding(Building b) {
@@ -91,5 +88,9 @@ public class StudyPlanBuilder {
                 }
             }
         }
+    }
+
+    public void remove(int i) {
+        this.program.remove(i);
     }
 }

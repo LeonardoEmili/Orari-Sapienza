@@ -273,12 +273,12 @@ public class TimelineView extends View {
      * @return the time line view type
      */
     public static int getTimeLineViewType(int position, int total_size, int specialPosition) {
-        if (total_size == 1) {
-            return LineType.ONLYONE;
-        } else if (specialPosition == -1) {
+        if (specialPosition == -1) {
             return LineType.SIMPLE;
         } else if (position == specialPosition) {
             return LineType.SPECIAL;
+        } else if (total_size == 1) {
+            return LineType.ONLYONE;
         } else if (position == 0) {
             return LineType.BEGIN;
         } else if (position == total_size - 1) {

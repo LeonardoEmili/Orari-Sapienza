@@ -48,6 +48,8 @@ public class SearchStaticListSupportFragment extends Fragment {
         CardView gpsButton = rootView.findViewById(R.id.use_gps_button);
         gpsButton.setOnClickListener(view -> {
             mapsActivity.useGPSPosition();
+            searchViewLayout.setCollapsedHint(getString(R.string.current_postion));
+            mapsActivity.clearButton.setVisibility(View.VISIBLE);
             searchViewLayout.collapse();
         });
 
@@ -57,6 +59,8 @@ public class SearchStaticListSupportFragment extends Fragment {
             final Building building = mAdapter.getItem(position);
             if (building != null) {
                 mapsActivity.useBuildingPosition(building);
+                searchViewLayout.setCollapsedHint(building.getName());
+                mapsActivity.clearButton.setVisibility(View.VISIBLE);
                 addBuildingToFavourites(mapsActivity, building, position);
             }
             searchViewLayout.collapse();

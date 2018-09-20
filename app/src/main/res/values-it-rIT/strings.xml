@@ -154,4 +154,5 @@
     <string name="available">Libera</string>
     <string name="occupied">Occupata</string>
     <string name="not_available">Non disponibile</string>
+    <string name="current_postion">Posizione attuale</string>
 </resources>

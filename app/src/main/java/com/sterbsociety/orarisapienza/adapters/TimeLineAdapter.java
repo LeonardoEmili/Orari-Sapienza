@@ -21,6 +21,10 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Static vs non-static ViewHolder in RecyclerView.Adapter discussion here:
+ * https://stackoverflow.com/questions/31302341/what-difference-between-static-and-non-static-viewholder-in-recyclerview-adapter
+ */
 public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder> {
 
     private static List<TimeLineModel> mFeedList;
@@ -78,10 +82,17 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
         return (mFeedList != null ? mFeedList.size() : 0);
     }
 
-    static class DefaultViewHolder extends BaseTimeLineViewHolder {
+    class DefaultViewHolder extends BaseTimeLineViewHolder implements View.OnClickListener {
 
         DefaultViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            currentClassroomIndex = getAdapterPosition();
+            notifyDataSetChanged();
         }
     }
 
@@ -110,6 +121,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
         SimpleViewHolder(@NonNull View itemView) {
             super(itemView);
             timeLineIndex = itemView.findViewById(R.id.timeline_index);
+            final ImageView infoButton = itemView.findViewById(R.id.info_building_btn);
+            infoButton.setOnClickListener(view -> {
+                final Context context = infoButton.getContext();
+                Intent i = new Intent(context, ClassDetailActivity.class);
+                i.putExtra(AppUtils.DEFAULT_KEY, mFeedList.get(getAdapterPosition()).getClassroom());
+                context.startActivity(i);
+            });
         }
     }
 }

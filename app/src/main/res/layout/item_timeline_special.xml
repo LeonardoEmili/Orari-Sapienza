@@ -43,6 +43,8 @@
                     android:layout_height="wrap_content"
                     android:text="Aula P1"
                     android:textColor="@color/coolBlack"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/_32sdp"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold" />
 
@@ -54,12 +56,14 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:textColor="@color/darkGray"
                     android:text="Viale dell'universitá, 23"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/_32sdp"
                     android:textSize="@dimen/_12sdp" />
 
                 <ImageView
                     android:id="@+id/info_building_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_27sdp"
+                    android:layout_height="@dimen/_27sdp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:clickable="true"

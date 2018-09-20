@@ -128,13 +128,12 @@ public class CurrentPlanActivity extends AppCompatActivity {
 
 
     private int getCurrentTimeLineIndex(List<TimeLineModel> dataList) {
-        int resultIndex = -1;
+        int resultIndex = dataList.size() - 1;
         try {
             SimpleDateFormat simpleDateFormat = getFullDateFormatter();
             final Date currentDate = new Date();
             for (int i = 0; i < dataList.size(); i++) {
                 TimeLineModel lineModel = dataList.get(i);
-                System.out.println(lineModel.getEndDate());
                 if (currentDate.before(simpleDateFormat.parse(lineModel.getEndDate()))) {
                     return i;
                 }
