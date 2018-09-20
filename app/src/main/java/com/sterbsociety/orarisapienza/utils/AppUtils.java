@@ -1344,6 +1344,7 @@ public class AppUtils {
         final Date maxHour, minHour;
         if ((maxHour = getMaxHour()) == null || (minHour = getMinHour()) == null) {
             calendar.set(Calendar.HOUR_OF_DAY, 7);
+            calendar.set(Calendar.MINUTE, 0);
             switch (calendar.get(Calendar.DAY_OF_WEEK)) {
                 case Calendar.FRIDAY:
                     calendar.add(Calendar.DAY_OF_WEEK, 3);
@@ -1360,6 +1361,7 @@ public class AppUtils {
             final Date now = new Date();
             if (now.before(minHour) || now.after(maxHour)) {
                 calendar.set(Calendar.HOUR_OF_DAY, 7);
+                calendar.set(Calendar.MINUTE, 0);
                 if (now.after(maxHour)) {
                     calendar.add(Calendar.DAY_OF_WEEK, 1);
                 }
