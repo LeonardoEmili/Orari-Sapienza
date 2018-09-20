@@ -38,6 +38,12 @@
             android:summary="@string/exit_box_desc"
             android:title="@string/exit_box_title" />
 
+        <Preference
+            android:name="Manual Update"
+            android:title="@string/manual_update_title"
+            android:summary="@string/manual_update_desc"
+            android:key="manual_update_pref" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/notifications"

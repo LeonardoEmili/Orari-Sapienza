@@ -151,7 +151,7 @@
     <string name="status">Status:</string>
     <string name="_course">Course:</string>
     <string name="_time">Time:</string>
-    <string name="updating">Updating…</string>
+    <string name="updating">Updating data…</string>
     <string name="data_not_sync_wait_please">Data is not sync.\nWait please.</string>
     <string name="from_">From</string>
     <string name="to_">To</string>
@@ -193,6 +193,9 @@
     <string name="occupied">Occupied</string>
     <string name="not_available">Not available</string>
     <string name="lesson_timetable" translatable="false">%1$s - %2$s</string>
+    <string name="alert_offline">You\'re offline. Please go online for updates.</string>
+    <string name="lesson_data_updated">Data has been succesfully updated!</string>
+    <string name="lesson_data_update_wrong">Data can\'t be updated now. Please try again later.</string>
 
     <string name="first">First</string>
     <string name="second">Second</string>
@@ -204,6 +207,8 @@
     <string name="eighth">Eighth</string>
     <string name="ninth">Ninth</string>
     <string name="star_class" translatable="false">Star class</string>
+    <string name="manual_update_title">Force data update</string>
+    <string name="manual_update_desc">This will force the app to download again lesson data.</string>
 
 
 </resources>

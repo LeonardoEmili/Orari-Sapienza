@@ -30,6 +30,7 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.KEY_VERSION;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.areUpdatesAllowed;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isCurrentDatabaseOutDated;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
@@ -65,7 +66,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         } else if (databaseExists) {
             super.onCreate(savedInstanceState);
-            if (!NetworkStatus.getInstance().isOnline(this)) {
+            if (!AppUtils.areUpdatesAllowed() || !NetworkStatus.getInstance().isOnline(this)) {
                 startMainActivity();
             }
         } else {
@@ -139,7 +140,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.getMessage());
             }
         };
-        authUser();
+        if (areUpdatesAllowed()) {
+            authUser();
+        }
     }
 
     /**

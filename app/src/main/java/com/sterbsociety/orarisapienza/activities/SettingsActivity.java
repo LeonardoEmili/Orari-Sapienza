@@ -1,5 +1,7 @@
 package com.sterbsociety.orarisapienza.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +9,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -15,14 +18,27 @@ import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
+import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
+import dmax.dialog.SpotsDialog;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.KEY_VERSION;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
@@ -43,6 +59,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     public static final String KEY_PREF_RINGTONE = "ringtone_pref";
     public static final String KEY_PREF_THEME = "pref_theme";
     public static final String KEY_PREF_LANGUAGE = "lang_pref";
+    public static final String KEY_PREF_MANUAL_UPDATE = "manual_update_pref";
     private static final String KEY_PREF_APP_VERSION = "version";
     private static final String KEY_BASE_THEME = "base_theme";
     private static final String KEY_GENERAL = "general";
@@ -50,11 +67,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
     private static final String KEY_ABOUT = "about";
     private static final int REQUEST_CODE_ALERT_RINGTONE = 142;
     private static Preference ringtonePref, updatesPref, animationsPref, exitPref, notificationsPref,
-                                vibrationPref, appVersionPref, baseTheme, general, notification, about;
+            vibrationPref, appVersionPref, baseTheme, general, notification, about, manualUpdate;
     private static ActionBar mActionBar;
     private static SwitchPreference themePreference;
     private static ListPreference languagePreference;
     private static String userLanguage;
+    private static Runnable mRunnable;
+    private static volatile boolean isAuthenticated, databaseExists;
+    private static Handler mHandler;
+    private static AlertDialog mProgressDialog;
+    private static DatabaseReference onlineDatabase;
+    private static FirebaseAuth mAuth;
+    private static ValueEventListener databaseDownloadListener;
+
 
     // todo implement clear favourites function in settings
 
@@ -95,9 +120,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             bindPreferenceSummaryToValue(findPreference(KEY_PREF_RINGTONE));
             bindPreferenceSummaryToValue(findPreference(KEY_PREF_LANGUAGE));
 
-            ringtonePref = findPreference(KEY_PREF_RINGTONE);
             themePreference = (SwitchPreference) findPreference(KEY_PREF_THEME);
             languagePreference = (ListPreference) findPreference(KEY_PREF_LANGUAGE);
+            manualUpdate = findPreference(KEY_PREF_MANUAL_UPDATE);
+            ringtonePref = findPreference(KEY_PREF_RINGTONE);
             ringtonePref.setSummary(AppUtils.getCurrentRingtoneTitle(getActivity()));
             updatesPref = findPreference(KEY_PREF_UPDATE_SWITCH);
             animationsPref = findPreference(KEY_PREF_ANIMATION_SWITCH);
@@ -111,9 +137,73 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
             about = findPreference(KEY_ABOUT);
 
             userLanguage = AppUtils.getCurrentLanguage();
+            manualUpdate.setOnPreferenceClickListener(preference -> {
+                final Activity activity = getActivity();
+                if (!NetworkStatus.getInstance().isOnline(activity)) {
+                    StyleableToast.makeText(activity, getResources().getString(R.string.alert_offline), Toast.LENGTH_LONG, R.style.errorToast).show();
+                } else {
+                    initManualUpdatesBackground(activity);
+                }
+
+                return false;
+            });
 
             languagePreference.setValue(userLanguage);
             languagePreference.setSummary(languagePreference.getEntry());
+        }
+
+        private void initManualUpdatesBackground(Activity activity) {
+            mProgressDialog = new SpotsDialog.Builder()
+                    .setContext(activity)
+                    .setMessage(getResources().getString(R.string.updating))
+                    .build();
+            mProgressDialog.show();
+
+            databaseDownloadListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    AppUtils.saveDatabase(activity, dataSnapshot);
+                    databaseExists = true;
+                    mProgressDialog.dismiss();
+                    onlineDatabase.removeEventListener(databaseDownloadListener);
+                    StyleableToast.makeText(activity, getResources().getString(R.string.lesson_data_updated), Toast.LENGTH_LONG, R.style.successToast).show();
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    onlineDatabase.removeEventListener(databaseDownloadListener);
+                    StyleableToast.makeText(activity, getResources().getString(R.string.lesson_data_update_wrong), Toast.LENGTH_LONG, R.style.errorToast).show();
+                }
+            };
+            authUser(activity);
+        }
+
+        private void authUser(Activity activity) {
+
+            onlineDatabase = FirebaseDatabase.getInstance().getReference();
+            mAuth = FirebaseAuth.getInstance();
+
+            mRunnable = () -> {
+                if (!isAuthenticated) {
+                    mAuth.signInAnonymously().addOnCompleteListener(activity, task -> {
+                        if (task.isSuccessful()) {
+                            isAuthenticated = true;
+                        }
+                    });
+                    mHandler.postDelayed(mRunnable, 1000);
+                } else {
+                    mHandler.removeCallbacks(mRunnable);
+                    onlineDatabase.addValueEventListener(databaseDownloadListener);
+                }
+            };
+
+            if (mAuth.getCurrentUser() == null) {
+                mHandler = new Handler();
+                mHandler.postDelayed(mRunnable, 0);
+            } else {
+                // This only happens if user has logged in in previous sessions.
+                isAuthenticated = true;
+                onlineDatabase.addValueEventListener(databaseDownloadListener);
+            }
         }
 
         /**
@@ -179,18 +269,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         }
 
         private void setRingtonePreferenceValue(String currentRingtone) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(KEY_PREF_RINGTONE, currentRingtone);
-            editor.apply();
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString(KEY_PREF_RINGTONE, currentRingtone).apply();
+            AppUtils.setCurrentRingtone(currentRingtone);
         }
     }
 
 
     /**
      * @param preference is the Preference we want to keep always up to date.
-     * This utility method keeps the preference summary updated when the user
-     * makes his choice.
+     *                   This utility method keeps the preference summary updated when the user
+     *                   makes his choice.
      */
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
@@ -199,9 +287,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
         // Trigger the listener immediately with the preference's
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
     }
 
     /**
@@ -239,7 +325,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                     // name.
                     String name = ringtone.getTitle(preference.getContext());
                     if (name.contains(".ogg"))
-                        preference.setSummary(name.substring(0, name.length()-4));
+                        preference.setSummary(name.substring(0, name.length() - 4));
                     else
                         preference.setSummary(name);
                 }
@@ -266,12 +352,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                 languagePreference.setNegativeButtonText(AppUtils.getStringByLocal(SettingsActivity.this, R.string.cancel, languagePreference.getValue()));
                 AppUtils.updateCurrentLanguage(languagePreference.getValue());
                 break;
+            case KEY_PREF_EXIT_SWITCH:
+                AppUtils.commuteExitPreference();
+                break;
+            case KEY_PREF_UPDATE_SWITCH:
+                AppUtils.commuteUpdatePreference();
+                break;
+            case KEY_PREF_ANIMATION_SWITCH:
+                AppUtils.commuteAnimationPreference();
+                break;
+            case KEY_PREF_NOTIFICATION_SWITCH:
+                AppUtils.commuteNotificationPreference();
+                break;
+            case KEY_PREF_VIBRATION_SWITCH:
+                AppUtils.commuteVibrationPreference();
+                break;
         }
     }
 
     /**
      * @param targetLanguage is the language we want to use
-     * This method allows us not to recreate() the activity, which increases performances.
+     *                       This method allows us not to recreate() the activity, which increases performances.
      */
     private void translateOnDemand(String targetLanguage) {
 
@@ -280,6 +381,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
 
         updatesPref.setTitle(AppUtils.getStringByLocal(this, R.string.sync_title, targetLanguage));
         updatesPref.setSummary(AppUtils.getStringByLocal(this, R.string.sync_desc, targetLanguage));
+
+        manualUpdate.setTitle(AppUtils.getStringByLocal(this, R.string.manual_update_title, targetLanguage));
+        manualUpdate.setSummary(AppUtils.getStringByLocal(this, R.string.manual_update_desc, targetLanguage));
 
         languagePreference.setTitle(AppUtils.getStringByLocal(this, R.string.lang_title, targetLanguage));
 
@@ -298,7 +402,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
 
         appVersionPref.setTitle(AppUtils.getStringByLocal(this, R.string.app_version, targetLanguage));
 
-        mActionBar.setTitle(AppUtils.getStringByLocal(this, R.string.title_activity_settings , targetLanguage));
+        mActionBar.setTitle(AppUtils.getStringByLocal(this, R.string.title_activity_settings, targetLanguage));
 
         baseTheme.setTitle(AppUtils.getStringByLocal(this, R.string.base_theme, targetLanguage));
 
@@ -350,10 +454,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
      */
     private void checkSharedPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-        if (sharedPref.getBoolean(SettingsActivity.KEY_PREF_ANIMATION_SWITCH, false) != AppUtils.areAnimationsAllowed()
+        boolean areNowAnimationsAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ANIMATION_SWITCH, false);
+        if (areNowAnimationsAllowed != AppUtils.areAnimationsAllowed()
                 || !sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "").equals(userLanguage)) {
             AppUtils.scheduleReboot();
         }
     }
-
 }

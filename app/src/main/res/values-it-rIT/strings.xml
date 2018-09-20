@@ -107,7 +107,7 @@
     <string name="status">Stato:</string>
     <string name="_course">Corso:</string>
     <string name="_time">Orario:</string>
-    <string name="updating">Aggiornamento…</string>
+    <string name="updating">Aggiornamento dati…</string>
     <string name="data_not_sync_wait_please">Dati aule non sincronizzati.\\nAttendere prego.</string>
     <string name="from_">Dalle</string>
     <string name="to_">Alle</string>
@@ -155,4 +155,9 @@
     <string name="occupied">Occupata</string>
     <string name="not_available">Non disponibile</string>
     <string name="current_postion">Posizione attuale</string>
+    <string name="alert_offline">Sei offline. Vai online per ricevere aggiornamenti.</string>
+    <string name="manual_update_title">Aggiorna dati manualmente</string>
+    <string name="manual_update_desc">Questo forzerá l\'app a riscaricare i dati delle lezioni.</string>
+    <string name="lesson_data_updated">Dati lezioni aggiornati con successo!</string>
+    <string name="lesson_data_update_wrong">I dati non possono essere aggiornati al momento. Riprova piú tardi.</string>
 </resources>

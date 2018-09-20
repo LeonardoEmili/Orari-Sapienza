@@ -19,7 +19,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -272,6 +271,26 @@ public class AppUtils {
         return favouriteClassroomList;
     }
 
+    public static void commuteExitPreference() {
+        secureExitAllowed = !secureExitAllowed;
+    }
+
+    public static void commuteUpdatePreference() {
+        updatesAllowed = !updatesAllowed;
+    }
+
+    public static void commuteAnimationPreference() {
+        animationsAllowed = !animationsAllowed;
+    }
+
+    public static void commuteNotificationPreference() {
+        notificationAllowed = !notificationAllowed;
+    }
+
+    public static void commuteVibrationPreference() {
+        vibrationAllowed = !vibrationAllowed;
+    }
+
     public static ArrayList<Classroom> getClassroomList() {
         return classroomList;
     }
@@ -440,15 +459,19 @@ public class AppUtils {
         return currentTheme;
     }
 
-    public static Ringtone getDefaultRingtone(Activity activity) {
+    private static Ringtone getDefaultRingtone(Activity activity) {
         return RingtoneManager.getRingtone(activity, Settings.System.DEFAULT_RINGTONE_URI);
     }
 
-    public static Ringtone getCurrentRingtone(Activity activity) {
+    private static Ringtone getCurrentRingtone(Activity activity) {
         if (sCurrentRingtone.equals("")) {
             return getDefaultRingtone(activity);
         }
         return RingtoneManager.getRingtone(activity, Uri.parse(sCurrentRingtone));
+    }
+
+    public static void setCurrentRingtone(String ringtone) {
+        sCurrentRingtone = ringtone;
     }
 
     public static String getCurrentRingtoneTitle(Activity activity) {
@@ -1271,30 +1294,26 @@ public class AppUtils {
     private static DateFormat basicDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
     private static Date minHour, maxHour;
 
-    @Nullable
+    @NonNull
     public static Date getMinHour() {
-        try {
-            if (minHour == null) {
-                minHour = basicDateFormat.parse("07:00");
-            }
-            return minHour;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+        if (minHour == null) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 7);
+            calendar.set(Calendar.MINUTE, 0);
+            minHour = calendar.getTime();
         }
+        return minHour;
     }
 
-    @Nullable
+    @NonNull
     public static Date getMaxHour() {
-        try {
-            if (maxHour == null) {
-                maxHour = basicDateFormat.parse("20:00");
-            }
-            return maxHour;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+        if (maxHour == null) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 20);
+            calendar.set(Calendar.MINUTE, 0);
+            maxHour = calendar.getTime();
         }
+        return maxHour;
     }
 
     public static int dayToInt(String day) {
@@ -1341,40 +1360,24 @@ public class AppUtils {
 
     public static Date[] getBestDates() {
         final Calendar calendar = Calendar.getInstance();
-        final Date maxHour, minHour;
-        if ((maxHour = getMaxHour()) == null || (minHour = getMinHour()) == null) {
+        final Date now = new Date();
+        final Date maxHour = getMaxHour();
+        final Date minHour = getMinHour();
+        if (now.before(minHour) || now.after(maxHour)) {
             calendar.set(Calendar.HOUR_OF_DAY, 7);
             calendar.set(Calendar.MINUTE, 0);
-            switch (calendar.get(Calendar.DAY_OF_WEEK)) {
-                case Calendar.FRIDAY:
-                    calendar.add(Calendar.DAY_OF_WEEK, 3);
-                    break;
-                case Calendar.SATURDAY:
-                    calendar.add(Calendar.DAY_OF_WEEK, 2);
-                    break;
-                default:
-                    calendar.add(Calendar.DAY_OF_WEEK, 1);
-                    break;
-            }
-        } else {
-            // Inside here we are safe from the monster of ParseException.
-            final Date now = new Date();
-            if (now.before(minHour) || now.after(maxHour)) {
-                calendar.set(Calendar.HOUR_OF_DAY, 7);
-                calendar.set(Calendar.MINUTE, 0);
-                if (now.after(maxHour)) {
-                    calendar.add(Calendar.DAY_OF_WEEK, 1);
-                }
-            }
-            final int day = calendar.get(Calendar.DAY_OF_WEEK);
-            if (day == Calendar.SATURDAY) {
-                calendar.add(Calendar.DAY_OF_WEEK, 2);
-            } else if (day == Calendar.SUNDAY) {
+            if (now.after(maxHour)) {
                 calendar.add(Calendar.DAY_OF_WEEK, 1);
             }
         }
+        final int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SATURDAY) {
+            calendar.add(Calendar.DAY_OF_WEEK, 2);
+        } else if (day == Calendar.SUNDAY) {
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
+        }
         final Date startDate = calendar.getTime();
         calendar.add(Calendar.HOUR_OF_DAY, 4);
-        return new Date[] {startDate, calendar.getTime()};
+        return new Date[]{startDate, calendar.getTime()};
     }
 }
