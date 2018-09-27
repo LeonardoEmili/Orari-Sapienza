@@ -194,9 +194,20 @@
     <string name="not_available">Not available</string>
     <string name="lesson_timetable" translatable="false">%1$s - %2$s</string>
     <string name="alert_offline">You\'re offline. Please go online for updates.</string>
-    <string name="lesson_data_updated">Data has been succesfully updated!</string>
+    <string name="lesson_data_updated">Data has been successfully updated!</string>
     <string name="lesson_data_update_wrong">Data can\'t be updated now. Please try again later.</string>
-
+    <string name="updated_timetables_title">Updated timetables</string>
+    <string name="updated_timetables_desc">You will find the list of timetables of Sapienza\'s courses. They are periodically updated and available also offline !</string>
+    <string name="study_plan_title">Study plan</string>
+    <string name="study_plan_desc">Are you looking for a quiet place where to study at Sapienza? Create now your custom Study Plan and you will always know where to go and at what time !</string>
+    <string name="class_info_title">Classroom detail</string>
+    <string name="class_info_desc">Discover now the functionality classroom detail, here you can find out which one is available and get useful information about classrooms.</string>
+    <string name="download_course_title">Downloading course</string>
+    <string name="download_course_desc">Please wait for course download.</string>
+    <string name="download_course_fail">Course has not been downloaded. Please try again leter.</string>
+    <string name="no_app_for_pdf_error">No Application available to view PDF</string>
+    <string name="semester">" semester."</string>
+    
     <string name="first">First</string>
     <string name="second">Second</string>
     <string name="third">Third</string>

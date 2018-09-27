@@ -160,4 +160,15 @@
     <string name="manual_update_desc">Questo forzerá l\'app a riscaricare i dati delle lezioni.</string>
     <string name="lesson_data_updated">Dati lezioni aggiornati con successo!</string>
     <string name="lesson_data_update_wrong">I dati non possono essere aggiornati al momento. Riprova piú tardi.</string>
+    <string name="study_plan_desc">Cerchi un posto dove studiare alla Sapienza? Crea il tuo Piano di studio personalizzato e saprai sempre dove studiare e a che ora!</string>
+    <string name="updated_timetables_desc">Troverai l\'intera raccolta degli orari dei corsi della Sapienza. Gli orari sono periodicamente aggiornati e disponibili anche offline !</string>
+    <string name="class_info_desc">Scopri la funzione dettaglio aule, qui puoi controllare quali sono libere e come ottenere utili informazioni sulle aule.</string>
+    <string name="updated_timetables_title">Orari aggiornati</string>
+    <string name="study_plan_title">Piano di studi</string>
+    <string name="class_info_title">Dettaglio aule</string>
+    <string name="download_course_title">Scaricamento corso</string>
+    <string name="download_course_desc">Attendi prego il download del corso</string>
+    <string name="download_course_fail">Corso non scaricato. Riprova piú tardi.</string>
+    <string name="no_app_for_pdf_error">Nessuna applicazione disponibile per aprire il PDF</string>
+    <string name="semester">" semestre."</string>
 </resources>

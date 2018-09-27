@@ -13,35 +13,29 @@ import com.sterbsociety.orarisapienza.R;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getStringByLocal;
+
 public class SliderAdapter extends PagerAdapter {
 
-    Context mContext;
-    LayoutInflater layoutInflater;
+    private String[] slideHeadings, slideDescriptions;
 
     private int[] slideImages = new int[] {
-
             R.drawable.stopwatch,
             R.drawable.oval,
             R.drawable.desk
     };
 
-    private final String[] slideHeadings = new String[] {
-
-            "Orari aggiornati",
-            "Piani di studio",
-            "Dettaglio aule"
-    };
-
-
-    private String[] slideDescs = new String[] {
-
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tempor, est sed pulvinar tincidunt, risus orci iaculis massa, nec gravida magna orci id nulla.",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tempor, est sed pulvinar tincidunt, risus orci iaculis massa, nec gravida magna orci id nulla.",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tempor, est sed pulvinar tincidunt, risus orci iaculis massa, nec gravida magna orci id nulla."
-    };
-
     public SliderAdapter(Context context) {
-        mContext = context;
+        slideDescriptions = new String[] {
+                getStringByLocal(context, R.string.updated_timetables_desc),
+                getStringByLocal(context, R.string.study_plan_desc),
+                getStringByLocal(context, R.string.class_info_desc)
+        };
+        slideHeadings = new String[] {
+                getStringByLocal(context, R.string.updated_timetables_title),
+                getStringByLocal(context, R.string.study_plan_title),
+                getStringByLocal(context, R.string.class_info_title)
+        };
     }
 
     @Override
@@ -58,26 +52,21 @@ public class SliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
-        layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) container.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
         View view = layoutInflater.inflate(R.layout.slide_layout, container, false);
-
         ImageView slideImageView = view.findViewById(R.id.slide_image);
         TextView slideHeading = view.findViewById(R.id.slide_heading);
         TextView slideDescription = view.findViewById(R.id.slide_desc);
-
         slideImageView.setImageResource(slideImages[position]);
         slideHeading.setText(slideHeadings[position]);
-        slideDescription.setText(slideDescs[position]);
-
+        slideDescription.setText(slideDescriptions[position]);
         container.addView(view);
-
         return view;
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-
         container.removeView((RelativeLayout)object);
     }
 }

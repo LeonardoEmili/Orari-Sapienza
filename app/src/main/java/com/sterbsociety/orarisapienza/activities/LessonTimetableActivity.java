@@ -4,10 +4,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -15,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.adapters.WeekDayFragmentPagerAdapter;
@@ -23,6 +33,11 @@ import com.sterbsociety.orarisapienza.models.Course;
 import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,11 +46,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.SPECIAL_COURSES;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addCourseToFavourites;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.doesPDFTableExist;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getLiteralNumber;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getLiteralYearByNumber;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getStringByLocal;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isTableVisible;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
@@ -47,6 +66,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
     private static List<List<Lesson>> scheduledLessons;
     private Set<String> courseTypologies;
     private String selectedType;
+    private PDFDownloadTask pdfDownloadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,39 +114,131 @@ public class LessonTimetableActivity extends AppCompatActivity {
         AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
     }
 
+    private void launchPDFDownloadTask(String courseName, String url) {
+        pdfDownloadTask = new PDFDownloadTask(this);
+        pdfDownloadTask.setListener(isDownloadCompleted -> {
+            if (isDownloadCompleted) {
+                openSpecialCourse(this, courseName);
+            } else {
+                StyleableToast.makeText(this, getStringByLocal(this, R.string.download_course_fail), Toast.LENGTH_LONG, R.style.errorToast).show();
+            }
+        });
+        pdfDownloadTask.execute(this, courseName, url);
+    }
+
     private void initSearchView() {
 
         searchView = findViewById(R.id.search_view);
         searchView.setVoiceSearch(false);
         final SearchViewAdapter searchViewAdapter = new SearchViewAdapter(this, AppUtils.getCoursesList());
         searchView.setAdapter(searchViewAdapter);
+
         searchView.setOnItemClickListener((adapterView, view, position, id) -> {
-            Course course = (Course) adapterView.getItemAtPosition(position);
+
+            final Course course = (Course) adapterView.getItemAtPosition(position);
             addCourseToFavourites(LessonTimetableActivity.this, course, searchViewAdapter, position);
-            readCourseDataFromDatabase(course);
-            askUserWhichCourseToDisplay();
+            final String courseCode = course.getId();
+            final HashMap<String, String> currentSpecialCourse;
+            if ((currentSpecialCourse = SPECIAL_COURSES.get(course.getName() + "_" + course.getId())) != null) {
+                // This means that this is a special course
+                if (currentSpecialCourse.size() > 1) {
+                    // The special course has more than 1 year|channel|semester
+                    final ArrayList<String> tmpListEntries = new ArrayList<>();
+                    final ArrayList<String> tmpListTypes = new ArrayList<>();
+                    final String[] listEntries, listTypes;
+                    int lastYear = -1;
+                    for (String courseType : currentSpecialCourse.keySet()) {
+                        final String[] courseParts = courseType.split("_");
+                        final String year = getLiteralYearByNumber(this, courseParts[0]);
+                        final int tmpYear;
+                        final String value;
+                        if (!courseParts[2].equals("0")) {
+                            value = year + getLiteralNumber(this, courseParts[1]) + getStringByLocal(this, R.string.semester) + getStringByLocal(this, R.string.channel) + courseParts[2];
+                        } else {
+                            value = year + getLiteralNumber(this, courseParts[1]) + getStringByLocal(this, R.string.semester);
+                        }
+                        if ((tmpYear = Integer.parseInt(courseParts[0])) > lastYear) {
+                            tmpListEntries.add(value);
+                            tmpListTypes.add(courseType);
+                        } else {
+                            tmpListEntries.add(0, value);
+                            tmpListTypes.add(0, courseType);
+                        }
+                        lastYear = tmpYear;
+                    }
+                    listEntries = tmpListEntries.toArray(new String[0]);
+                    listTypes = tmpListTypes.toArray(new String[0]);
+                    selectedType = listTypes[0];
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.select_course)
+                            .setSingleChoiceItems(listEntries, 0, (dialogInterface, which) -> {
+                                selectedType = listTypes[which];
+                            })
+                            .setCancelable(false)
+                            .setPositiveButton(AppUtils.getStringByLocal(this, R.string.ok), (dialog, index) -> {
+                                if (doesPDFTableExist(this, courseCode + selectedType)) {
+                                    openSpecialCourse(this, courseCode + selectedType);
+                                } else {
+                                    launchPDFDownloadTask(courseCode + selectedType, currentSpecialCourse.get(selectedType));
+                                }
+                            })
+                            .show();
+                } else {
+                    // If there is just one type of course, just check if its existence
+                    if (doesPDFTableExist(this, courseCode)) {
+                        openSpecialCourse(this, courseCode);
+                    } else {
+                        launchPDFDownloadTask(courseCode, currentSpecialCourse.get(currentSpecialCourse.keySet().toArray(new String[0])[0]));
+                    }
+                }
+            } else {
+                // It's a normal course case
+                readCourseDataFromDatabase(course);
+                displayRightCourse();
+            }
             searchView.closeSearch();
-            Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + course.getId());
+            Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + courseCode);
         });
     }
 
+    private void openSpecialCourse(Activity activity, String courseCode) {
+        try {
+            final File pdfFile = new File(activity.getFilesDir().getAbsolutePath(), courseCode + ".pdf");
+            final Uri path = FileProvider.getUriForFile(activity, activity.getApplicationContext().getPackageName() + ".my.package.name.provider", pdfFile);
+            final Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+            pdfIntent.setDataAndType(path, "application/pdf");
+            pdfIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            activity.startActivity(pdfIntent);
+        } catch (ActivityNotFoundException e) {
+            StyleableToast.makeText(activity, getString(R.string.no_app_for_pdf_error), Toast.LENGTH_LONG, R.style.errorToast).show();
+        }
+    }
+
     /**
-     * This method asks the user which course to show.
+     * This method asks the user which course to show, and then displays it.
      */
-    private void askUserWhichCourseToDisplay() {
+    private void displayRightCourse() {
         if (courseTypologies.size() > 1) {
-            int tmpIndex = 0;
-            final String[] listEntries = new String[courseTypologies.size()];
-            final String[] listTypes = new String[courseTypologies.size()];
-
+            final ArrayList<String> tmpListEntries = new ArrayList<>();
+            final ArrayList<String> tmpListTypes = new ArrayList<>();
+            final String[] listEntries, listTypes;
+            int lastYear = -1;
             for (String courseType : courseTypologies) {
+                final int tmpYear;
                 final String[] courseParts = courseType.split("#");
-                final String year = AppUtils.getLiteralYearByNumber(this, courseParts[0]);
-                listEntries[tmpIndex] = year + getStringByLocal(this, R.string.channel) + courseParts[1];
-                listTypes[tmpIndex] = courseType;
-                tmpIndex++;
+                final String year = getLiteralYearByNumber(this, courseParts[0]);
+                if ((tmpYear = Character.getNumericValue(courseParts[0].charAt(0))) > lastYear) {
+                    tmpListEntries.add(year + getStringByLocal(this, R.string.channel) + courseParts[1]);
+                    tmpListTypes.add(courseType);
+                } else {
+                    tmpListEntries.add(0, year + getStringByLocal(this, R.string.channel) + courseParts[1]);
+                    tmpListTypes.add(0, courseType);
+                }
+                lastYear = tmpYear;
             }
-
+            listEntries = tmpListEntries.toArray(new String[0]);
+            listTypes = tmpListTypes.toArray(new String[0]);
             // This string holds info about courseYear#channel
             selectedType = listTypes[0];
 
@@ -227,9 +339,16 @@ public class LessonTimetableActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        // Prevent leak after activity is destroyed
+        pdfDownloadTask.setListener(null);
+        super.onDestroy();
+    }
+
+
+    @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen()) {
-            Toast.makeText(this, "aperta", Toast.LENGTH_SHORT).show();
             searchView.closeSearch();
         } else {
             isTableVisible = false;
@@ -241,5 +360,61 @@ public class LessonTimetableActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    static class PDFDownloadTask extends AsyncTask<Object, Void, Boolean> {
+
+        private AsyncTaskListener listener;
+        private ProgressDialog mProgressDialog;
+
+        PDFDownloadTask(Activity activity) {
+            mProgressDialog = ProgressDialog.show(activity, getStringByLocal(activity, R.string.download_course_title),
+                    getStringByLocal(activity, R.string.download_course_desc), true);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            try {
+                final Activity activity = (Activity) params[0];
+                final String courseCode = (String) params[1];
+                final String fileUrl = (String) params[2];
+                HttpURLConnection c = (HttpURLConnection) new URL(fileUrl).openConnection();
+                c.connect();
+                final FileOutputStream fileOutputStream = activity.openFileOutput(courseCode + ".pdf", Context.MODE_PRIVATE);
+                final InputStream in = c.getInputStream();
+                byte[] buffer = new byte[1024];
+                int len1;
+                while ((len1 = in.read(buffer)) > 0) {
+                    fileOutputStream.write(buffer, 0, len1);
+                }
+                fileOutputStream.close();
+                return true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean outcome) {
+            super.onPostExecute(outcome);
+            if (listener != null) {
+                listener.onTaskFinished(outcome);
+            }
+            mProgressDialog.dismiss();
+        }
+
+        void setListener(AsyncTaskListener listener) {
+            this.listener = listener;
+        }
+
+        public interface AsyncTaskListener {
+            void onTaskFinished(boolean value);
+        }
     }
 }

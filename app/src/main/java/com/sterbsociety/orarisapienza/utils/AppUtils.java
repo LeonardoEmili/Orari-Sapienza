@@ -2,6 +2,7 @@ package com.sterbsociety.orarisapienza.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -49,6 +51,7 @@ import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -78,6 +81,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
 public class AppUtils {
@@ -356,7 +360,7 @@ public class AppUtils {
         if (!isFavouriteBuilding(buildingCode)) {
             // If the Building is not yet in favourites, then it will be added. Since favourites are stored in a set
             // we can't keep track of order in there, so the code is formed by POSITION + BuildingCode.
-            mFavouriteBuildingSetCodes.add(mFavouriteBuildingSetCodes.size() + "/" + buildingCode);
+            mFavouriteBuildingSetCodes.add(mFavouriteBuildingSetCodes.size() + FAV_SEPARATOR + buildingCode);
             mFavouriteBuildingList.add(0, building);
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
             buildingList.remove(index);
@@ -366,7 +370,7 @@ public class AppUtils {
             int buildingIndex = -1;
             // We search through all the favourites the index of the building to 'reorder'
             for (String currentBuildingCode : mFavouriteBuildingSetCodes) {
-                String[] parts = currentBuildingCode.split("/");
+                String[] parts = currentBuildingCode.split(FAV_SEPARATOR);
                 int tmpIndex = Integer.parseInt(parts[0]);
                 if (parts[1].equals(buildingCode)) {
                     buildingIndex = tmpIndex;
@@ -380,14 +384,14 @@ public class AppUtils {
                 Set<String> tmpHashSet = new HashSet<>(mFavouriteBuildingSetCodes);
                 mFavouriteBuildingSetCodes.clear();
                 for (String currentBuildingCode : tmpHashSet) {
-                    String[] parts = currentBuildingCode.split("/");
+                    String[] parts = currentBuildingCode.split(FAV_SEPARATOR);
                     final int currentIndex = Integer.parseInt(parts[0]);
                     if (currentIndex < buildingIndex) {
                         mFavouriteBuildingSetCodes.add(currentBuildingCode);
                     } else if (currentIndex > buildingIndex) {
-                        mFavouriteBuildingSetCodes.add(currentIndex - 1 + "/" + parts[1]);
+                        mFavouriteBuildingSetCodes.add(currentIndex - 1 + FAV_SEPARATOR + parts[1]);
                     } else {
-                        mFavouriteBuildingSetCodes.add(tmpHashSet.size() - 1 + "/" + parts[1]);
+                        mFavouriteBuildingSetCodes.add(tmpHashSet.size() - 1 + FAV_SEPARATOR + parts[1]);
                     }
                 }
                 activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
@@ -502,7 +506,7 @@ public class AppUtils {
 
     @NonNull
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public static String getStringByLocal(Activity context, int id, String locale) {
+    public static String getStringByLocal(Context context, int id, String locale) {
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
         configuration.setLocale(new Locale(locale));
         return context.createConfigurationContext(configuration).getResources().getString(id);
@@ -510,7 +514,7 @@ public class AppUtils {
 
     @NonNull
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public static String getStringByLocal(Activity context, int id) {
+    public static String getStringByLocal(Context context, int id) {
         return getStringByLocal(context, id, currentLanguage);
     }
 
@@ -757,7 +761,7 @@ public class AppUtils {
 
     public static boolean hasAlreadyBeenSearchedByUser(String courseCode) {
         for (String favouriteCourseId : mFavouriteCourseSet) {
-            if (favouriteCourseId.split("/")[1].equals(courseCode))
+            if (favouriteCourseId.split(FAV_SEPARATOR)[1].equals(courseCode))
                 return true;
         }
         return false;
@@ -769,7 +773,7 @@ public class AppUtils {
      */
     public static boolean isFavouriteBuilding(String buildingCode) {
         for (String favouriteBuildingCode : mFavouriteBuildingSetCodes) {
-            if (favouriteBuildingCode.split("/")[1].equals(buildingCode))
+            if (favouriteBuildingCode.split(FAV_SEPARATOR)[1].equals(buildingCode))
                 return true;
         }
         return false;
@@ -787,7 +791,7 @@ public class AppUtils {
         if (!hasAlreadyBeenSearchedByUser(courseCode)) {
             // If the Course has never been searched before, then it will be added. Since favourites are stored in a set
             // we can't keep track of order in there, so the code is formed by POSITION + CourseID.
-            mFavouriteCourseSet.add(mFavouriteCourseSet.size() + "/" + courseCode);
+            mFavouriteCourseSet.add(mFavouriteCourseSet.size() + FAV_SEPARATOR + courseCode);
             mFavouriteCourseList.add(0, course);
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
             courseList.remove(course);
@@ -798,7 +802,7 @@ public class AppUtils {
             int courseIndex = -1;
             // We search through all the favourites the index of the course to 'reorder'
             for (String currentCourseCode : mFavouriteCourseSet) {
-                String[] parts = currentCourseCode.split("/");
+                String[] parts = currentCourseCode.split(FAV_SEPARATOR);
                 int tmpIndex = Integer.parseInt(parts[0]);
                 if (parts[1].equals(courseCode)) {
                     courseIndex = tmpIndex;
@@ -812,14 +816,14 @@ public class AppUtils {
                 Set<String> tmpHashSet = new HashSet<>(mFavouriteCourseSet);
                 mFavouriteCourseSet.clear();
                 for (String currentCourseCode : tmpHashSet) {
-                    String[] parts = currentCourseCode.split("/");
+                    String[] parts = currentCourseCode.split(FAV_SEPARATOR);
                     final int currentIndex = Integer.parseInt(parts[0]);
                     if (currentIndex < courseIndex) {
                         mFavouriteCourseSet.add(currentCourseCode);
                     } else if (currentIndex > courseIndex) {
-                        mFavouriteCourseSet.add(currentIndex - 1 + "/" + parts[1]);
+                        mFavouriteCourseSet.add(currentIndex - 1 + FAV_SEPARATOR + parts[1]);
                     } else {
-                        mFavouriteCourseSet.add(tmpHashSet.size() - 1 + "/" + parts[1]);
+                        mFavouriteCourseSet.add(tmpHashSet.size() - 1 + FAV_SEPARATOR + parts[1]);
                     }
                 }
                 activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_COURSE_FAVOURITES, mFavouriteCourseSet).apply();
@@ -1016,7 +1020,7 @@ public class AppUtils {
 
     public static void saveDatabase(Activity activity, DataSnapshot dataSnapshot) {
         try {
-            POJO pojo = dataSnapshot.child(DB_KEY).getValue(POJO.class);
+            final POJO pojo = dataSnapshot.child(DB_KEY).getValue(POJO.class);
             FileOutputStream outputStream;
             outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
             outputStream.write(new Gson().toJson(pojo).getBytes());
@@ -1029,6 +1033,7 @@ public class AppUtils {
     }
 
     public static final String KEY_VERSION = "version";
+    public static HashMap<String, HashMap<String, String>> SPECIAL_COURSES;
 
     public static void parseDatabase(Activity activity) {
         try {
@@ -1041,6 +1046,15 @@ public class AppUtils {
                 sb.append(line);
             }
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
+            //SPECIAL_COURSES = new HashMap<>(database.specialCourses);
+            SPECIAL_COURSES = new HashMap<>();
+            SPECIAL_COURSES.put("Infermieristica D - Policlinico Umberto I/Aeronautica Militare_29971", new HashMap<String, String>(){
+                {
+                    put("1_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_i_anno_i_semestre_2018-19_def.pdf");
+                    put("2_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_ii_anno_primo_semestre_2018-19.pdf");
+                    put("3_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_iii_anno_i_semestre_2018-19.pdf");
+                }
+            } );
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
             MATRIX = new HashMap<>(database.matrix);
@@ -1055,6 +1069,7 @@ public class AppUtils {
     public static HashMap<String, HashMap<String, Integer>> TIMETABLES = new HashMap<>();
 
     public static List<String> LESSON_LIST = new ArrayList<>();
+    private static final String FAV_SEPARATOR = "%";
 
     /**
      * @param arrayList is the list of buildings from DB
@@ -1065,12 +1080,12 @@ public class AppUtils {
 
         // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
         ArrayList<String> dirtySortedFavouriteCodes = new ArrayList<>(mFavouriteBuildingSetCodes);
-        Collections.sort(dirtySortedFavouriteCodes, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
+        Collections.sort(dirtySortedFavouriteCodes, (c1, c2) -> Integer.parseInt(c2.split(FAV_SEPARATOR)[0]) - Integer.parseInt(c1.split(FAV_SEPARATOR)[0]));
 
         // This is responsible for cleaning buildingCodes from their dirty indexes.
         ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
         for (String dirtyCode : dirtySortedFavouriteCodes) {
-            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+            cleanSortedFavouriteCodes.add(dirtyCode.split(FAV_SEPARATOR)[1]);
         }
 
         // Inside here we put each building in accordance to their code's position.
@@ -1122,18 +1137,25 @@ public class AppUtils {
         final ArrayDeque<Course> resultList = new ArrayDeque<>();
         for (String courseKey : map.keySet()) {
             final String[] parts = courseKey.split("_");
-            Course course = new Course(parts[0], parts[1], courseKey);
-            resultList.add(course);
+            resultList.add(new Course(parts[0], parts[1], courseKey));
+        }
+        for (String courseKey: SPECIAL_COURSES.keySet()) {
+            final String[] parts = courseKey.split("_");
+            resultList.add(new Course(parts[0], parts[1], courseKey));
         }
 
         // We pass from HashSet to an ordered ArrayList by reversing the list, look at the Comparator.
         ArrayList<String> dirtySortedFavouriteCourses = new ArrayList<>(mFavouriteCourseSet);
-        Collections.sort(dirtySortedFavouriteCourses, (c1, c2) -> Integer.parseInt(c2.split("/")[0]) - Integer.parseInt(c1.split("/")[0]));
+        Collections.sort(dirtySortedFavouriteCourses, (c1, c2) -> Integer.parseInt(c2.split(FAV_SEPARATOR)[0]) - Integer.parseInt(c1.split(FAV_SEPARATOR)[0]));
 
         // This is responsible for cleaning buildingCodes from their dirty indexes.
         ArrayList<String> cleanSortedFavouriteCodes = new ArrayList<>();
         for (String dirtyCode : dirtySortedFavouriteCourses) {
-            cleanSortedFavouriteCodes.add(dirtyCode.split("/")[1]);
+            cleanSortedFavouriteCodes.add(dirtyCode.split(FAV_SEPARATOR)[1]);
+        }
+
+        for (Course c: resultList) {
+            if (c==null) System.out.println("aaa");
         }
 
         // Inside here we put each building in accordance to their code's position.
@@ -1141,13 +1163,20 @@ public class AppUtils {
 
         // Note that Iterator.remove() is the only safe way to modify a collection during iteration
         // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
-        Iterator<Course> iterator = resultList.iterator();
+        final Iterator<Course> iterator = resultList.iterator();
         while (iterator.hasNext()) {
-            Course course = iterator.next();
+            final Course course = iterator.next();
+            if (course == null) System.out.println("ccc");
             if (hasAlreadyBeenSearchedByUser(course.getFullName())) {
                 tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getFullName())] = course;
                 iterator.remove();
             }
+        }
+
+        int index = 0;
+        for (Course c: tmpFavourites) {
+            if (c==null) System.out.println("ddd");
+            System.out.println(index++);
         }
 
         mFavouriteCourseList = new ArrayList<>(Arrays.asList(tmpFavourites));
@@ -1222,7 +1251,7 @@ public class AppUtils {
                 yearResource = R.string.third;
                 break;
             case 4:
-                yearResource = R.string.third;
+                yearResource = R.string.fourth;
                 break;
             case 5:
                 yearResource = R.string.fifth;
@@ -1243,7 +1272,6 @@ public class AppUtils {
                 yearResource = R.string.first;
         }
 
-        Toast.makeText(activity, courseType, Toast.LENGTH_SHORT).show();
         if (courseType.toLowerCase().equals("m")) {
             courseResource = R.string.master_degree;
         } else {
@@ -1252,6 +1280,29 @@ public class AppUtils {
         }
         return getStringByLocal(activity, yearResource) + getStringByLocal(activity, R.string.year)
                 + getStringByLocal(activity, R.string.of) + getStringByLocal(activity, courseResource) + ". ";
+    }
+
+    public static String getLiteralNumber(Activity activity, String number) {
+        switch (Integer.parseInt(number)) {
+            case 2:
+                return activity.getString(R.string.second);
+            case 3:
+                return activity.getString(R.string.third);
+            case 4:
+                return activity.getString(R.string.fourth);
+            case 5:
+                return activity.getString(R.string.fifth);
+            case 6:
+                return activity.getString(R.string.sixth);
+            case 7:
+                return activity.getString(R.string.seventh);
+            case 8:
+                return activity.getString(R.string.eighth);
+            case 9:
+                return activity.getString(R.string.ninth);
+            default:
+                return activity.getString(R.string.first);
+        }
     }
 
     public static String hourToString(int hour) {
@@ -1379,5 +1430,9 @@ public class AppUtils {
         final Date startDate = calendar.getTime();
         calendar.add(Calendar.HOUR_OF_DAY, 4);
         return new Date[]{startDate, calendar.getTime()};
+    }
+
+    public static boolean doesPDFTableExist(Activity activity, String courseCode) {
+        return new File(activity.getFilesDir().getAbsolutePath(), courseCode + ".pdf").exists();
     }
 }
