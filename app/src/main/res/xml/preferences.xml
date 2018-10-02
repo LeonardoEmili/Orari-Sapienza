@@ -44,6 +44,12 @@
             android:summary="@string/manual_update_desc"
             android:key="manual_update_pref" />
 
+        <Preference
+            android:name="Donation"
+            android:title="@string/donate_title"
+            android:summary="@string/donate_desc"
+            android:key="donate_pref" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/notifications"

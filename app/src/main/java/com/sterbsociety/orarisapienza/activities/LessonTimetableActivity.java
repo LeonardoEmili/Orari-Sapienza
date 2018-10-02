@@ -341,7 +341,9 @@ public class LessonTimetableActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         // Prevent leak after activity is destroyed
-        pdfDownloadTask.setListener(null);
+        if (pdfDownloadTask != null) {
+            pdfDownloadTask.setListener(null);
+        }
         super.onDestroy();
     }
 
@@ -362,6 +364,9 @@ public class LessonTimetableActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Here we go a static AsyncTask to avoid any memory leak.
+     */
     static class PDFDownloadTask extends AsyncTask<Object, Void, Boolean> {
 
         private AsyncTaskListener listener;

@@ -220,6 +220,8 @@
     <string name="star_class" translatable="false">Star class</string>
     <string name="manual_update_title">Force data update</string>
     <string name="manual_update_desc">This will force the app to download again lesson data.</string>
+    <string name="donate_title">Donate</string>
+    <string name="donate_desc">Donate and get an ad-free version of the App.</string>
 
 
 </resources>

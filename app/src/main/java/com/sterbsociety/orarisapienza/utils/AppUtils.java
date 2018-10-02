@@ -2,7 +2,6 @@ package com.sterbsociety.orarisapienza.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -78,10 +76,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 
 public class AppUtils {
@@ -235,6 +231,8 @@ public class AppUtils {
         view.getLayoutParams().height = view.getMeasuredHeight();
     }
 
+    private static final String KEY_PREF_DONATION_ACTIVE = "donation_pref";
+
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp;
     private static String sCurrentRingtone, currentLanguage, currentStudyPlan, currentDBVersion;
@@ -300,6 +298,7 @@ public class AppUtils {
     }
 
     private static final String GENERAL_PREF = "com.sterbsociety.orarisapienza.general";
+    public static boolean isDonationActive = false;
 
 
     /**
@@ -316,6 +315,7 @@ public class AppUtils {
         mFavouriteClassSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_CLASS_FAVOURITES, new HashSet<>()));
         firstTimeStartUp = sharedPreferences.getBoolean(FIRST_TIME_FLAG, true);
         currentDBVersion = sharedPreferences.getString(DB_KEY, null);
+        isDonationActive = sharedPreferences.getBoolean(KEY_PREF_DONATION_ACTIVE, false);
 
         mFavouriteBuildingSetCodes = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_BUILDING_FAVOURITES, new HashSet<>()));
         mFavouriteCourseSet = new HashSet<>(sharedPreferences.getStringSet(KEY_PREF_COURSE_FAVOURITES, new HashSet<>()));
@@ -1046,8 +1046,12 @@ public class AppUtils {
                 sb.append(line);
             }
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
-            //SPECIAL_COURSES = new HashMap<>(database.specialCourses);
-            SPECIAL_COURSES = new HashMap<>();
+            if (database.specialCourses == null) {
+                SPECIAL_COURSES = new HashMap<>();
+            } else {
+                SPECIAL_COURSES = new HashMap<>(database.specialCourses);
+            }
+            // remove start
             SPECIAL_COURSES.put("Infermieristica D - Policlinico Umberto I/Aeronautica Militare_29971", new HashMap<String, String>(){
                 {
                     put("1_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_i_anno_i_semestre_2018-19_def.pdf");
@@ -1055,6 +1059,7 @@ public class AppUtils {
                     put("3_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_iii_anno_i_semestre_2018-19.pdf");
                 }
             } );
+            // remove end
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
             MATRIX = new HashMap<>(database.matrix);
