@@ -174,7 +174,6 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     }
 
     private ArrayList<Classroom> filterClassroomListByDistance(ArrayList<Classroom> list, @NonNull Location currentLocation, int distanceRadius) {
-
         if (distanceRadius == 21) {
             return list;
         }
@@ -217,19 +216,14 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         } else {
             holder.classroom.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
-        Date minHour;
-        Date maxHour;
-        if ((minHour = AppUtils.getMinHour()) == null || (maxHour = AppUtils.getMaxHour()) == null) {
-            // If somehow the date parse would fail, we're safe.
+        final Date minHour = AppUtils.getMinHour();
+        final Date maxHour = AppUtils.getMaxHour();
+        if (now.before(minHour) || now.after(maxHour)) {
             holder.background.setColor(blackColor);
+        } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
+            holder.background.setColor(redColor);
         } else {
-            if (now.before(minHour) || now.after(maxHour)) {
-                holder.background.setColor(blackColor);
-            } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
-                holder.background.setColor(redColor);
-            } else {
-                holder.background.setColor(greenColor);
-            }
+            holder.background.setColor(greenColor);
         }
         holder.classroom.setText(classroom.getName());
         holder.building.setText(getRealBuilding(classroom).getName());

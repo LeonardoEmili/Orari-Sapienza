@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -285,6 +284,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
         scheduledLessons.add(new ArrayList<>());    // Wednesday
         scheduledLessons.add(new ArrayList<>());    // Thursday
         scheduledLessons.add(new ArrayList<>());    // Friday
+        scheduledLessons.add(new ArrayList<>());    // Saturday
 
         final HashMap<String, Integer> map = AppUtils.TIMETABLES.get(course.getCourseKey());
         for (String classroomCode : map.keySet()) {
@@ -308,11 +308,11 @@ public class LessonTimetableActivity extends AppCompatActivity {
 
             final String day = getDayByIndex(lessonIndex);
             final String startLesson = getHourByIndex(scrollIndex);
-            while (scrollIndex != 785 && lessonList.get(scrollIndex) == lessonIndex) {
+            while (scrollIndex != 342 && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
             }
             scrollIndex--;
-            scheduledLessons.get(scrollIndex / 157).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), professor, startLesson, subjectName, year, channel));
+            scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), professor, startLesson, subjectName, year, channel));
         }
     }
 

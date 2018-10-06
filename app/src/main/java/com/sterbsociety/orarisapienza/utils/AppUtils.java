@@ -85,7 +85,7 @@ public class AppUtils {
     private static final int PICK_FROM_GALLERY = 1;
     public static final String APP_VERSION = "1.0";
     public static final String DEFAULT_KEY = "KEY";
-    public static final String DATABASE_NAME = "courses.db";
+    private static final String DATABASE_NAME = "courses.db";
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
@@ -198,7 +198,6 @@ public class AppUtils {
     private static String getHash(String mString, String hashType) {
 
         try {
-
             byte[] bytesOfMessage = mString.getBytes("UTF-8");
             MessageDigest md = MessageDigest.getInstance(hashType);
             byte[] resultByte = md.digest(bytesOfMessage);
@@ -255,13 +254,12 @@ public class AppUtils {
         currentLanguage = sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
 
         if (currentLanguage.equals("")) {
-            if (isUserLanguageSupported(activity))
+            if (isUserLanguageSupported(activity)) {
                 currentLanguage = Locale.getDefault().getLanguage();
-            else
+            } else {
                 currentLanguage = "en";
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage);
-            editor.apply();
+            }
+            sharedPref.edit().putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage).apply();
         }
 
         readGeneralPreferences(activity);
@@ -657,7 +655,7 @@ public class AppUtils {
 
     private static void initDate() {
 
-        SELECTED_DAY_BTN_INDEX = new boolean[5];
+        SELECTED_DAY_BTN_INDEX = new boolean[6];
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
@@ -675,7 +673,7 @@ public class AppUtils {
         if (CURRENT_DAY == -1) {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_WEEK);
-            if (day == Calendar.SATURDAY || day == Calendar.SUNDAY || day == Calendar.MONDAY)
+            if (day == Calendar.SUNDAY || day == Calendar.MONDAY)
                 CURRENT_DAY = 0;
             else
                 CURRENT_DAY = day - 2;
@@ -683,7 +681,7 @@ public class AppUtils {
         return CURRENT_DAY;
     }
 
-    public static int getCurrentDayIndex() {
+    private static int getCurrentDayIndex() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         switch (day) {
@@ -710,8 +708,8 @@ public class AppUtils {
         return SELECTED_DAY_BTN_INDEX;
     }
 
-    public final static int MIN_HOUR = 7;
-    public final static int MAX_HOUR = 20;
+    private final static int MIN_HOUR = 8;
+    private final static int MAX_HOUR = 22;
 
     public static int CACHED_MIN_HOUR = 10;
     public static int CACHED_MAX_HOUR = 14;
@@ -732,7 +730,7 @@ public class AppUtils {
     public final static int FILTER_ACTIVITY = 111;
 
     public static void initClassroomFilters() {
-        SELECTED_DAY_BTN_INDEX = new boolean[5];
+        SELECTED_DAY_BTN_INDEX = new boolean[6];
         SELECTED_DAY_BTN_INDEX[getCurrentWeekDayIndex()] = true;
         SELECTED_CLASS_BTN_INDEX = 0;
         CACHED_MIN_HOUR = 10;
@@ -895,21 +893,6 @@ public class AppUtils {
         return new ArrayList<>(mFavouriteBuildingList);
     }
 
-    private static StudyPlanPresenter mStudyPlanPresenter;
-
-    public static boolean isSameStudyPlanRequestAsBefore(@NonNull StudyPlanPresenter studyPlanPresenter) {
-        boolean outcome = false;
-        if (mStudyPlanPresenter != null) {
-            outcome = mStudyPlanPresenter.getStartDate().equals(studyPlanPresenter.getStartDate())
-                    && mStudyPlanPresenter.getEndDate().equals(studyPlanPresenter.getEndDate())
-                    && mStudyPlanPresenter.getLatitude() == studyPlanPresenter.getLatitude()
-                    && mStudyPlanPresenter.getLongitude() == studyPlanPresenter.getLongitude();
-        }
-        mStudyPlanPresenter = new StudyPlanPresenter(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate(),
-                studyPlanPresenter.getLatitude(), studyPlanPresenter.getLongitude(), studyPlanPresenter.getBuilding());
-        return outcome;
-    }
-
     /**
      * @param classroom is the classroom located in the building
      * @return the building that houses the classroom
@@ -979,10 +962,6 @@ public class AppUtils {
         return fullDateFormat;
     }
 
-    public static SimpleDateFormat getSimpleDateFormat() {
-        return simpleDateFormat;
-    }
-
     public static String getSimpleDate(@NonNull String fullDate) {
         try {
             return simpleDateFormat.format(fullDateFormat.parse(fullDate));
@@ -990,10 +969,6 @@ public class AppUtils {
             e.printStackTrace();
             return fullDate.substring(fullDate.length() - 5, fullDate.length());
         }
-    }
-
-    public static String getCurrentDBVersion() {
-        return currentDBVersion;
     }
 
     public static boolean isCurrentDatabaseOutDated(DataSnapshot dataSnapshot) {
@@ -1046,19 +1021,7 @@ public class AppUtils {
                 sb.append(line);
             }
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
-            if (database.specialCourses == null) {
-                SPECIAL_COURSES = new HashMap<>();
-            } else {
                 SPECIAL_COURSES = new HashMap<>(database.specialCourses);
-            }
-            // remove start
-            SPECIAL_COURSES.put("Infermieristica D - Policlinico Umberto I/Aeronautica Militare_29971", new HashMap<String, String>(){
-                {
-                    put("1_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_i_anno_i_semestre_2018-19_def.pdf");
-                    put("2_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_ii_anno_primo_semestre_2018-19.pdf");
-                    put("3_1_0", "https://corsidilaurea.uniroma1.it/sites/default/files/allegati_frequentare/orario_iii_anno_i_semestre_2018-19.pdf");
-                }
-            } );
             // remove end
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
@@ -1144,7 +1107,7 @@ public class AppUtils {
             final String[] parts = courseKey.split("_");
             resultList.add(new Course(parts[0], parts[1], courseKey));
         }
-        for (String courseKey: SPECIAL_COURSES.keySet()) {
+        for (String courseKey : SPECIAL_COURSES.keySet()) {
             final String[] parts = courseKey.split("_");
             resultList.add(new Course(parts[0], parts[1], courseKey));
         }
@@ -1159,10 +1122,6 @@ public class AppUtils {
             cleanSortedFavouriteCodes.add(dirtyCode.split(FAV_SEPARATOR)[1]);
         }
 
-        for (Course c: resultList) {
-            if (c==null) System.out.println("aaa");
-        }
-
         // Inside here we put each building in accordance to their code's position.
         Course[] tmpFavourites = new Course[mFavouriteCourseSet.size()];
 
@@ -1171,17 +1130,10 @@ public class AppUtils {
         final Iterator<Course> iterator = resultList.iterator();
         while (iterator.hasNext()) {
             final Course course = iterator.next();
-            if (course == null) System.out.println("ccc");
             if (hasAlreadyBeenSearchedByUser(course.getFullName())) {
                 tmpFavourites[cleanSortedFavouriteCodes.indexOf(course.getFullName())] = course;
                 iterator.remove();
             }
-        }
-
-        int index = 0;
-        for (Course c: tmpFavourites) {
-            if (c==null) System.out.println("ddd");
-            System.out.println(index++);
         }
 
         mFavouriteCourseList = new ArrayList<>(Arrays.asList(tmpFavourites));
@@ -1205,7 +1157,7 @@ public class AppUtils {
     }
 
     public static String getDayByIndex(int index) {
-        int i = index / 157;
+        int i = index / 57;
         switch (i) {
             case 1:
                 return "tue";
@@ -1215,16 +1167,17 @@ public class AppUtils {
                 return "thu";
             case 4:
                 return "fri";
+            case 5:
+                return "sat";
             default:
                 return "mon";
         }
     }
 
-
     public static String getHourByIndex(int index) {
-        return String.format(Locale.getDefault(), "%02d", (420 + index % 157 * 5) / 60)
+        return String.format(Locale.getDefault(), "%02d", (465 + index % 57 * 15) / 60)
                 + ":" +
-                String.format(Locale.getDefault(), "%02d", (420 + index % 157 * 5) % 60);
+                String.format(Locale.getDefault(), "%02d", (465 + index % 57 * 15) % 60);
     }
 
     public static String getClassroomName(String code) {
@@ -1324,13 +1277,13 @@ public class AppUtils {
     }
 
     public static int timeToInt(String h, int day) {
-        int dayVar = day * 157;//day index
-        int var = Math.min(157, Integer.parseInt(h.split(":")[0]) - 7) * 12 + (Integer.parseInt(h.split(":")[1]) / 5);//hour parsing
+        int dayVar = day * 57;//day index
+        int var = Math.min(57, Integer.parseInt(h.split(":")[0]) - 8) * 4 + (Integer.parseInt(h.split(":")[1]) / 15);//hour parsing
         if (var < 0) {
-            return Math.min(dayVar, 629) % 629;
+            return Math.min(dayVar, 286) % 286;
             //if hour is 00<h<07 than retun minimum  between dayvar and 628 (7:05 of friday,the maximum that day can assume in our week) %628 to get 0 if dayvar is superior(saturday,sunday)
         }
-        if (dayVar + var < 785) {
+        if (dayVar + var < 342) {
             return dayVar + var;//a right value, day+hour index in our array
         }
         return 0;//index out of bound
@@ -1354,7 +1307,7 @@ public class AppUtils {
     public static Date getMinHour() {
         if (minHour == null) {
             final Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 7);
+            calendar.set(Calendar.HOUR_OF_DAY, MIN_HOUR);
             calendar.set(Calendar.MINUTE, 0);
             minHour = calendar.getTime();
         }
@@ -1365,7 +1318,7 @@ public class AppUtils {
     public static Date getMaxHour() {
         if (maxHour == null) {
             final Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 20);
+            calendar.set(Calendar.HOUR_OF_DAY, MAX_HOUR);
             calendar.set(Calendar.MINUTE, 0);
             maxHour = calendar.getTime();
         }
@@ -1389,7 +1342,8 @@ public class AppUtils {
             case ("sun"):
                 return 6;
         }
-        return -1;
+        // Return 0 and not -1 to avoid other errors, anyway we should be safe.
+        return 0;
     }
 
     public static Classroom getClassroom(String code) {
@@ -1420,7 +1374,7 @@ public class AppUtils {
         final Date maxHour = getMaxHour();
         final Date minHour = getMinHour();
         if (now.before(minHour) || now.after(maxHour)) {
-            calendar.set(Calendar.HOUR_OF_DAY, 7);
+            calendar.set(Calendar.HOUR_OF_DAY, MIN_HOUR);
             calendar.set(Calendar.MINUTE, 0);
             if (now.after(maxHour)) {
                 calendar.add(Calendar.DAY_OF_WEEK, 1);

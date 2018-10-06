@@ -38,7 +38,6 @@ import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,7 +45,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.isSameStudyPlanRequestAsBefore;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
@@ -112,14 +110,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (isSameStudyPlanRequestAsBefore(studyPlanPresenter)) {
-            // todo alert the user if he wants to regenerate a study plan with same settings
-        }
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == STUDY_PLAN && resultCode == Activity.RESULT_OK) {
             finish();
@@ -140,7 +130,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         final LinearLayout alterNativeLayout = findViewById(R.id.dinosaur_wrapper);
 
         if (NetworkStatus.getInstance().isOnline(this)) {
-            DefaultAirMapViewBuilder mapViewBuilder = new DefaultAirMapViewBuilder(this);
+            final DefaultAirMapViewBuilder mapViewBuilder = new DefaultAirMapViewBuilder(this);
             mapView.setOnMapInitializedListener(this);
             mapView.initialize(getSupportFragmentManager());
             alterNativeLayout.setVisibility(View.GONE);
@@ -156,13 +146,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     private void initSearchViewLayout() {
 
         searchViewLayout = findViewById(R.id.search_view_container);
-
         mAdapter = new BuildingListViewAdapter(this, AppUtils.getFavouriteBuildingList());
-
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticListSupportFragment());
         searchViewLayout.setCollapsedHint(getString(R.string.where_to_study));
         searchViewLayout.setExpandedHint(getString(R.string.query_example));
-
         searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
             @Override
             public void onStart(boolean expanded) {
@@ -171,7 +158,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                     secondButton.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onFinish(boolean expanded) {
                 if (expanded) {
@@ -208,7 +194,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
     @Override
     public void onMapInitialized() {
-
         final LatLng latLng = new LatLng(41.904130, 12.515297);
         mapView.animateCenterZoom(latLng, 14);
         mapView.setMyLocationEnabled(false);

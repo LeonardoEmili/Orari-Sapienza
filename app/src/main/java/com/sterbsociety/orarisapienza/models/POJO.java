@@ -31,4 +31,11 @@ public class POJO {
         this.timeTables = timeTables;
         this.specialCourses = specialCourses;
     }
+
+    private HashMap<String, HashMap<String, String>> getSpecialCourses() {
+        if (specialCourses == null) {
+            specialCourses = new HashMap<>();
+        }
+        return specialCourses;
+    }
 }

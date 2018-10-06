@@ -222,6 +222,8 @@
     <string name="manual_update_desc">This will force the app to download again lesson data.</string>
     <string name="donate_title">Donate</string>
     <string name="donate_desc">Donate and get an ad-free version of the App.</string>
+    <string name="sat">Sat</string>
+    <string name="same_study_plan_alert">You are submitting the same study plan request as before, are you sure?</string>
 
 
 </resources>

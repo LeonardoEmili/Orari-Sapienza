@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.florent37.rxgps.RxGps;
 import com.jaygoo.widget.OnRangeChangedListener;
@@ -84,13 +83,11 @@ public class FilterActivity extends AppCompatActivity {
 
         rxGps = new RxGps(this);
         rxGps.lastLocation()
-
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(location -> {
                     if (location != null) {
                         ClassListActivity.setLastLocation(location);
-                        Toast.makeText(this, "location low", Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> {
                     needToObfuscateView = true;
@@ -112,7 +109,6 @@ public class FilterActivity extends AppCompatActivity {
                 .subscribe(location -> {
                     if (location != null) {
                         ClassListActivity.setLastLocation(location);
-                        Toast.makeText(this, "location hight", Toast.LENGTH_SHORT).show();
                     }
                 }, throwable -> {
                     if (throwable instanceof RxGps.PermissionException) {
@@ -139,7 +135,7 @@ public class FilterActivity extends AppCompatActivity {
         activeBtn = findViewById(R.id.active_btn);
         toggleArray = new LinearLayout[]{findViewById(R.id.vacant), findViewById(R.id.busy), findViewById(R.id.all)};
         dayButtonArray = new TextView[]{findViewById(R.id.mon), findViewById(R.id.tue), findViewById(R.id.wed)
-                , findViewById(R.id.thu), findViewById(R.id.fri)};
+                , findViewById(R.id.thu), findViewById(R.id.fri), findViewById(R.id.sat)};
 
         initSeekBars();
         setToggleButtons();
@@ -179,7 +175,6 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         return cnt == 1 && cachedDayIndex[index];
-        // todo maybe add some alert
     }
 
     /**

@@ -8,32 +8,36 @@ import java.util.List;
 
 public class StudyPlanBuilder {
 
-    private ArrayList<String[]> program;
-    private ArrayList<Building> buildings, checked, nearby;
+    private ArrayList<String[]> program = new ArrayList<>();
+    private ArrayList<Building> buildings;
+    private Building startBuilding;
     private HashMap<String, List<Integer>> dataMatrix;
-    private List<String> alist; // todo do we need this?
-    private int radius = 500;
+    private ArrayList<Building> checked, nearby;
+    public int radius = 500;
 
-    public StudyPlanBuilder() {
-        this.buildings = AppUtils.getBuildingList();
-        this.dataMatrix = AppUtils.MATRIX;
-        this.alist = AppUtils.LESSON_LIST;
-        this.program = new ArrayList<>();
+    public StudyPlanBuilder(ArrayList<Building> buildings, HashMap<String, List<Integer>> dataMatrix, Building startBuilding) {
+        this.buildings = buildings;
+        this.dataMatrix = dataMatrix;
         this.checked = new ArrayList<>();
         this.nearby = new ArrayList<>();
+        this.startBuilding = startBuilding;
     }
 
     public void add(String classroom, String time) {
         this.program.add(new String[]{classroom, time});
     }
 
+    public void remove(int i) {
+        this.program.remove(i);
+    }
+
     public String[] get(int i) {
         return this.program.get(i);
     }
 
-    public void createProgramInt(int start, int end, Building building) {
-        fillNearby(building);
-        findNextRoom(start, end, building);
+    public void createProgramInt(int start, int end) {
+        fillNearby(startBuilding);
+        findNextRoom(start, end, startBuilding);
     }
 
     public ArrayList<String[]> getProgram() {
@@ -43,6 +47,17 @@ public class StudyPlanBuilder {
     private void findNextRoom(int start, int end, Building building) {
         if (start >= end) {
             return;
+        }
+        if (building == null) {
+            if (this.program.get(program.size() - 1)[3].equals("")) {
+                this.program.get(program.size() - 1)[2] = AppUtils.getHourByIndex(start + 1);
+                findNextRoom(start + 1, end, startBuilding);
+                return;
+            } else {
+                this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start), AppUtils.getHourByIndex(start + 1), ""});
+                findNextRoom(start + 1, end, startBuilding);
+                return;
+            }
         }
         int max = start, i = start;
         String room = "";
@@ -62,17 +77,22 @@ public class StudyPlanBuilder {
             this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start), AppUtils.getHourByIndex((Math.min(end, max))), room});
             checked.clear();
             fillNearby(building);
+            startBuilding = building;
             findNextRoom(max, end, building);
         } else {
             findNextRoom(start, end, changeBuilding(building));
         }
+
     }
 
     private Building changeBuilding(Building b) {
         checked.add(b);
-        if (nearby.size() == 0) {
+        int MAX_RAD = 2000;
+        if (nearby.size() == 0 && radius < MAX_RAD) {
             radius += 100;
             fillNearby(b);
+        } else if (radius >= MAX_RAD) {
+            return null;
         }
         return nearby.remove(0);
     }
@@ -88,9 +108,5 @@ public class StudyPlanBuilder {
                 }
             }
         }
-    }
-
-    public void remove(int i) {
-        this.program.remove(i);
     }
 }

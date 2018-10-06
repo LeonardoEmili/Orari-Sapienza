@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;
 import com.sterbsociety.orarisapienza.fragments.HomeFragment;
@@ -18,15 +19,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.utils.AppUtils;
-
 import org.codechimp.apprater.AppRater;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
@@ -58,8 +59,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         if (isDBAvailable(this)) {
             parseDatabase(this);
         } else {
-            Log.e("not presente", "ee");
-            // todo show alert box and close the App
+            new Handler().postDelayed(() -> {
+                StyleableToast.makeText(this, getResources().getString(R.string.some_errors_occured),
+                        Toast.LENGTH_LONG, R.style.errorToast).show();
+            }, 200);
         }
         initActivity();
 

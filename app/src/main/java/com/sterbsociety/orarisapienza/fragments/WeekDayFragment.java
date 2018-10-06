@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.views.SortableCourseTableView;
@@ -106,8 +105,7 @@ public abstract class WeekDayFragment extends Fragment {
 
         @Override
         public void onDataClicked(final int rowIndex, final Lesson clickedData) {
-            final String carString = "Click: " + clickedData.getCourseName() + " " + clickedData.getProfessor();
-            Toast.makeText(getActivity(), carString, Toast.LENGTH_SHORT).show();
+
         }
     }
 

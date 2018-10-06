@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -78,22 +79,19 @@ public class StudyPlanActivity extends AppCompatActivity {
     }
 
     private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
+
         studyPlan = new StudyPlan();
-        final StudyPlanBuilder spBuilder = new StudyPlanBuilder();
+        final StudyPlanBuilder spBuilder = new StudyPlanBuilder(AppUtils.getBuildingList(), AppUtils.MATRIX, studyPlanPresenter.getBuilding());
         final List<TimeLineModel> dataList = new ArrayList<>();
-        final String startDate = studyPlanPresenter.getStartDate().substring(3, 18);
-        final String endDate = studyPlanPresenter.getEndDate().substring(3, 18);      // todo do we need this?
-        int startIndex = AppUtils.timeToInt(studyPlanPresenter.getHours()[0], AppUtils.dayToInt(studyPlanPresenter.getDays()[0]));
-        int endIndex = AppUtils.timeToInt(studyPlanPresenter.getHours()[1], AppUtils.dayToInt(studyPlanPresenter.getDays()[1]));
-        final Building startBuilding = studyPlanPresenter.getBuilding();
-        if (startIndex == endIndex) {
-            StyleableToast.makeText(this, getResources().getString(R.string.selected_dates_are_incompatibles),
-                    Toast.LENGTH_LONG, R.style.errorToast).show();
-            finish();
-        }
-        spBuilder.createProgramInt(startIndex, endIndex, startBuilding);
+        int start, end;
+        final String startDate = studyPlanPresenter.getStartDate().substring(3, 18), endDate = studyPlanPresenter.getEndDate().substring(3, 18);
+        start = AppUtils.timeToInt(studyPlanPresenter.getHours()[0], AppUtils.dayToInt(studyPlanPresenter.getDays()[0]));
+        end = AppUtils.timeToInt(studyPlanPresenter.getHours()[1], AppUtils.dayToInt(studyPlanPresenter.getDays()[1]));
+        spBuilder.createProgramInt(start, end);
         for (String[] s : spBuilder.getProgram()) {
-            dataList.add(new TimeLineModel(s[0] + startDate + s[1], s[0] + startDate + s[2], getClassroom(s[3])));
+            if (!TextUtils.isEmpty(s[3])) {
+                dataList.add(new TimeLineModel(s[0] + startDate + s[1], s[0] + startDate + s[2], AppUtils.getClassroom(s[3])));
+            }
         }
         studyPlan.setDataList(dataList);
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
