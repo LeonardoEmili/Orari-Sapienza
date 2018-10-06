@@ -218,6 +218,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
      * This method asks the user which course to show, and then displays it.
      */
     private void displayRightCourse() {
+
         if (courseTypologies.size() > 1) {
             final ArrayList<String> tmpListEntries = new ArrayList<>();
             final ArrayList<String> tmpListTypes = new ArrayList<>();
