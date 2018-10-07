@@ -45,7 +45,6 @@ import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.models.Course;
 import com.sterbsociety.orarisapienza.models.POJO;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
-import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 
 import java.io.BufferedReader;
@@ -1034,7 +1033,7 @@ public class AppUtils {
     // This is the mega matrix which holds info inside each cell
     public static HashMap<String, List<Integer>> MATRIX = new HashMap<>();
 
-    public static HashMap<String, HashMap<String, Integer>> TIMETABLES = new HashMap<>();
+    public static HashMap<String, HashMap<String, List<Integer>>> TIMETABLES = new HashMap<>();
 
     public static List<String> LESSON_LIST = new ArrayList<>();
     private static final String FAV_SEPARATOR = "%";
@@ -1100,7 +1099,7 @@ public class AppUtils {
     /**
      * @param map is the map of courses ("courseName":[lesson0, lesson1, lesson2, lesson3, ...])
      */
-    private static void parseCourseList(HashMap<String, HashMap<String, Integer>> map) {
+    private static void parseCourseList(HashMap<String, HashMap<String, List<Integer>>> map) {
 
         final ArrayDeque<Course> resultList = new ArrayDeque<>();
         for (String courseKey : map.keySet()) {
@@ -1366,29 +1365,6 @@ public class AppUtils {
             }
         }
         return nearestBuilding;
-    }
-
-    public static Date[] getBestDates() {
-        final Calendar calendar = Calendar.getInstance();
-        final Date now = new Date();
-        final Date maxHour = getMaxHour();
-        final Date minHour = getMinHour();
-        if (now.before(minHour) || now.after(maxHour)) {
-            calendar.set(Calendar.HOUR_OF_DAY, MIN_HOUR);
-            calendar.set(Calendar.MINUTE, 0);
-            if (now.after(maxHour)) {
-                calendar.add(Calendar.DAY_OF_WEEK, 1);
-            }
-        }
-        final int day = calendar.get(Calendar.DAY_OF_WEEK);
-        if (day == Calendar.SATURDAY) {
-            calendar.add(Calendar.DAY_OF_WEEK, 2);
-        } else if (day == Calendar.SUNDAY) {
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
-        }
-        final Date startDate = calendar.getTime();
-        calendar.add(Calendar.HOUR_OF_DAY, 4);
-        return new Date[]{startDate, calendar.getTime()};
     }
 
     public static boolean doesPDFTableExist(Activity activity, String courseCode) {

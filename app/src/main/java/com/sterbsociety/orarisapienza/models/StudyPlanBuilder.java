@@ -74,7 +74,7 @@ public class StudyPlanBuilder {
             }
         }
         if (max > start) {
-            this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start), AppUtils.getHourByIndex((Math.min(end, max))), room});
+            this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start+1), AppUtils.getHourByIndex((Math.min(end, max))+1), room});
             checked.clear();
             fillNearby(building);
             startBuilding = building;

@@ -19,7 +19,6 @@ import com.google.gson.GsonBuilder;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.TimeLineAdapter;
-import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
 import com.sterbsociety.orarisapienza.models.StudyPlanPresenter;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroom;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveStudyPlan;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
@@ -84,13 +82,15 @@ public class StudyPlanActivity extends AppCompatActivity {
         final StudyPlanBuilder spBuilder = new StudyPlanBuilder(AppUtils.getBuildingList(), AppUtils.MATRIX, studyPlanPresenter.getBuilding());
         final List<TimeLineModel> dataList = new ArrayList<>();
         int start, end;
-        final String startDate = studyPlanPresenter.getStartDate().substring(3, 18), endDate = studyPlanPresenter.getEndDate().substring(3, 18);
         start = AppUtils.timeToInt(studyPlanPresenter.getHours()[0], AppUtils.dayToInt(studyPlanPresenter.getDays()[0]));
         end = AppUtils.timeToInt(studyPlanPresenter.getHours()[1], AppUtils.dayToInt(studyPlanPresenter.getDays()[1]));
+        if (start == end) {
+            end += 16;
+        }
         spBuilder.createProgramInt(start, end);
         for (String[] s : spBuilder.getProgram()) {
             if (!TextUtils.isEmpty(s[3])) {
-                dataList.add(new TimeLineModel(s[0] + startDate + s[1], s[0] + startDate + s[2], AppUtils.getClassroom(s[3])));
+                dataList.add(new TimeLineModel(s[0] + s[1], s[0] + s[2], AppUtils.getClassroom(s[3])));
             }
         }
         studyPlan.setDataList(dataList);

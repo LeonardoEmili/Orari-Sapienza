@@ -287,33 +287,30 @@ public class LessonTimetableActivity extends AppCompatActivity {
         scheduledLessons.add(new ArrayList<>());    // Friday
         scheduledLessons.add(new ArrayList<>());    // Saturday
 
-        final HashMap<String, Integer> map = AppUtils.TIMETABLES.get(course.getCourseKey());
+        final HashMap<String, List<Integer>> map = AppUtils.TIMETABLES.get(course.getCourseKey());
         for (String classroomCode : map.keySet()) {
-
-            // Foreach lesson inside this course
-            int scrollIndex = map.get(classroomCode);   // We go ahead with this index until we find 0
-            final List<Integer> lessonList = AppUtils.MATRIX.get(classroomCode);  // List with integers
-            final int lessonIndex = lessonList.get(scrollIndex);    // This is the index for the lesson
-            if (lessonIndex == 0) {
-                // Just to be sure that some lesson index is not 0, this would make the app crash due to IndexOutOfBoundException
-                continue;
+            for (int scrollIndex : map.get(classroomCode)) {
+                // Foreach lesson inside this course
+                final List<Integer> lessonList = AppUtils.MATRIX.get(classroomCode);  // List with integers
+                final int lessonIndex = lessonList.get(scrollIndex);    // This is the index for the lesson
+                if (lessonIndex == 0) {
+                    // Just to be sure that some lesson index is not 0, this would make the app crash due to IndexOutOfBoundException
+                    continue;
+                }
+                final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");  // We retrieve lesson's info
+                final String subjectName = lessonParts[2];
+                final String year = lessonParts[3];
+                final String professor = lessonParts[4];
+                final String channel = lessonParts[5];
+                courseTypologies.add(year + "#" + channel);
+                final String day = getDayByIndex(lessonIndex);
+                final String startLesson = getHourByIndex(scrollIndex);
+                while (scrollIndex != 342 && lessonList.get(scrollIndex) == lessonIndex) {
+                    scrollIndex++;
+                }
+                scrollIndex--;
+                scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), professor, startLesson, subjectName, year, channel));
             }
-            final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");  // We retrieve lesson's info
-
-            final String subjectName = lessonParts[2];
-            final String year = lessonParts[3];
-            final String professor = lessonParts[4];
-            final String channel = lessonParts[5];
-
-            courseTypologies.add(year + "#" + channel);
-
-            final String day = getDayByIndex(lessonIndex);
-            final String startLesson = getHourByIndex(scrollIndex);
-            while (scrollIndex != 342 && lessonList.get(scrollIndex) == lessonIndex) {
-                scrollIndex++;
-            }
-            scrollIndex--;
-            scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), professor, startLesson, subjectName, year, channel));
         }
     }
 

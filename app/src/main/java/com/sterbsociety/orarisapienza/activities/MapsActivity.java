@@ -77,8 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-        final Date[] bestDates = AppUtils.getBestDates();
+        final Date[] bestDates = new Date[]{new Date(), new Date()};
         mPickerDialog = new MyDoubleDateAndTimePickerDialog.Builder(this)
                 .curved()
                 .minutesStep(15)
