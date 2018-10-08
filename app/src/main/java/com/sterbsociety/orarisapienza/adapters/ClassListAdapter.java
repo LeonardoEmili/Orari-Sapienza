@@ -221,9 +221,11 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         if (now.before(minHour) || now.after(maxHour)) {
             holder.background.setColor(blackColor);
         } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
-            holder.background.setColor(redColor);
-        } else {
+            // Classroom is now empty
             holder.background.setColor(greenColor);
+        } else {
+            // Classroom is now busy
+            holder.background.setColor(redColor);
         }
         holder.classroom.setText(classroom.getName());
         holder.building.setText(getRealBuilding(classroom).getName());

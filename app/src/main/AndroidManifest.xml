@@ -72,7 +72,7 @@
             android:name=".activities.BugReportActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.DevsActivity"
+            android:name=".activities.DevActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FaqActivity"

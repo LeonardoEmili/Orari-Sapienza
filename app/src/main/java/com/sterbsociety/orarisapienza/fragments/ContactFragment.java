@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
-import com.sterbsociety.orarisapienza.activities.DevsActivity;
+import com.sterbsociety.orarisapienza.activities.DevActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.BugReportActivity;
 import com.sterbsociety.orarisapienza.activities.FeedbackActivity;
@@ -67,7 +67,7 @@ public class ContactFragment extends Fragment {
 
         view.findViewById(R.id.feedback_btn).setOnClickListener(view13 -> startActivity(new Intent(getActivity(), FeedbackActivity.class)));
         view.findViewById(R.id.bug_report_btn).setOnClickListener(view12 -> startActivity(new Intent(getActivity(), BugReportActivity.class)));
-        view.findViewById(R.id.dev_btn).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), DevsActivity.class)));
+        view.findViewById(R.id.dev_btn).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), DevActivity.class)));
         return view;
     }
 

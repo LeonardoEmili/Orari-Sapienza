@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza.utils;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -86,7 +87,7 @@ public class AppUtils {
     private static final String DATABASE_NAME = "courses.db";
     public static final int WEEK_LENGTH = 342;
     public static final int DAY_LENGTH = 57;
-    public static final int TIME_INTERVAL = 15;
+    private static final int TIME_INTERVAL = 15;
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
@@ -104,6 +105,7 @@ public class AppUtils {
      * Resource and explanations found at:
      * https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
      */
+    @SuppressLint("ClickableViewAccessibility")
     public static void setupUIElements(Activity activity, View view) {
 
         final Activity mActivity = activity;
@@ -1056,14 +1058,13 @@ public class AppUtils {
         buildingList.addAll(resultList);
     }
 
-    private static HashSet<String> realClassroomSet = new HashSet<>();
     private static ArrayList<Classroom> realClassroomList;
 
     public static ArrayList<Classroom> getRealClassroomList() {
         if (realClassroomList == null) {
             realClassroomList = new ArrayList<>();
             for (final Classroom classroom : classroomList) {
-                if (realClassroomSet.contains(classroom.getFullCode())) {
+                if (MATRIX.containsKey(classroom.getFullCode())) {
                     realClassroomList.add(classroom);
                 }
             }
@@ -1082,7 +1083,6 @@ public class AppUtils {
             for (int j = 0; j < building.getAule().size(); j++) {
                 final Classroom POJOClassroom = building.getAule().get(j);
                 classroomList.add(new Classroom(POJOClassroom.getName(), POJOClassroom.getCode(), POJOClassroom.getSits(), building, i));
-                realClassroomSet.add(building.getCode() + "-" + POJOClassroom.getCode());
             }
         }
         // Down here we parse class favourites

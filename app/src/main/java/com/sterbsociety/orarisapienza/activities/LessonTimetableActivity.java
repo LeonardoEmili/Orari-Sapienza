@@ -45,7 +45,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.DAY_LENGTH;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.SPECIAL_COURSES;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.WEEK_LENGTH;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addCourseToFavourites;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.doesPDFTableExist;
@@ -305,13 +307,13 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 courseTypologies.add(year + "#" + channel);
                 final String day = getDayByIndex(lessonIndex);
                 final String startLesson = getHourByIndex(scrollIndex + 1);
-                while (scrollIndex != 342 && lessonList.get(scrollIndex) == lessonIndex) {
+                while (scrollIndex != WEEK_LENGTH && lessonList.get(scrollIndex) == lessonIndex) {
                     scrollIndex++;
                 }
-                if (scrollIndex >= 342) {
-                    scrollIndex = 341;
+                if (scrollIndex >= WEEK_LENGTH) {
+                    scrollIndex = WEEK_LENGTH - 1;
                 }
-                scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex + 1), professor, startLesson, subjectName, year, channel));
+                scheduledLessons.get(scrollIndex / DAY_LENGTH).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex + 1), professor, startLesson, subjectName, year, channel));
             }
         }
     }

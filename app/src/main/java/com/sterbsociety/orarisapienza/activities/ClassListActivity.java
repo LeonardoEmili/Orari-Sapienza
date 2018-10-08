@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
@@ -47,7 +45,6 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.ItemDecoration mItemDecoration;
     protected ClassListAdapter mAdapter;
-    //protected ArrayList<Classroom> mDataList;
     private static Location lastLocation;
     private String lastQuery = "";
 

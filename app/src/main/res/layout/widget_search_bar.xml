@@ -75,7 +75,8 @@
                 android:src="@drawable/ic_close"
                 android:onClick="clearSearchQuery"
                 android:visibility="gone"
-                android:tint="@color/searchbox_icon_tint" />
+                android:tint="@color/searchbox_icon_tint"
+                android:contentDescription="@string/image" />
 
         </LinearLayout>
 

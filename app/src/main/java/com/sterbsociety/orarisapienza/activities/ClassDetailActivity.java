@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +26,7 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.List;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.WEEK_LENGTH;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addClassroomToFavourites;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
@@ -87,16 +87,8 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
 
         // We retrieve the index of the current / most close in future lesson in this classroom
         int scrollIndex = AppUtils.getCurrentTimeToInt();
-        final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getBuildingCode() + "-" + classroom.getCode());  // List with integers
+        final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());  // List with integers
         final int lessonIndex = lessonList.get(scrollIndex);
-
-        // ----------LOGS-----------------
-
-        Log.e("timeToInt", scrollIndex+"");
-        Log.e("lessonIndex", lessonIndex + "");
-        Log.e("classroomCode", classroom.getFullCode());
-
-        // --------END OF LOGS------------
         if (lessonIndex == 0) {
             // Then the classroom is available
             classStatus.setText(R.string.available);
@@ -111,12 +103,13 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             classStatus.setText(R.string.occupied);
             currentLesson.setText(lessonParts[2]);
             currentProfessor.setText(lessonParts[4]);
-            Log.e("lesson", AppUtils.LESSON_LIST.get(lessonIndex));
             final String startHour = getHourByIndex(scrollIndex);
-            while (scrollIndex != 785 && lessonList.get(scrollIndex) == lessonIndex) {
+            while (scrollIndex != WEEK_LENGTH && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
             }
-            scrollIndex--;
+            if (scrollIndex >= WEEK_LENGTH) {
+                scrollIndex = WEEK_LENGTH - 1;
+            }
             classTimetable.setText(getString(R.string.lesson_timetable, startHour, getHourByIndex(scrollIndex)));
             // UX stuff - This is responsible for aligning lesson to its relative currentLesson
             ViewTreeObserver viewTreeObserver = currentLesson.getViewTreeObserver();
@@ -131,7 +124,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             }
         }
 
-        if (!AppUtils.getFavouriteClassSet().contains(classroom.getBuildingCode() + "-" + classroom.getCode())) {
+        if (!AppUtils.getFavouriteClassSet().contains(classroom.getFullCode())) {
             isFavouriteButtonVisible = true;
         }
 
@@ -192,9 +185,5 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
                 .build());
         mapView.animateCenterZoom(latLng, 16);
         mapView.setMyLocationEnabled(false);
-    }
-
-    private void addToFavourites() {
-        addClassroomToFavourites(this, classroom);
     }
 }
