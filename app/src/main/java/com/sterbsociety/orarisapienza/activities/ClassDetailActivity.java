@@ -61,7 +61,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         }
 
         LinearLayout mAdsContainer = findViewById(R.id.ad_container);
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/7649462643");
 
         final TextView className = findViewById(R.id.class_name);
         final TextView buildingName = findViewById(R.id.building_name);

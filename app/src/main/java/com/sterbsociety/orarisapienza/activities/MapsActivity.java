@@ -39,11 +39,13 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import com.sterbsociety.orarisapienza.utils.NetworkStatus;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getBestDates;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
@@ -77,7 +79,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        final Date[] bestDates = new Date[]{new Date(), new Date()};
+        final Date[] bestDates = getBestDates();
         mPickerDialog = new MyDoubleDateAndTimePickerDialog.Builder(this)
                 .curved()
                 .minutesStep(15)
@@ -96,7 +98,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                         return;
                     }
 
-                    if (tab0date.after(tab1date) || (getFullDateFormatter().format(tab0date).equals(getFullDateFormatter().format(tab1date)))) {
+                    if (tab0date.after(tab1date)
+                            || (getFullDateFormatter().format(tab0date).equals(getFullDateFormatter().format(tab1date)))
+                            || TimeUnit.HOURS.convert(tab1date.getTime() - tab0date.getTime(), TimeUnit.MILLISECONDS)  > 24) {
                         errorDialogMustBeDisplayed = true;
                     } else {
                         errorDialogMustBeDisplayed = false;
@@ -157,6 +161,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
                     secondButton.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void onFinish(boolean expanded) {
                 if (expanded) {

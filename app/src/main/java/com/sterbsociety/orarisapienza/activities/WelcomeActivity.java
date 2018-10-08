@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +59,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         initBaseActivity();
+
+        MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
 
         if (isFirstTimeStartApp = (isFirstTimeStartApp())) {
             setTheme(R.style.AppTheme_NoActionBar);

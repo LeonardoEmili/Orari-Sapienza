@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
+
 public class StudyPlanBuilder {
 
     private ArrayList<String[]> program = new ArrayList<>();
@@ -50,11 +53,12 @@ public class StudyPlanBuilder {
         }
         if (building == null) {
             if (this.program.get(program.size() - 1)[3].equals("")) {
-                this.program.get(program.size() - 1)[2] = AppUtils.getHourByIndex(start + 1);
+                this.program.get(program.size() - 1)[2] = getHourByIndex(start + 1);
                 findNextRoom(start + 1, end, startBuilding);
                 return;
             } else {
-                this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start), AppUtils.getHourByIndex(start + 1), ""});
+                this.program.add(new String[]{getDayByIndex(start), getHourByIndex(start),
+                        getHourByIndex(start + 1), "", getDayByIndex(start + 1)});
                 findNextRoom(start + 1, end, startBuilding);
                 return;
             }
@@ -74,7 +78,8 @@ public class StudyPlanBuilder {
             }
         }
         if (max > start) {
-            this.program.add(new String[]{AppUtils.getDayByIndex(start), AppUtils.getHourByIndex(start+1), AppUtils.getHourByIndex((Math.min(end, max))+1), room});
+            this.program.add(new String[]{getDayByIndex(start), getHourByIndex(start + 1),
+                    getHourByIndex((Math.min(end, max)) + 1), room, getDayByIndex((Math.min(end, max)) + 1)});
             checked.clear();
             fillNearby(building);
             startBuilding = building;

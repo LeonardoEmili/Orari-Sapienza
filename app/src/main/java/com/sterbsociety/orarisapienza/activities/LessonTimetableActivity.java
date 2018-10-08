@@ -110,7 +110,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
         initSearchView();
 
         LinearLayout mAdsContainer = findViewById(R.id.ad_container);
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/3277019084");
     }
 
     private void launchPDFDownloadTask(String courseName, String url) {
@@ -304,12 +304,14 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 final String channel = lessonParts[5];
                 courseTypologies.add(year + "#" + channel);
                 final String day = getDayByIndex(lessonIndex);
-                final String startLesson = getHourByIndex(scrollIndex);
+                final String startLesson = getHourByIndex(scrollIndex + 1);
                 while (scrollIndex != 342 && lessonList.get(scrollIndex) == lessonIndex) {
                     scrollIndex++;
                 }
-                scrollIndex--;
-                scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex), professor, startLesson, subjectName, year, channel));
+                if (scrollIndex >= 342) {
+                    scrollIndex = 341;
+                }
+                scheduledLessons.get(scrollIndex / 57).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex + 1), professor, startLesson, subjectName, year, channel));
             }
         }
     }

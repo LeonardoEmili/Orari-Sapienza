@@ -24,6 +24,7 @@ import com.sterbsociety.orarisapienza.models.TimeLineModel;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class CurrentPlanActivity extends AppCompatActivity {
             final TimeLineAdapter mTimeLineAdapter = new TimeLineAdapter(mDataList, currentClassPosition);
             mRecyclerView.setAdapter(mTimeLineAdapter);
 
-            AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+            AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/4612235766");
         }
     }
 
@@ -128,12 +129,14 @@ public class CurrentPlanActivity extends AppCompatActivity {
 
 
     private int getCurrentTimeLineIndex(List<TimeLineModel> dataList) {
-        int resultIndex = dataList.size() - 1;
+        if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            return 0;
+        }
         try {
-            SimpleDateFormat simpleDateFormat = getFullDateFormatter();
+            final SimpleDateFormat simpleDateFormat = getFullDateFormatter();
             final Date currentDate = new Date();
             for (int i = 0; i < dataList.size(); i++) {
-                TimeLineModel lineModel = dataList.get(i);
+                final TimeLineModel lineModel = dataList.get(i);
                 if (currentDate.before(simpleDateFormat.parse(lineModel.getEndDate()))) {
                     return i;
                 }
@@ -142,6 +145,6 @@ public class CurrentPlanActivity extends AppCompatActivity {
             ex.printStackTrace();
             sendSilentReport(this, 76, ex, CurrentPlanActivity.class.toString());
         }
-        return resultIndex;
+        return dataList.size() - 1;
     }
 }

@@ -57,7 +57,6 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
@@ -85,6 +84,9 @@ public class AppUtils {
     public static final String APP_VERSION = "1.0";
     public static final String DEFAULT_KEY = "KEY";
     private static final String DATABASE_NAME = "courses.db";
+    public static final int WEEK_LENGTH = 342;
+    public static final int DAY_LENGTH = 57;
+    public static final int TIME_INTERVAL = 15;
 
     /**
      * This method closes the keyboard inside an Activity and from a specific view.
@@ -572,25 +574,6 @@ public class AppUtils {
 
     private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
-    public static double distance(double startLat, double startLong,
-                                  double endLat, double endLong) {
-
-        double dLat = Math.toRadians((endLat - startLat));
-        double dLong = Math.toRadians((endLong - startLong));
-
-        startLat = Math.toRadians(startLat);
-        endLat = Math.toRadians(endLat);
-
-        double a = haversin(dLat) + Math.cos(startLat) * Math.cos(endLat) * haversin(dLong);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return EARTH_RADIUS * c; // <-- d
-    }
-
-    private static double haversin(double val) {
-        return Math.pow(Math.sin(val / 2), 2);
-    }
-
     public static final int GPS_ACCESS = 42;
 
     public static void askForGPSPermission(Activity activity) {
@@ -858,17 +841,11 @@ public class AppUtils {
 
         } else {
             // AdMob App ID: ca-app-pub-9817701892167034~2496155654
-            String androidId = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
-            String deviceId = AppUtils.hash(androidId).toUpperCase();
-
             AdView mAdView = new AdView(activity.getApplicationContext());
             mAdView.setAdSize(AdSize.BANNER);
             mAdView.setAdUnitId(unitId);
-            AdRequest mAdRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice(deviceId)
-                    .build();
-            mAdView.loadAd(mAdRequest);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             adContainer.addView(mAdView, params);
         }
@@ -957,15 +934,20 @@ public class AppUtils {
 
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 
+    private static final SimpleDateFormat mediumDateFormat = new SimpleDateFormat("E HH:mm", Locale.ENGLISH);
+
     public static SimpleDateFormat getFullDateFormatter() {
         return fullDateFormat;
+    }
+
+    public static SimpleDateFormat getMediumDateFormat() {
+        return mediumDateFormat;
     }
 
     public static String getSimpleDate(@NonNull String fullDate) {
         try {
             return simpleDateFormat.format(fullDateFormat.parse(fullDate));
         } catch (ParseException e) {
-            e.printStackTrace();
             return fullDate.substring(fullDate.length() - 5, fullDate.length());
         }
     }
@@ -1020,7 +1002,7 @@ public class AppUtils {
                 sb.append(line);
             }
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
-                SPECIAL_COURSES = new HashMap<>(database.specialCourses);
+            SPECIAL_COURSES = new HashMap<>(database.specialCourses);
             // remove end
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
@@ -1074,6 +1056,21 @@ public class AppUtils {
         buildingList.addAll(resultList);
     }
 
+    private static HashSet<String> realClassroomSet = new HashSet<>();
+    private static ArrayList<Classroom> realClassroomList;
+
+    public static ArrayList<Classroom> getRealClassroomList() {
+        if (realClassroomList == null) {
+            realClassroomList = new ArrayList<>();
+            for (final Classroom classroom : classroomList) {
+                if (realClassroomSet.contains(classroom.getFullCode())) {
+                    realClassroomList.add(classroom);
+                }
+            }
+        }
+        return realClassroomList;
+    }
+
     /**
      * This method re-elaborates classrooms in order to provide each one of them each info
      * and a light-reference to their relative building.
@@ -1085,6 +1082,7 @@ public class AppUtils {
             for (int j = 0; j < building.getAule().size(); j++) {
                 final Classroom POJOClassroom = building.getAule().get(j);
                 classroomList.add(new Classroom(POJOClassroom.getName(), POJOClassroom.getCode(), POJOClassroom.getSits(), building, i));
+                realClassroomSet.add(building.getCode() + "-" + POJOClassroom.getCode());
             }
         }
         // Down here we parse class favourites
@@ -1156,7 +1154,7 @@ public class AppUtils {
     }
 
     public static String getDayByIndex(int index) {
-        int i = index / 57;
+        int i = index / DAY_LENGTH;
         switch (i) {
             case 1:
                 return "tue";
@@ -1174,9 +1172,10 @@ public class AppUtils {
     }
 
     public static String getHourByIndex(int index) {
-        return String.format(Locale.getDefault(), "%02d", (465 + index % 57 * 15) / 60)
+        // 465 is second offset
+        return String.format(Locale.getDefault(), "%02d", (465 + index % DAY_LENGTH * TIME_INTERVAL) / 60)
                 + ":" +
-                String.format(Locale.getDefault(), "%02d", (465 + index % 57 * 15) % 60);
+                String.format(Locale.getDefault(), "%02d", (465 + index % DAY_LENGTH * TIME_INTERVAL) % 60);
     }
 
     public static String getClassroomName(String code) {
@@ -1276,16 +1275,17 @@ public class AppUtils {
     }
 
     public static int timeToInt(String h, int day) {
-        int dayVar = day * 57;//day index
-        int var = Math.min(57, Integer.parseInt(h.split(":")[0]) - 8) * 4 + (Integer.parseInt(h.split(":")[1]) / 15);//hour parsing
+        int dayVar = day * DAY_LENGTH;//day index
+        int var = Math.min(DAY_LENGTH, Integer.parseInt(h.split(":")[0]) - 8) * 4 + (Integer.parseInt(h.split(":")[1]) / TIME_INTERVAL);    //hour parsing
         if (var < 0) {
+            // 286 is 08:00 of Saturday
             return Math.min(dayVar, 286) % 286;
-            //if hour is 00<h<07 than retun minimum  between dayvar and 628 (7:05 of friday,the maximum that day can assume in our week) %628 to get 0 if dayvar is superior(saturday,sunday)
+            //if hour is 00<h<07 than return minimum  between dayVar and 628 (7:05 of friday,the maximum that day can assume in our week) %628 to get 0 if dayVar is superior(saturday,sunday)
         }
-        if (dayVar + var < 342) {
+        if (dayVar + var < WEEK_LENGTH) {
             return dayVar + var;//a right value, day+hour index in our array
         }
-        return 0;//index out of bound
+        return 0;   //index out of bound
     }
 
     public static double haversine(double lat1, double lon1, double lat2, double lon2) {
@@ -1299,7 +1299,6 @@ public class AppUtils {
         return R * c * 1000;
     }
 
-    private static DateFormat basicDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
     private static Date minHour, maxHour;
 
     @NonNull
@@ -1366,6 +1365,28 @@ public class AppUtils {
         }
         return nearestBuilding;
     }
+
+    public static Date[] getBestDates() {
+        final Calendar calendar = Calendar.getInstance();
+        final Date now = new Date();
+        final Date maxHour = getMaxHour();
+        final Date minHour = getMinHour();
+        if (now.before(minHour) || now.after(maxHour)) {
+            calendar.set(Calendar.HOUR_OF_DAY, MIN_HOUR);
+            calendar.set(Calendar.MINUTE, 0);
+            if (now.after(maxHour)) {
+                calendar.add(Calendar.DAY_OF_WEEK, 1);
+            }
+        }
+        final int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SUNDAY) {
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
+        }
+        final Date startDate = calendar.getTime();
+        calendar.add(Calendar.HOUR_OF_DAY, 4);
+        return new Date[]{startDate, calendar.getTime()};
+    }
+
 
     public static boolean doesPDFTableExist(Activity activity, String courseCode) {
         return new File(activity.getFilesDir().getAbsolutePath(), courseCode + ".pdf").exists();

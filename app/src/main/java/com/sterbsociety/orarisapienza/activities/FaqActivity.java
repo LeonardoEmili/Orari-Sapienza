@@ -121,6 +121,6 @@ public class FaqActivity extends AppCompatActivity {
             // End of Q&A list setup
         }
 
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/1878261215");
     }
 }

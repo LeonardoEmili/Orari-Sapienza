@@ -28,9 +28,13 @@ import com.sterbsociety.orarisapienza.models.StudyPlanBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sterbsociety.orarisapienza.utils.AppUtils.MATRIX;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.dayToInt;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getBuildingList;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveStudyPlan;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.timeToInt;
 
 public class StudyPlanActivity extends AppCompatActivity {
 
@@ -73,24 +77,29 @@ public class StudyPlanActivity extends AppCompatActivity {
         final TimeLineAdapter mTimeLineAdapter = new TimeLineAdapter(studyPlan.getDataList());
         mRecyclerView.setAdapter(mTimeLineAdapter);
 
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/7575765860");
     }
 
     private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
 
         studyPlan = new StudyPlan();
-        final StudyPlanBuilder spBuilder = new StudyPlanBuilder(AppUtils.getBuildingList(), AppUtils.MATRIX, studyPlanPresenter.getBuilding());
+        final StudyPlanBuilder utilitySPB;
+        final StudyPlanBuilder spBuilder = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter.getBuilding());
         final List<TimeLineModel> dataList = new ArrayList<>();
         int start, end;
-        start = AppUtils.timeToInt(studyPlanPresenter.getHours()[0], AppUtils.dayToInt(studyPlanPresenter.getDays()[0]));
-        end = AppUtils.timeToInt(studyPlanPresenter.getHours()[1], AppUtils.dayToInt(studyPlanPresenter.getDays()[1]));
-        if (start == end) {
-            end += 16;
+        start = timeToInt(studyPlanPresenter.getHours()[0], dayToInt(studyPlanPresenter.getDays()[0]));
+        end = timeToInt(studyPlanPresenter.getHours()[1], dayToInt(studyPlanPresenter.getDays()[1]));
+        if (start > end) {
+            spBuilder.createProgramInt(start, 341);
+            utilitySPB = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter.getBuilding());
+            utilitySPB.createProgramInt(0, end);
+            spBuilder.getProgram().addAll(utilitySPB.getProgram());
+        } else {
+            spBuilder.createProgramInt(start, end);
         }
-        spBuilder.createProgramInt(start, end);
         for (String[] s : spBuilder.getProgram()) {
             if (!TextUtils.isEmpty(s[3])) {
-                dataList.add(new TimeLineModel(s[0] + s[1], s[0] + s[2], AppUtils.getClassroom(s[3])));
+                dataList.add(new TimeLineModel(s[0] + s[1], s[4] + " " + s[2], AppUtils.getClassroom(s[3])));
             }
         }
         studyPlan.setDataList(dataList);

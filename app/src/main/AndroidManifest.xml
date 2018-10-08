@@ -19,6 +19,10 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9817701892167034~2496155654" />
+
         <activity
             android:name=".activities.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -53,7 +57,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <activity
@@ -109,7 +113,8 @@
         <activity
             android:name=".activities.StudyPlanActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.CurrentPlanActivity"
+        <activity
+            android:name=".activities.CurrentPlanActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

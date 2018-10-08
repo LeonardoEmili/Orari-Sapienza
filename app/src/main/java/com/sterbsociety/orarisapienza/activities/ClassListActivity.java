@@ -144,7 +144,6 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
         mRecyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged(mDataList);
         mAdapter.filterClassroomList();
         mAdapter.notifyDataSetChanged();
 
@@ -164,7 +163,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
             }
         });
 
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/7074747576");
     }
 
     @Override

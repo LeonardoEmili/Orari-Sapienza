@@ -77,7 +77,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         if (backupList == null) {
             // This happens only the first time, if the user hasn't completed a full research,
             // then it can only filter the whole list (which shows by default only free classroom in the current day)
-            backupList = new ArrayList<>(AppUtils.getClassroomList());
+            backupList = new ArrayList<>(AppUtils.getRealClassroomList());
             searchForAvailableClassrooms(backupList, getCurrentWeekDayIndex());
         }
         for (Classroom model : backupList) {
@@ -101,7 +101,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         for (int dayIndex = 0; dayIndex < dayIndexArray.length; dayIndex++) {
             if (dayIndexArray[dayIndex]) {
                 // Foreach day request by the user
-                ArrayList<Classroom> tmpList = new ArrayList<>(AppUtils.getClassroomList());
+                ArrayList<Classroom> tmpList = new ArrayList<>(AppUtils.getRealClassroomList());
 
                 if (onlyAvailable == 0) {
                     searchForAvailableClassrooms(tmpList, dayIndex);

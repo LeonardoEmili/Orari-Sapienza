@@ -47,7 +47,7 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
 
     private View renderString(final String value) {
         final TextView textView = new TextView(getContext());
-        textView.setText(value);
+        textView.setText(value.trim());
         textView.setPadding(30, 20, 20, 20);
         textView.setTextSize(TEXT_SIZE);
         return textView;
@@ -59,12 +59,12 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
         final TextView textView = new TextView(getContext());
         textView.setText(startHour);
         textView.setPadding(30, 12, 20, 3);
-        textView.setTextSize(TEXT_SIZE+1);
+        textView.setTextSize(TEXT_SIZE + 1);
         linearLayout.addView(textView);
         final TextView textView2 = new TextView(getContext());
         textView2.setText(endHour);
         textView2.setPadding(30, 3, 20, 12);
-        textView2.setTextSize(TEXT_SIZE+1);
+        textView2.setTextSize(TEXT_SIZE + 1);
         linearLayout.addView(textView2);
         return linearLayout;
     }

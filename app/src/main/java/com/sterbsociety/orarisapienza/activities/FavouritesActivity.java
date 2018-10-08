@@ -67,21 +67,7 @@ public class FavouritesActivity extends AppCompatActivity implements SwipeItemCl
         }
 
         final LinearLayout mAdsContainer = findViewById(R.id.ad_container);
-
-        // AdMob App ID: ca-app-pub-9817701892167034~2496155654
-        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AppUtils.hash(androidId).toUpperCase();
-
-        final AdView mAdView = new AdView(getApplicationContext());
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        AdRequest mAdRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(deviceId)
-                .build();
-        mAdView.loadAd(mAdRequest);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        mAdsContainer.addView(mAdView, params);
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/6833120711");
     }
 
     private void initClassListView() {

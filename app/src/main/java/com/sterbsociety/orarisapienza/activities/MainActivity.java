@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         contactFragment.setChangeFragmentListener(this);
         showHomeFragment();
 
-        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-3940256099942544/6300978111");
+        AppUtils.setAdLayout(this, mAdsContainer, "ca-app-pub-9817701892167034/6189339725");
     }
 
     /**
