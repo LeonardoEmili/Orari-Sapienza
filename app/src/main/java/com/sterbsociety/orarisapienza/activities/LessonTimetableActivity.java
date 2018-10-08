@@ -144,31 +144,50 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 // This means that this is a special course
                 if (currentSpecialCourse.size() > 1) {
                     // The special course has more than 1 year|channel|semester
-                    final ArrayList<String> tmpListEntries = new ArrayList<>();
-                    final ArrayList<String> tmpListTypes = new ArrayList<>();
+                    final ArrayList<Integer> entriesHeaders = new ArrayList<>();
+                    final ArrayList<Integer> typesHeaders = new ArrayList<>();
+                    final HashMap<String, ArrayList<String>> tmpListEntries = new HashMap<>();
+                    final HashMap<String, ArrayList<String>> tmpListTypes = new HashMap<>();
                     final String[] listEntries, listTypes;
-                    int lastYear = -1;
                     for (String courseType : currentSpecialCourse.keySet()) {
                         final String[] courseParts = courseType.split("_");
+                        final int currentYear = Character.getNumericValue(courseParts[0].charAt(0));
+                        final String sCurrentYear = String.valueOf(currentYear);
                         final String year = getLiteralYearByNumber(this, courseParts[0]);
-                        final int tmpYear;
                         final String value;
                         if (!courseParts[2].equals("0")) {
                             value = year + getLiteralNumber(this, courseParts[1]) + getStringByLocal(this, R.string.semester) + getStringByLocal(this, R.string.channel) + courseParts[2];
                         } else {
                             value = year + getLiteralNumber(this, courseParts[1]) + getStringByLocal(this, R.string.semester);
                         }
-                        if ((tmpYear = Integer.parseInt(courseParts[0])) > lastYear) {
-                            tmpListEntries.add(value);
-                            tmpListTypes.add(courseType);
-                        } else {
-                            tmpListEntries.add(0, value);
-                            tmpListTypes.add(0, courseType);
+                        if (!entriesHeaders.contains(currentYear)) {
+                            int index = 0;
+                            for (int i = entriesHeaders.size() - 1; i > -1; i--) {
+                                final int keyInt = entriesHeaders.get(i);
+                                if (currentYear > keyInt) {
+                                    index = i + 1;
+                                    break;
+                                }
+                            }
+                            entriesHeaders.add(index, currentYear);
+                            typesHeaders.add(index, currentYear);
+                            tmpListEntries.put(sCurrentYear, new ArrayList<>());
+                            tmpListTypes.put(sCurrentYear, new ArrayList<>());
                         }
-                        lastYear = tmpYear;
+                        tmpListEntries.get(sCurrentYear).add(value);
+                        tmpListTypes.get(sCurrentYear).add(courseType);
+
                     }
-                    listEntries = tmpListEntries.toArray(new String[0]);
-                    listTypes = tmpListTypes.toArray(new String[0]);
+                    final ArrayList<String> tmp = new ArrayList<>();
+                    for (int key : entriesHeaders) {
+                        tmp.addAll(tmpListEntries.get(String.valueOf(key)));
+                    }
+                    listEntries = tmp.toArray(new String[0]);
+                    tmp.clear();
+                    for (int key : typesHeaders) {
+                        tmp.addAll(tmpListTypes.get(String.valueOf(key)));
+                    }
+                    listTypes = tmp.toArray(new String[0]);
                     selectedType = listTypes[0];
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.select_course)
