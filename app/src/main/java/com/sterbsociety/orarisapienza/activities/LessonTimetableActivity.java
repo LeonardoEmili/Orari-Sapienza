@@ -222,25 +222,44 @@ public class LessonTimetableActivity extends AppCompatActivity {
     private void displayRightCourse() {
 
         if (courseTypologies.size() > 1) {
-            final ArrayList<String> tmpListEntries = new ArrayList<>();
-            final ArrayList<String> tmpListTypes = new ArrayList<>();
             final String[] listEntries, listTypes;
-            int lastYear = -1;
+            final ArrayList<Integer> entriesHeaders = new ArrayList<>();
+            final ArrayList<Integer> typesHeaders = new ArrayList<>();
+            final HashMap<String, ArrayList<String>> tmpListEntries = new HashMap<>();
+            final HashMap<String, ArrayList<String>> tmpListTypes = new HashMap<>();
             for (String courseType : courseTypologies) {
-                final int tmpYear;
                 final String[] courseParts = courseType.split("#");
                 final String year = getLiteralYearByNumber(this, courseParts[0]);
-                if ((tmpYear = Character.getNumericValue(courseParts[0].charAt(0))) > lastYear) {
-                    tmpListEntries.add(year + getStringByLocal(this, R.string.channel) + courseParts[1]);
-                    tmpListTypes.add(courseType);
-                } else {
-                    tmpListEntries.add(0, year + getStringByLocal(this, R.string.channel) + courseParts[1]);
-                    tmpListTypes.add(0, courseType);
+                final String value = year + getStringByLocal(this, R.string.channel) + courseParts[1];
+                final int currentYear = Character.getNumericValue(courseParts[0].charAt(0));
+                final String sCurrentYear = String.valueOf(currentYear);
+                if (!entriesHeaders.contains(currentYear)) {
+                    int index = 0;
+                    for (int i = entriesHeaders.size() - 1; i > -1; i--) {
+                        final int keyInt = entriesHeaders.get(i);
+                        if (currentYear > keyInt) {
+                            index = i + 1;
+                            break;
+                        }
+                    }
+                    entriesHeaders.add(index, currentYear);
+                    typesHeaders.add(index, currentYear);
+                    tmpListEntries.put(sCurrentYear, new ArrayList<>());
+                    tmpListTypes.put(sCurrentYear, new ArrayList<>());
                 }
-                lastYear = tmpYear;
+                tmpListEntries.get(sCurrentYear).add(value);
+                tmpListTypes.get(sCurrentYear).add(courseType);
             }
-            listEntries = tmpListEntries.toArray(new String[0]);
-            listTypes = tmpListTypes.toArray(new String[0]);
+            final ArrayList<String> tmp = new ArrayList<>();
+            for (int key : entriesHeaders) {
+                tmp.addAll(tmpListEntries.get(String.valueOf(key)));
+            }
+            listEntries = tmp.toArray(new String[0]);
+            tmp.clear();
+            for (int key : typesHeaders) {
+                tmp.addAll(tmpListTypes.get(String.valueOf(key)));
+            }
+            listTypes = tmp.toArray(new String[0]);
             // This string holds info about courseYear#channel
             selectedType = listTypes[0];
 
