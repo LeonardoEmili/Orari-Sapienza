@@ -70,7 +70,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
 
         if (holder instanceof SpecialViewHolder) {
             // We want to display it as the current element.
-            ((SpecialViewHolder) holder).buildingAddress.setText(AppUtils.getRealBuilding(timeLineModel.getClassroom()).getLocation());
+            ((SpecialViewHolder) holder).buildingName.setText(AppUtils.getRealBuilding(timeLineModel.getClassroom()).name);
         } else if (holder instanceof SimpleViewHolder) {
             // StudyPlanActivity visualization.
             ((SimpleViewHolder) holder).timeLineIndex.setText(String.format(Locale.getDefault(), "%d", SimpleViewHolder.index++));
@@ -98,11 +98,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<BaseTimeLineViewHolder
 
     static class SpecialViewHolder extends BaseTimeLineViewHolder {
 
-        TextView buildingAddress;
+        TextView buildingName;
 
         SpecialViewHolder(@NonNull View itemView) {
             super(itemView);
-            buildingAddress = itemView.findViewById(R.id.timeline_address);
+            buildingName = itemView.findViewById(R.id.timeline_building);
             final ImageView infoButton = itemView.findViewById(R.id.info_building_btn);
             infoButton.setOnClickListener(view -> {
                 final Context context = infoButton.getContext();

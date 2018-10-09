@@ -174,4 +174,24 @@
     <string name="donate_title">Dona</string>
     <string name="donate_desc">Dona e ricevi una versione senza pubblicitá</string>
     <string name="sat">Sab</string>
+    <string name="check_timetables">Come posso controllare gli orari del mio corso?</string>
+    <string name="created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic">Ogni Piano di Studio viene controllato di continuo. Il tuo piano di studio era scaduto.  Puoi crearne uno nuovo ... non rendere triste lo Storm Trooper!</string>
+    <string name="great_job_how_can_i_support_you">Bel lavoro! Come posso supportarvi?</string>
+    <string name="how_can_i_change_the_default_app_language">Come posso cambiare la lingua?</string>
+    <string name="i_m_experiencing_some_problems_with_lesson_timetables_how_can_i_fix_it">Sto avendo dei problemi con gli orari, come posso risolvere?</string>
+    <string name="i_ve_created_a_study_plan_but_now_i_can_t_see_it_anymore_what_is_happening">Ho creato un Piano di studi ma ora non è più attivo. Come mai?</string>
+    <string name="i_ve_found_a_bug_inside_the_app_how_can_i_report_it">Ho trovato un bug. Come posso segnalarlo?</string>
+    <string name="just_go_to_contacts_area_bug_in_this_section_you_can_provide_a_description_of_the_experienced_bug_and_attach_some_meaningful_screenshot">Puoi andare alla sezione Contatti > Bug. Fornisci un descrizione il più accurata possibile, puoi allegare anche screenshot.</string>
+    <string name="just_go_to_settings_and_tap_on_current_language_to_change_it">Vai alle Impostazioni cliccando sulla rotellina in alto a destra. Qui clicca su Lingua corrente per cambiarla.</string>
+    <string name="of_course_all_you_need_to_do_is_click_on_lesson_timetable_button_in_previous_page_and_search_you_course">Tutto quello che devi fare è cliccare su Orario Lezioni e cercare nella barra di ricerca il corso che preferisci!</string>
+    <string name="orari_sapienza_is_a_free_app_but_if_you_want_to_support_us_you_can_do_it_by_going_in_settings_donate_you_will_receive_an_ad_free_version_of_the_app_as_a_thank_from_us">Orari Sapienza è un app gratuita.  Se vuoi supportarci vai nelle impostazioni e clicca su Dona, come bonus riceverai una versione senza pubblicità dell\'app!</string>
+    <string name="our_databases_are_periodically_updated_if_you_think_you_need_an_update_you_can_check_the_entry_automatically_check_for_updates_in_settings_or_force_a_manual_update">I nostri orari sono periodicamente aggiornati. Se ritieni di voler aggiornare i dati allora metti la spunta su \'Controlla automaticamente aggiornamenti\', oppure puoi aggiornare i dati manualmente.</string>
+    <string name="the_indicators_inform_you_about_the_current_state_of_that_particular_classroom">Gli indicatori ti informano sullo stato corrente di un\'aula.</string>
+    <string name="what_are_those_coloured_indicators_in_classroom_list">Cosa sono quegli indicatori in  Elenco Aule?</string>
+    <string name="what_is_a_study_plan">Cos\'è un Piano di studi?</string>
+    <string name="same_study_plan_alert">Stai inviando la stessa richiesta più volte. Sei sicuro?</string>
+    <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">Il piano di studio è un potente strumento per l\'organizzazione dello studio alla Sapienza. Per provarlo basta inserire un luogo e una fascia oraria. Saprai sempre in che aula studiare e a che ora andarci!</string>
+    <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">Il mio professore ha spostato l\'orario della mia lezione di 1 ora, perchè la lezione non è aggiornata nell\'app?</string>
+    <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Gli orari delle lezioni non vengono aggiornati in tempo reale. Aggiorniamo i nostri dati il più possibile, i dati mostrati in app sono le sole lezioni programmate durante l\'anno corrente.</string>
+    <string name="_20_year_old_developer_rome">Sviluppatore, 20 anni. Roma.</string>
 </resources>

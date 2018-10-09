@@ -147,7 +147,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     }
 
     private void initSearchViewLayout() {
-
         searchViewLayout = findViewById(R.id.search_view_container);
         mAdapter = new BuildingListViewAdapter(this, AppUtils.getFavouriteBuildingList());
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticListSupportFragment());
@@ -172,9 +171,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         });
 
         searchViewLayout.setSearchListener(query -> {
+            // Inside here we can do the same search
             searchViewLayout.collapse();
-            // todo add check if query is correct
-            Snackbar.make(searchViewLayout, "User clicked ENTER" + query, Snackbar.LENGTH_LONG).show();
         });
 
         searchViewLayout.setSearchBoxListener(new SearchViewLayout.SearchBoxListener() {
@@ -261,9 +259,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
     }
 
     private void launchStudyPlanActivity() {
-        if (errorDialogMustBeDisplayed) {
-
-        } else {
+        if (!errorDialogMustBeDisplayed) {
             Intent i = new Intent(this, StudyPlanActivity.class);
             i.putExtra(AppUtils.DEFAULT_KEY, studyPlanPresenter);
             startActivityForResult(i, STUDY_PLAN);
@@ -284,7 +280,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
 
     public void useBuildingPosition(Building building) {
         isPlaceSelected = true;
-        setMarker(building.getLat(), building.getLong(), building.hashCode(), building.getName());
+        setMarker(building.getLat(), building.getLong(), building.hashCode(), building.name);
         studyPlanPresenter.setBuilding(building);
         studyPlanPresenter.setGpsLocation(null);
     }

@@ -11,19 +11,26 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 
 public class StudyPlanBuilder {
 
-    private ArrayList<String[]> program = new ArrayList<>();
+    private ArrayList<String[]> program;
     private ArrayList<Building> buildings;
     private Building startBuilding;
+    private StudyPlanPresenter spp;
     private HashMap<String, List<Integer>> dataMatrix;
     private ArrayList<Building> checked, nearby;
+    private int st;
+    private int en;
     public int radius = 500;
 
-    public StudyPlanBuilder(ArrayList<Building> buildings, HashMap<String, List<Integer>> dataMatrix, Building startBuilding) {
+    public StudyPlanBuilder(ArrayList<Building> buildings, HashMap<String, List<Integer>> dataMatrix, StudyPlanPresenter spp) {
         this.buildings = buildings;
         this.dataMatrix = dataMatrix;
         this.checked = new ArrayList<>();
         this.nearby = new ArrayList<>();
-        this.startBuilding = startBuilding;
+        this.program = new ArrayList<>();
+        this.startBuilding = spp.getBuilding();
+        this.spp = spp;
+        this.st = AppUtils.timeToInt(spp.getHours()[0], AppUtils.dayToInt(spp.getDays()[0]));
+        this.en = AppUtils.timeToInt(spp.getHours()[1], AppUtils.dayToInt(spp.getDays()[1]));
     }
 
     public void add(String classroom, String time) {
@@ -38,9 +45,16 @@ public class StudyPlanBuilder {
         return this.program.get(i);
     }
 
-    public void createProgramInt(int start, int end) {
-        fillNearby(startBuilding);
-        findNextRoom(start, end, startBuilding);
+    public void createProgramInt() {
+        if (st > en) {
+            fillNearby(startBuilding);
+            findNextRoom(st, 341, startBuilding);
+            fillNearby(startBuilding);
+            findNextRoom(0, en, startBuilding);
+        } else {
+            fillNearby(startBuilding);
+            findNextRoom(st, en, startBuilding);
+        }
     }
 
     public ArrayList<String[]> getProgram() {
@@ -66,7 +80,7 @@ public class StudyPlanBuilder {
         int max = start, i = start;
         String room = "";
         for (String s : dataMatrix.keySet()) {
-            if (s.startsWith(building.getCode())) {
+            if (s.startsWith(building.code)) {
                 while (i < dataMatrix.get(s).size() && dataMatrix.get(s).get(i) == 0) {
                     i++;
                 }
@@ -113,5 +127,22 @@ public class StudyPlanBuilder {
                 }
             }
         }
+    }
+
+    public String[] getMoment(int i) {
+        String stDate = spp.getStartDate();
+        String enDate = spp.getEndDate();
+        String[] progInd = program.get(i);
+        if (stDate.substring(0, 3).toLowerCase().equals(progInd[3])) {
+            return new String[]{stDate.substring(0, stDate.length() - 5) + progInd[1], stDate.substring(0, stDate.length() - 5) + progInd[2]};
+        } else if (stDate.substring(0, 3).toLowerCase().equals(progInd[0])) {
+            return new String[]{stDate.substring(0, stDate.length() - 5) + progInd[1], enDate.substring(0, stDate.length() - 5) + progInd[2]};
+        } else {
+            return new String[]{enDate.substring(0, stDate.length() - 5) + progInd[1], enDate.substring(0, stDate.length() - 5) + progInd[2]};
+        }
+    }
+
+    public String getClassroomMoment(int i) {
+        return program.get(i)[3];
     }
 }

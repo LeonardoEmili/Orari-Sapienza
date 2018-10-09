@@ -49,9 +49,9 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:paddingStart="@dimen/_6sdp"
                 android:paddingEnd="@dimen/_6sdp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, No plus ultra."
+                android:text="@string/_20_year_old_developer_rome"
                 android:textAlignment="center"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="?attr/textStyle" />
 
         </LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:paddingEnd="@dimen/_6sdp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, No plus ultra."
                 android:textAlignment="center"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="?attr/textStyle" />
 
         </LinearLayout>
 

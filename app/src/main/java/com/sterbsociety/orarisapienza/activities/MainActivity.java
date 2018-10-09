@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.google.android.gms.ads.MobileAds;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
@@ -52,17 +54,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         applyThemeNoActionBar(MainActivity.this);
         setLocale(MainActivity.this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         if (isDBAvailable(this)) {
-            parseDatabase(this);
+            AsyncTask.execute(() -> parseDatabase(this));
         } else {
-            new Handler().postDelayed(() -> {
-                StyleableToast.makeText(this, getResources().getString(R.string.some_errors_occured),
-                        Toast.LENGTH_LONG, R.style.errorToast).show();
-            }, 200);
+            StyleableToast.makeText(this, getResources().getString(R.string.some_errors_occured),
+                    Toast.LENGTH_LONG, R.style.errorToast).show();
+            new Handler().postDelayed(this::finish, 400);
         }
         initActivity();
 
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));

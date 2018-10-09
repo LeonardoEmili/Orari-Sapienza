@@ -224,6 +224,25 @@
     <string name="donate_desc">Donate and get an ad-free version of the App.</string>
     <string name="sat">Sat</string>
     <string name="same_study_plan_alert">You are submitting the same study plan request as before, are you sure?</string>
+    <string name="what_is_a_study_plan">What is a study plan?</string>
+    <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">The study plan is a powerful tool which helps you when you want to study at Sapienza. To obtain one simply ask for a place and a time and you will always know in which classroom to study and at what time!</string>
+    <string name="check_timetables">How can I check my course timetables?</string>
+    <string name="of_course_all_you_need_to_do_is_click_on_lesson_timetable_button_in_previous_page_and_search_you_course">All you need to do is click on Lesson Timetable button in previous page and search you course.</string>
+    <string name="what_are_those_coloured_indicators_in_classroom_list">What are those coloured indicators in Classroom list?</string>
+    <string name="the_indicators_inform_you_about_the_current_state_of_that_particular_classroom">The indicators inform you about the current state of that particular classroom.</string>
+    <string name="i_ve_found_a_bug_inside_the_app_how_can_i_report_it">I\'ve found a bug inside the app. How can I report it?</string>
+    <string name="just_go_to_contacts_area_bug_in_this_section_you_can_provide_a_description_of_the_experienced_bug_and_attach_some_meaningful_screenshot">Just go to Contacts area > Bug. In this section you can provide a description of the experienced bug, you can also attach some screenshot.</string>
+    <string name="great_job_how_can_i_support_you">Great job! How can I support you?</string>
+    <string name="orari_sapienza_is_a_free_app_but_if_you_want_to_support_us_you_can_do_it_by_going_in_settings_donate_you_will_receive_an_ad_free_version_of_the_app_as_a_thank_from_us">Orari Sapienza is a free app. If you want to support us you can do it by going in Settings > Donate. You will receive an ad-free version of the App as a thank from us.</string>
+    <string name="how_can_i_change_the_default_app_language">How can I change the default app language?</string>
+    <string name="just_go_to_settings_and_tap_on_current_language_to_change_it">Just go to Settings and tap on Current language to change it.</string>
+    <string name="i_m_experiencing_some_problems_with_lesson_timetables_how_can_i_fix_it">I\'m experiencing some problems with lesson timetables, how can I fix it?</string>
+    <string name="our_databases_are_periodically_updated_if_you_think_you_need_an_update_you_can_check_the_entry_automatically_check_for_updates_in_settings_or_force_a_manual_update">Our databases are periodically updated. If you think you need an update you can check the entry \'Automatically check for updates\' in Settings or force a manual update.</string>
+    <string name="i_ve_created_a_study_plan_but_now_i_can_t_see_it_anymore_what_is_happening">I\'ve created a Study Plan but now I can\'t see it anymore. What is happening?</string>
+    <string name="created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic">Every Study Plan is constantly validated. It means that the plan has expired. You may want to create another one ... don\'t make the Storm Trooper sad!</string>
+    <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">My professor moved the lesson to 1 hour later, why isn\'t the lesson updated inside the app?</string>
+    <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Lesson timetables are not updated in real time. They are updated as often as possible, timetables shown inside the app come from scheduled lessons for the current year.</string>
+    <string name="_20_year_old_developer_rome">20 year old developer, Rome.</string>
 
 
 </resources>

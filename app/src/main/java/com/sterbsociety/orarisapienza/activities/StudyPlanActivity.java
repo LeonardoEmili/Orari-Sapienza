@@ -32,6 +32,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.MATRIX;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.dayToInt;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getBuildingList;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroom;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveStudyPlan;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.timeToInt;
@@ -81,7 +82,20 @@ public class StudyPlanActivity extends AppCompatActivity {
     }
 
     private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
+        studyPlan = new StudyPlan();
+        final StudyPlanBuilder spBuilder = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter);
+        final List<TimeLineModel> dataList = new ArrayList<>();
+        spBuilder.createProgramInt();
+        for (int i = 0; i < spBuilder.getProgram().size(); i++) {
+            if (!TextUtils.isEmpty(spBuilder.getProgram().get(i)[3])) {
+                dataList.add(new TimeLineModel(spBuilder.getMoment(i)[0], spBuilder.getMoment(i)[1], getClassroom(spBuilder.getClassroomMoment(i))));
+            }
+        }
+        studyPlan.setDataList(dataList);
+        studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
+    }
 
+    /*private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
         studyPlan = new StudyPlan();
         final StudyPlanBuilder utilitySPB;
         final StudyPlanBuilder spBuilder = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter.getBuilding());
@@ -104,7 +118,7 @@ public class StudyPlanActivity extends AppCompatActivity {
         }
         studyPlan.setDataList(dataList);
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
-    }
+    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

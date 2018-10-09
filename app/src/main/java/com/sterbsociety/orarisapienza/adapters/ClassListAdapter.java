@@ -62,7 +62,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         final Iterator<Classroom> iterator = list.iterator();
         while (iterator.hasNext()) {
             final Classroom classroom = iterator.next();
-            final String buildingName = getRealBuilding(classroom).getName().toLowerCase();
+            final String buildingName = getRealBuilding(classroom).name.toLowerCase();
             if (!classroom.getName().toLowerCase().contains(lowerCaseQuery)
                     && !buildingName.contains(lowerCaseQuery) && classroom.getCode().contains(lowerCaseQuery)) {
                 iterator.remove();
@@ -82,8 +82,8 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         }
         for (Classroom model : backupList) {
             final Building building = getRealBuilding(model);
-            if (model.getName().toLowerCase().contains(lowerCaseQuery) || building.getName().toLowerCase().contains(lowerCaseQuery)
-                    || building.getCode().toLowerCase().contains(lowerCaseQuery)) {
+            if (model.getName().toLowerCase().contains(lowerCaseQuery) || building.code.toLowerCase().contains(lowerCaseQuery)
+                    || building.code.toLowerCase().contains(lowerCaseQuery)) {
                 mDataList.add(model);
             }
         }
@@ -228,7 +228,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
             holder.background.setColor(redColor);
         }
         holder.classroom.setText(classroom.getName());
-        holder.building.setText(getRealBuilding(classroom).getName());
+        holder.building.setText(getRealBuilding(classroom).name);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

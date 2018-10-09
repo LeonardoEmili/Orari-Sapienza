@@ -230,7 +230,7 @@ public class AppUtils {
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(screenWidth, View.MeasureSpec.EXACTLY);
 
         view.measure(widthMeasureSpec, heightMeasureSpec);
-        view.getLayoutParams().height = view.getMeasuredHeight();
+        view.getLayoutParams().height = view.getMeasuredHeight() + 50;
     }
 
     private static final String KEY_PREF_DONATION_ACTIVE = "donation_pref";
@@ -335,7 +335,7 @@ public class AppUtils {
         try {
             for (TimeLineModel model : studyPlan.getDataList()) {
                 int buildingIndex = model.getClassroom().getBuildingIndex();
-                if (!buildingList.get(buildingIndex).getCode().equals(model.getClassroom().getBuildingCode())) {
+                if (!buildingList.get(buildingIndex).code.equals(model.getClassroom().getBuildingCode())) {
                     clearCachedStudyPlan(activity);
                     StyleableToast.makeText(activity, getStringByLocal(activity, R.string.study_plan_corrupt),
                             Toast.LENGTH_LONG, R.style.errorToast).show();
@@ -355,7 +355,7 @@ public class AppUtils {
 
     public static void addBuildingToFavourites(Activity activity, Building building, int index) {
 
-        final String buildingCode = building.getCode();
+        final String buildingCode = building.code;
 
         // todo may be useful to limit user history max to 10 or less
         if (!isFavouriteBuilding(buildingCode)) {
@@ -840,7 +840,6 @@ public class AppUtils {
             // Here we could put a message to promote our app.
             // The line below removes the 'inactive' ad.
             ((ViewGroup) adContainer.getParent()).removeView(adContainer);
-
         } else {
             // AdMob App ID: ca-app-pub-9817701892167034~2496155654
             AdView mAdView = new AdView(activity.getApplicationContext());
@@ -1044,11 +1043,11 @@ public class AppUtils {
 
         // Note that Iterator.remove() is the only safe way to modify a collection during iteration
         // DOCS at: http://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
-        Iterator<Building> iterator = resultList.iterator();
+        final Iterator<Building> iterator = resultList.iterator();
         while (iterator.hasNext()) {
             Building building = iterator.next();
-            if (isFavouriteBuilding(building.getCode())) {
-                tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.getCode())] = building;
+            if (isFavouriteBuilding(building.code)) {
+                tmpFavourites[cleanSortedFavouriteCodes.indexOf(building.code)] = building;
                 iterator.remove();
             }
         }
@@ -1080,8 +1079,8 @@ public class AppUtils {
         classroomList = new ArrayList<>();
         for (int i = 0; i < buildingList.size(); i++) {
             final Building building = buildingList.get(i);
-            for (int j = 0; j < building.getAule().size(); j++) {
-                final Classroom POJOClassroom = building.getAule().get(j);
+            for (int j = 0; j < building.aule.size(); j++) {
+                final Classroom POJOClassroom = building.aule.get(j);
                 classroomList.add(new Classroom(POJOClassroom.getName(), POJOClassroom.getCode(), POJOClassroom.getSits(), building, i));
             }
         }
@@ -1182,8 +1181,8 @@ public class AppUtils {
         final String myBuildingCode = code.split("-")[0];
         final String myClassCode = code.split("-")[1];
         for (Building b : AppUtils.getBuildingList()) {
-            if (myBuildingCode.equals(b.getCode())) {
-                for (Classroom c : b.getAule()) {
+            if (myBuildingCode.equals(b.code)) {
+                for (Classroom c : b.aule) {
                     if (myClassCode.equals(c.getCode())) {
                         return c.getName();
                     }

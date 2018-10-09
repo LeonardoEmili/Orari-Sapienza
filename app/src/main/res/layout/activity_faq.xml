@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -31,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Come faccio a vedere gli orari di ogni aula?"
+                    android:text="@string/what_is_a_study_plan"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -51,8 +51,9 @@
                 android:id="@+id/first_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -61,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Puoi trovare tutte le info nelle sezioni X e Y."
+                    android:text="@string/a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -70,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -82,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Cosa ne pensate di Sterbini?"
+                    android:text="@string/check_timetables"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -91,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -100,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Powerful."
+                    android:text="@string/of_course_all_you_need_to_do_is_click_on_lesson_timetable_button_in_previous_page_and_search_you_course"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -109,6 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -121,7 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Dove posso trovare le carammelle rare in Pokémon smeraldo?"
+                    android:text="@string/what_are_those_coloured_indicators_in_classroom_list"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -130,7 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -139,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Sono nascoste in alcune grotte o cespugli della regione di Hinnoh."
+                    android:text="@string/the_indicators_inform_you_about_the_current_state_of_that_particular_classroom"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -148,6 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -160,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Come posso supportavi?"
+                    android:text="@string/i_ve_found_a_bug_inside_the_app_how_can_i_report_it"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -169,7 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -178,7 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Dobbiamo inserire una sezione per le donazioni."
+                    android:text="@string/just_go_to_contacts_area_bug_in_this_section_you_can_provide_a_description_of_the_experienced_bug_and_attach_some_meaningful_screenshot"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -187,6 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -199,7 +207,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Come posso segnalare dei bug trovati nell'app?"
+                    android:text="@string/great_job_how_can_i_support_you"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -208,7 +216,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -217,7 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="All'interno della sezione contattaci troverai la pagina dedicata."
+                    android:text="@string/orari_sapienza_is_a_free_app_but_if_you_want_to_support_us_you_can_do_it_by_going_in_settings_donate_you_will_receive_an_ad_free_version_of_the_app_as_a_thank_from_us"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -226,6 +235,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -238,7 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Che altre faq possiamo inserire?"
+                    android:text="@string/how_can_i_change_the_default_app_language"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -247,7 +257,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -256,7 +267,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Fabio avrá la risposta anche per questo."
+                    android:text="@string/just_go_to_settings_and_tap_on_current_language_to_change_it"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -265,6 +276,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -277,7 +289,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Come posso leggere la risposta a questa domanda?"
+                    android:text="@string/i_m_experiencing_some_problems_with_lesson_timetables_how_can_i_fix_it"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -286,7 +298,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_38sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -295,7 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Mitico."
+                    android:text="@string/our_databases_are_periodically_updated_if_you_think_you_need_an_update_you_can_check_the_entry_automatically_check_for_updates_in_settings_or_force_a_manual_update"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 
@@ -304,6 +317,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -316,7 +330,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Che senso ha la domanda qui sopra?"
+                    android:text="@string/i_ve_created_a_study_plan_but_now_i_can_t_see_it_anymore_what_is_happening"
                     android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
@@ -325,7 +339,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="42dp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -334,7 +349,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:text="Eh, boh."
+                    android:text="@string/created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic"
+                    android:textColor="?attr/textStyle" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ninth_q"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_show_more" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:text="@string/my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app"
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ninth_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:text="@string/lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester"
                     android:textColor="?attr/textStyle" />
             </LinearLayout>
 

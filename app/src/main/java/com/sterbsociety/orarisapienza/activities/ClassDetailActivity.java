@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,8 +83,8 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         mainBuilding = getRealBuilding(classroom);
 
         className.setText(classroom.getName());
-        buildingName.setText(mainBuilding.getName());
-        buildingAddress.setText(mainBuilding.getLocation());
+        buildingName.setText(mainBuilding.name);
+        buildingAddress.setText(mainBuilding.address);
 
         // We retrieve the index of the current / most close in future lesson in this classroom
         int scrollIndex = AppUtils.getCurrentTimeToInt();
@@ -92,6 +93,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         if (lessonIndex == 0) {
             // Then the classroom is available
             classStatus.setText(R.string.available);
+            classStatus.setTextColor(getResources().getColor(R.color.green_normal));
             currentLesson.setVisibility(View.GONE);
             classTimetable.setVisibility(View.GONE);
             lesson.setVisibility(View.GONE);
@@ -101,8 +103,8 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         } else {
             final String[] lessonParts = AppUtils.LESSON_LIST.get(lessonIndex).split("_");
             classStatus.setText(R.string.occupied);
-            currentLesson.setText(lessonParts[2]);
-            currentProfessor.setText(lessonParts[4]);
+            currentLesson.setText(lessonParts[2].trim());
+            currentProfessor.setText(lessonParts[4].trim());
             final String startHour = getHourByIndex(scrollIndex);
             while (scrollIndex != WEEK_LENGTH && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
@@ -180,7 +182,7 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         mapView.addMarker(new AirMapMarker.Builder()
                 .id(mainBuilding.hashCode())
                 .position(latLng)
-                .title(mainBuilding.getName())
+                .title(mainBuilding.name)
                 .iconId(R.drawable.ic_location_pin)
                 .build());
         mapView.animateCenterZoom(latLng, 16);

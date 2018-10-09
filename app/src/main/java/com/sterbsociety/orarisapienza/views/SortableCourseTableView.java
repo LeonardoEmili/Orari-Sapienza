@@ -38,8 +38,8 @@ public class SortableCourseTableView extends SortableTableView<Lesson> {
         setHeaderSortStateViewProvider(SortStateViewProviders.brightArrows());
 
         final TableColumnWeightModel tableColumnWeightModel = new TableColumnWeightModel(3);
-        tableColumnWeightModel.setColumnWeight(0, 9);
-        tableColumnWeightModel.setColumnWeight(1, 12);
+        tableColumnWeightModel.setColumnWeight(0, 8);
+        tableColumnWeightModel.setColumnWeight(1, 13);
         tableColumnWeightModel.setColumnWeight(2, 9);
         setColumnModel(tableColumnWeightModel);
 

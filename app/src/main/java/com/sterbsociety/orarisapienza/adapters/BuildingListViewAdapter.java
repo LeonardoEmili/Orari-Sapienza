@@ -59,14 +59,14 @@ public class BuildingListViewAdapter extends ArrayAdapter<Building> {
 
         // this has to be changed to building code, since we check favourites with codes
         // we have to retrieve also the building code.
-        if (AppUtils.isFavouriteBuilding(building.getCode())) {
+        if (AppUtils.isFavouriteBuilding(building.code)) {
             viewHolder.imageView.setImageDrawable(historyImg);
         } else {
             viewHolder.imageView.setImageDrawable(searchImg);
         }
 
-        viewHolder.buildingName.setText(building.getName());
-        viewHolder.buildingDetails.setText(building.getLocation());
+        viewHolder.buildingName.setText(building.code);
+        viewHolder.buildingDetails.setText(building.address);
         return convertView;
     }
 
@@ -77,12 +77,11 @@ public class BuildingListViewAdapter extends ArrayAdapter<Building> {
 
         if (lowerCaseQuery.trim().equals("")) {
             mDataList.addAll(AppUtils.getFavouriteBuildingList());
-
         } else {
             final List<Building> dataList = AppUtils.getBuildingList();
             for (Building building : dataList) {
                 // here we could add filter by location (street)
-                if (building.getName().toLowerCase().contains(lowerCaseQuery)) {
+                if (building.name.toLowerCase().contains(lowerCaseQuery)) {
                     mDataList.add(building);
                 }
             }

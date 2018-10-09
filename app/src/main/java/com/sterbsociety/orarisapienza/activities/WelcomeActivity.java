@@ -166,7 +166,6 @@ public class WelcomeActivity extends AppCompatActivity {
      * This method allows the user to login into the DB.
      */
     private void getAuthentication() {
-
         if (NetworkStatus.getInstance().isOnline(this)) {
             mAuth.signInAnonymously().addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()) {
@@ -181,7 +180,6 @@ public class WelcomeActivity extends AppCompatActivity {
      * and does a login-attempt every 2 sec until the user is authenticated.
      */
     private void authUser() {
-
         onlineDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 

@@ -24,7 +24,7 @@ public class Classroom implements Parcelable {
 
     public Classroom(String name, String code, int sits, Building building) {
         this(name, code, sits);
-        this.buildingCode = building.getCode();
+        this.buildingCode = building.code;
     }
 
     public Classroom(String name, String code, int sits) {

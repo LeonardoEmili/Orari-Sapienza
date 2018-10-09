@@ -59,7 +59,7 @@ public class SearchStaticListSupportFragment extends Fragment {
             final Building building = mAdapter.getItem(position);
             if (building != null) {
                 mapsActivity.useBuildingPosition(building);
-                searchViewLayout.setCollapsedHint(building.getName());
+                searchViewLayout.setCollapsedHint(building.name);
                 mapsActivity.clearButton.setVisibility(View.VISIBLE);
                 addBuildingToFavourites(mapsActivity, building, position);
             }

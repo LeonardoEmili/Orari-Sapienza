@@ -21,7 +21,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class FaqActivity extends AppCompatActivity {
 
-    private static final int FAQ_ENTRIES = 8;
+    private static final int FAQ_ENTRIES = 9;
     private static final int ANIMATION_DURATION = 200;
     private static final int COLLAPSE_ACTION = 1;
     private static final int EXPAND_ACTION = 0;
@@ -34,7 +34,6 @@ public class FaqActivity extends AppCompatActivity {
         setLocale(FaqActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
-
         initActivity();
     }
 
@@ -68,10 +67,10 @@ public class FaqActivity extends AppCompatActivity {
         // From here is code for setting up the Q&A list
         ArrayList<View> questionList = new ArrayList<>(Arrays.asList(findViewById(R.id.first_q), findViewById(R.id.second_q), findViewById(R.id.third_q),
                 findViewById(R.id.fourth_q), findViewById(R.id.fifth_q), findViewById(R.id.sixth_q),
-                findViewById(R.id.seventh_q), findViewById(R.id.eighth_q)));
+                findViewById(R.id.seventh_q), findViewById(R.id.eighth_q), findViewById(R.id.ninth_q)));
         ArrayList<View> answerList =  new ArrayList<>(Arrays.asList(findViewById(R.id.first_a), findViewById(R.id.second_a), findViewById(R.id.third_a),
                 findViewById(R.id.fourth_a), findViewById(R.id.fifth_a), findViewById(R.id.sixth_a),
-                findViewById(R.id.seventh_a), findViewById(R.id.eighth_a)));
+                findViewById(R.id.seventh_a), findViewById(R.id.eighth_a), findViewById(R.id.ninth_a)));
 
         for (int i = 0; i < questionList.size(); i++) {
 

@@ -137,6 +137,7 @@ public class CurrentPlanActivity extends AppCompatActivity {
             final Date currentDate = new Date();
             for (int i = 0; i < dataList.size(); i++) {
                 final TimeLineModel lineModel = dataList.get(i);
+                System.out.println(currentDate);
                 if (currentDate.before(simpleDateFormat.parse(lineModel.getEndDate()))) {
                     return i;
                 }
