@@ -42,6 +42,13 @@ public class FavouritesActivity extends AppCompatActivity implements SwipeItemCl
     private SwipeMenuRecyclerView mRecyclerView;
     protected ClassListAdapter mAdapter;
     protected ArrayList<Classroom> mDataList, backupList;
+    private boolean isBuildingClickable;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isBuildingClickable = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +149,11 @@ public class FavouritesActivity extends AppCompatActivity implements SwipeItemCl
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Intent i = new Intent(this, ClassDetailActivity.class);
-        i.putExtra(DEFAULT_KEY, backupList.get(position));
-        startActivity(i);
+        if (isBuildingClickable) {
+            isBuildingClickable = false;
+            Intent i = new Intent(this, ClassDetailActivity.class);
+            i.putExtra(DEFAULT_KEY, backupList.get(position));
+            startActivity(i);
+        }
     }
 }

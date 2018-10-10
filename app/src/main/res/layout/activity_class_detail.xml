@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/_14sdp"
                     android:paddingEnd="@dimen/_5sdp"
-                    android:text="@string/_time"
+                    android:text="@string/professor"
                     android:textColor="@color/coolBlack"
                     android:textSize="@dimen/_15sdp" />
 

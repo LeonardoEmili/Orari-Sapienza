@@ -129,12 +129,12 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
             int scrollIndex = minIndex;
             final Classroom classroom = iterator.next();
             final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());
-            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) == 0) {
+            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) != 0) {
                 iterator.remove();
             } else {
                 boolean toBeRemoved = false;
                 while (scrollIndex <= maxIndex) {
-                    if (lessonList.get(scrollIndex) == 0) {
+                    if (lessonList.get(scrollIndex) != 0) {
                         toBeRemoved = true;
                         break;
                     }
@@ -155,12 +155,12 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
             int scrollIndex = minIndex;
             final Classroom classroom = iterator.next();
             final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());
-            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) != 0) {
+            if (scrollIndex > maxIndex || lessonList.get(scrollIndex) == 0) {
                 iterator.remove();
             } else {
                 boolean toBeRemoved = false;
                 while (scrollIndex <= maxIndex) {
-                    if (lessonList.get(scrollIndex) != 0) {
+                    if (lessonList.get(scrollIndex) == 0) {
                         toBeRemoved = true;
                         break;
                     }

@@ -105,14 +105,14 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             classStatus.setText(R.string.occupied);
             currentLesson.setText(lessonParts[2].trim());
             currentProfessor.setText(lessonParts[4].trim());
-            final String startHour = getHourByIndex(scrollIndex);
+            final String startHour = getHourByIndex(scrollIndex + 1);
             while (scrollIndex != WEEK_LENGTH && lessonList.get(scrollIndex) == lessonIndex) {
                 scrollIndex++;
             }
             if (scrollIndex >= WEEK_LENGTH) {
                 scrollIndex = WEEK_LENGTH - 1;
             }
-            classTimetable.setText(getString(R.string.lesson_timetable, startHour, getHourByIndex(scrollIndex)));
+            classTimetable.setText(getString(R.string.lesson_timetable, startHour, getHourByIndex(scrollIndex + 1)));
             // UX stuff - This is responsible for aligning lesson to its relative currentLesson
             ViewTreeObserver viewTreeObserver = currentLesson.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {

@@ -194,4 +194,5 @@
     <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">Il mio professore ha spostato l\'orario della mia lezione di 1 ora, perchè la lezione non è aggiornata nell\'app?</string>
     <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Gli orari delle lezioni non vengono aggiornati in tempo reale. Aggiorniamo i nostri dati il più possibile, i dati mostrati in app sono le sole lezioni programmate durante l\'anno corrente.</string>
     <string name="_20_year_old_developer_rome">Sviluppatore, 20 anni. Roma.</string>
+    <string name="professor">Prof:</string>
 </resources>

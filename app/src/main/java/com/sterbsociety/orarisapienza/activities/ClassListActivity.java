@@ -47,6 +47,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     protected ClassListAdapter mAdapter;
     private static Location lastLocation;
     private String lastQuery = "";
+    private boolean isBuildingClickable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     @Override
     protected void onResume() {
         super.onResume();
+        isBuildingClickable = true;
         mAdapter.notifyDataSetChanged();
     }
 
@@ -187,9 +189,12 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Intent i = new Intent(this, ClassDetailActivity.class);
-        i.putExtra(AppUtils.DEFAULT_KEY, mAdapter.getClassroom(position));
-        startActivity(i);
+        if (isBuildingClickable) {
+            isBuildingClickable = false;
+            Intent i = new Intent(this, ClassDetailActivity.class);
+            i.putExtra(AppUtils.DEFAULT_KEY, mAdapter.getClassroom(position));
+            startActivity(i);
+        }
     }
 
     public static void setLastLocation(@NonNull Location location) {
