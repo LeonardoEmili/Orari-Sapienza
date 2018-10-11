@@ -84,7 +84,7 @@
             android:layout_gravity="center_horizontal"
             android:foreground="?android:attr/selectableItemBackground"
             android:background="@color/picker_button_background_selected"
-            android:text="SET STUDY TIME" />
+            android:text="@string/set_study_time" />
 
     </LinearLayout>
 </FrameLayout>

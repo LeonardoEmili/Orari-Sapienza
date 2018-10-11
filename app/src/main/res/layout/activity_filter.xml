@@ -65,10 +65,10 @@
 
         <TextView
             android:id="@+id/mon"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
             android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"
@@ -79,10 +79,10 @@
 
         <TextView
             android:id="@+id/tue"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"
@@ -93,10 +93,10 @@
 
         <TextView
             android:id="@+id/wed"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"
@@ -107,10 +107,10 @@
 
         <TextView
             android:id="@+id/thu"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"
@@ -121,10 +121,10 @@
 
         <TextView
             android:id="@+id/fri"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"
@@ -135,10 +135,10 @@
 
         <TextView
             android:id="@+id/sat"
-            android:layout_width="@dimen/_44sdp"
+            android:layout_width="@dimen/_41sdp"
             android:layout_height="@dimen/_36sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:background="@drawable/back_gray_rounded"
             android:clickable="true"
             android:focusable="true"

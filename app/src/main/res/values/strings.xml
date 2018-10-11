@@ -244,6 +244,7 @@
     <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Lesson timetables are not updated in real time. They are updated as often as possible, timetables shown inside the app come from scheduled lessons for the current year.</string>
     <string name="_20_year_old_developer_rome">20 year old developer, Rome.</string>
     <string name="professor">Prof:</string>
+    <string name="search_classroom">Search classroom</string>
 
 
 </resources>

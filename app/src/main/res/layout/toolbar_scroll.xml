@@ -35,7 +35,7 @@
             android:layout_height="?attr/actionBarSize"
             android:focusable="false"
             app:iconifiedByDefault="false"
-            app:queryHint="Search classroom" />
+            app:queryHint="@string/search_classroom" />
 
         <ImageView
             android:layout_width="wrap_content"

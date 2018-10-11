@@ -27,7 +27,6 @@ import com.airbnb.android.airmapview.listeners.OnMapInitializedListener;
 import com.bumptech.glide.Glide;
 import com.github.florent37.rxgps.RxGps;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.snackbar.Snackbar;
 import com.sterbsociety.orarisapienza.views.MyDoubleDateAndTimePickerDialog;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.BuildingListViewAdapter;
@@ -47,6 +46,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getBestDates;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getStringByLocal;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
