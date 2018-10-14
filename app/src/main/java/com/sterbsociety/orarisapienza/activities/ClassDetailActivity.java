@@ -25,6 +25,8 @@ import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.WEEK_LENGTH;
@@ -90,7 +92,9 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
         int scrollIndex = AppUtils.getCurrentTimeToInt();
         final List<Integer> lessonList = AppUtils.MATRIX.get(classroom.getFullCode());  // List with integers
         final int lessonIndex = lessonList.get(scrollIndex);
-        if (lessonIndex == 0) {
+        final Date now = new Date();
+        if (lessonIndex == 0 || Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+                || now.before(AppUtils.getMinHour()) || now.after(AppUtils.getMaxHour())) {
             // Then the classroom is available
             classStatus.setText(R.string.available);
             classStatus.setTextColor(getResources().getColor(R.color.green_normal));

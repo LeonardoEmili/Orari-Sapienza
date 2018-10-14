@@ -14,6 +14,7 @@ import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     private static Set<String> mClassFavourites;
     private static Drawable starImg;
     private int redColor, greenColor, blackColor;
-    private int currentTimeIndex;
+    private int currentTimeIndex, currentDay;
     private Date now;
 
     public ClassListAdapter(Context context) {
@@ -49,6 +50,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         blackColor = context.getResources().getColor(R.color.coolBlack);
         mDataList = new ArrayList<>();
         currentTimeIndex = AppUtils.getCurrentTimeToInt();
+        currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         now = new Date();
     }
 
@@ -218,7 +220,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         }
         final Date minHour = AppUtils.getMinHour();
         final Date maxHour = AppUtils.getMaxHour();
-        if (now.before(minHour) || now.after(maxHour)) {
+        if (now.before(minHour) || now.after(maxHour) || currentDay   == Calendar.SUNDAY) {
             holder.background.setColor(blackColor);
         } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
             // Classroom is now empty

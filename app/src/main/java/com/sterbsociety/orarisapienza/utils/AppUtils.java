@@ -1370,16 +1370,13 @@ public class AppUtils {
         final Date now = new Date();
         final Date maxHour = getMaxHour();
         final Date minHour = getMinHour();
-        if (now.before(minHour) || now.after(maxHour)) {
+        final int day = calendar.get(Calendar.DAY_OF_WEEK);
+        if (now.before(minHour) || now.after(maxHour) || day == Calendar.SUNDAY) {
             calendar.set(Calendar.HOUR_OF_DAY, MIN_HOUR);
             calendar.set(Calendar.MINUTE, 0);
-            if (now.after(maxHour)) {
+            if (now.after(maxHour) || day == Calendar.SUNDAY) {
                 calendar.add(Calendar.DAY_OF_WEEK, 1);
             }
-        }
-        final int day = calendar.get(Calendar.DAY_OF_WEEK);
-        if (day == Calendar.SUNDAY) {
-            calendar.add(Calendar.DAY_OF_WEEK, 1);
         }
         final Date startDate = calendar.getTime();
         calendar.add(Calendar.HOUR_OF_DAY, 4);
