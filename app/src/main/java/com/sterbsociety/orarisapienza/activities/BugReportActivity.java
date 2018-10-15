@@ -114,7 +114,7 @@ public class BugReportActivity extends AppCompatActivity {
 
         attachImageListener = view -> AppUtils.pickImage(BugReportActivity.this);
 
-        removeImageListener = view -> showAlertDialog(view);
+        removeImageListener = this::showAlertDialog;
 
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);

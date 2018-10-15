@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +36,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.isCurrentDatabaseOut
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.moveDatabaseFromRawToInternalStorage;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -59,25 +59,19 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         initBaseActivity();
-
-        MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
-
-        if (isFirstTimeStartApp = (isFirstTimeStartApp())) {
+        databaseExists = isDBAvailable(this);
+        if (!databaseExists || (isFirstTimeStartApp = isFirstTimeStartApp())) {
             setTheme(R.style.AppTheme_NoActionBar);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_welcome);
             initWelcomeActivity();
-
-        } else if (databaseExists) {
-            super.onCreate(savedInstanceState);
-            if (!AppUtils.areUpdatesAllowed() || !NetworkStatus.getInstance().isOnline(this)) {
-                startMainActivity();
-            }
         } else {
             super.onCreate(savedInstanceState);
-            // From API 21 it's allowed, this will make the status bar transparent
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            mProgressDialog.show();
+            if (areUpdatesAllowed() && NetworkStatus.getInstance().isOnline(this)) {
+                authUser();
+            } else {
+                startMainActivity();
+            }
         }
     }
 
@@ -85,9 +79,6 @@ public class WelcomeActivity extends AppCompatActivity {
      * This utility method is responsible for the basic setup of this activity.
      */
     private void initBaseActivity() {
-
-        // This is a flag used for checking if the DB exists in local storage.
-        databaseExists = isDBAvailable(this);
 
         loadSettings(this);
         setLocale(this);
@@ -105,6 +96,9 @@ public class WelcomeActivity extends AppCompatActivity {
                         onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
                         databaseExists = false;
                         mProgressDialog.show();
+                        if (!NetworkStatus.getInstance().isOnline(WelcomeActivity.this)) {
+                            mProgressDialog.setMessage(getResources().getString(R.string.updating_turn_on_connection));
+                        }
                         updateDatabase();
                     } else {
                         startMainActivity();
@@ -144,9 +138,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 Log.d(TAG, databaseError.getMessage());
             }
         };
-        if (areUpdatesAllowed()) {
-            authUser();
-        }
     }
 
     /**
@@ -155,6 +146,9 @@ public class WelcomeActivity extends AppCompatActivity {
      * Visit DOC at: https://firebase.google.com/docs/database/admin/retrieve-data
      */
     private void updateDatabase() {
+        if (isFirstTimeStartApp) {
+            return;
+        }
         if (databaseExists) {
             onlineDatabase.child(KEY_VERSION).addValueEventListener(versionControlListener);
         } else {
@@ -216,9 +210,11 @@ public class WelcomeActivity extends AppCompatActivity {
         mButton = findViewById(R.id.skip_button);
 
         sliderAdapter = new SliderAdapter(WelcomeActivity.this);
-
         mSlideViewPager.setAdapter(sliderAdapter);
         addDotsIndicator(0);
+
+        AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(this));
+        databaseExists = true;
 
         ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -283,6 +279,7 @@ public class WelcomeActivity extends AppCompatActivity {
         AppUtils.setFirstTimeStartApp(this);
         mProgressDialog.dismiss();
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 
@@ -291,6 +288,9 @@ public class WelcomeActivity extends AppCompatActivity {
         if (databaseExists) {
             startMainActivity();
         } else {
+            if (!NetworkStatus.getInstance().isOnline(this)) {
+                mProgressDialog.setMessage(getResources().getString(R.string.updating_turn_on_connection));
+            }
             mProgressDialog.show();
         }
     }

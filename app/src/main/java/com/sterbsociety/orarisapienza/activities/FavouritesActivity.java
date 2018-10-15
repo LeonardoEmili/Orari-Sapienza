@@ -9,15 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
 import com.sterbsociety.orarisapienza.models.Classroom;

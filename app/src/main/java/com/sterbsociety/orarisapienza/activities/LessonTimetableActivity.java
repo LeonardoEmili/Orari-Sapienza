@@ -40,7 +40,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -66,8 +65,9 @@ public class LessonTimetableActivity extends AppCompatActivity {
     private MaterialSearchView searchView;
     private static List<List<Lesson>> scheduledLessons;
     private Set<String> courseTypologies;
-    private String selectedType;
+    private boolean[] selectedType;
     private PDFDownloadTask pdfDownloadTask;
+    private String currentSelectedType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,18 +188,18 @@ public class LessonTimetableActivity extends AppCompatActivity {
                         tmp.addAll(tmpListTypes.get(String.valueOf(key)));
                     }
                     listTypes = tmp.toArray(new String[0]);
-                    selectedType = listTypes[0];
+                    currentSelectedType = listTypes[0];
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.select_course)
                             .setSingleChoiceItems(listEntries, 0, (dialogInterface, which) -> {
-                                selectedType = listTypes[which];
+                                currentSelectedType = listTypes[which];
                             })
                             .setCancelable(false)
                             .setPositiveButton(AppUtils.getStringByLocal(this, R.string.ok), (dialog, index) -> {
-                                if (doesPDFTableExist(this, courseCode + selectedType)) {
-                                    openSpecialCourse(this, courseCode + selectedType);
+                                if (doesPDFTableExist(this, courseCode + currentSelectedType)) {
+                                    openSpecialCourse(this, courseCode + currentSelectedType);
                                 } else {
-                                    launchPDFDownloadTask(courseCode + selectedType, currentSpecialCourse.get(selectedType));
+                                    launchPDFDownloadTask(courseCode + currentSelectedType, currentSpecialCourse.get(currentSelectedType));
                                 }
                             })
                             .show();
@@ -280,28 +280,44 @@ public class LessonTimetableActivity extends AppCompatActivity {
             }
             listTypes = tmp.toArray(new String[0]);
             // This string holds info about courseYear#channel
-            selectedType = listTypes[0];
+            selectedType = new boolean[listTypes.length];
+            selectedType[0] = true;
 
             new AlertDialog.Builder(this)
                     .setTitle(R.string.select_course)
-                    .setSingleChoiceItems(listEntries, 0, (dialogInterface, which) -> {
-                        selectedType = listTypes[which];
+                    .setMultiChoiceItems(listEntries, selectedType, (dialogInterface, which, isChecked) -> {
+                        selectedType[which] = isChecked;
                     })
                     .setCancelable(false)
-                    .setPositiveButton(AppUtils.getStringByLocal(this, R.string.yes), (dialog, index) -> {
-                        final String[] courseParts = selectedType.split("#");
-                        final String year = courseParts[0];
-                        final String channel = courseParts[1];
-                        for (List<Lesson> dailySchedule : scheduledLessons) {
-                            Iterator<Lesson> iterator = dailySchedule.iterator();
-                            while (iterator.hasNext()) {
-                                Lesson lesson = iterator.next();
-                                if (!lesson.getYear().equals(year) || !lesson.getChannel().equals(channel)) {
-                                    // If a lesson is from another 'course type' it is not displayed
-                                    iterator.remove();
+                    .setPositiveButton(AppUtils.getStringByLocal(this, R.string.ok), (dialog, index) -> {
+                        final ArrayList<ArrayList<Lesson>> tmpWeekList = new ArrayList<ArrayList<Lesson>>() {{
+                            add(new ArrayList<>());
+                            add(new ArrayList<>());
+                            add(new ArrayList<>());
+                            add(new ArrayList<>());
+                            add(new ArrayList<>());
+                            add(new ArrayList<>());
+                        }};
+                        for (int i = 0; i < listTypes.length; i++) {
+                            if (!selectedType[i]) {
+                                continue;
+                            }
+                            final String currentListType = listTypes[i];
+                            final String[] courseParts = currentListType.split("#");
+                            final String year = courseParts[0];
+                            final String channel = courseParts[1];
+                            for (int j = 0; j < scheduledLessons.size(); j++) {
+                                final List<Lesson> dailySchedule = scheduledLessons.get(j);
+                                final List<Lesson> tmpDailySchedule = tmpWeekList.get(j);
+                                for (Lesson lesson : dailySchedule) {
+                                    if (lesson.getYear().equals(year) && lesson.getChannel().equals(channel)) {
+                                        // If a lesson is from another 'course type' it is not displayed
+                                        tmpDailySchedule.add(lesson);
+                                    }
                                 }
                             }
                         }
+                        scheduledLessons = new ArrayList<>(tmpWeekList);
                         displayTableView();
                     })
                     .show();

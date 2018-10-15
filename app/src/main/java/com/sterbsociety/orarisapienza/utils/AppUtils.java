@@ -45,6 +45,7 @@ import com.sterbsociety.orarisapienza.models.Building;
 import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.models.Course;
 import com.sterbsociety.orarisapienza.models.POJO;
+import com.sterbsociety.orarisapienza.models.Root;
 import com.sterbsociety.orarisapienza.models.StudyPlan;
 import com.sterbsociety.orarisapienza.models.TimeLineModel;
 
@@ -52,6 +53,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -75,6 +77,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
@@ -966,11 +969,18 @@ public class AppUtils {
     private static boolean isDBAvailable;
 
     public static boolean isDBAvailable(Activity activity) {
-        if (isDBAvailable)
+        if (isDBAvailable) {
             return true;
-        if (currentDBVersion != null)
+        }
+        if (currentDBVersion != null) {
             return true;
+        }
         return (currentDBVersion = activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).getString(DB_KEY, null)) != null;
+    }
+
+    @Nullable
+    public static String getCurrentDBVersion() {
+        return currentDBVersion;
     }
 
     private static final String DB_KEY = "finalDB";
@@ -986,6 +996,28 @@ public class AppUtils {
             isDBAvailable = true;
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void moveDatabaseFromRawToInternalStorage(Activity activity) {
+        try {
+            InputStream inputStream = activity.getResources().openRawResource(activity.getResources()
+                    .getIdentifier("root", "raw", activity.getPackageName()));
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            final Root root = new Gson().fromJson(sb.toString(), Root.class);
+            FileOutputStream outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
+            outputStream.write(new Gson().toJson(root.finalDB).getBytes());
+            outputStream.close();
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, root.version).apply();
+            isDBAvailable = true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

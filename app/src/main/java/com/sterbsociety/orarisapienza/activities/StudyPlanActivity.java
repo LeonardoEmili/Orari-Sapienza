@@ -30,12 +30,10 @@ import java.util.List;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.MATRIX;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.dayToInt;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getBuildingList;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroom;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveStudyPlan;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.timeToInt;
 
 public class StudyPlanActivity extends AppCompatActivity {
 

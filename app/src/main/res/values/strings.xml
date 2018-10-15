@@ -152,6 +152,7 @@
     <string name="_course">Course:</string>
     <string name="_time">Time:</string>
     <string name="updating">Updating data…</string>
+    <string name="updating_turn_on_connection">"Updating data…\nCheck that you have enabled Internet connection"</string>
     <string name="data_not_sync_wait_please">Data is not sync.\nWait please.</string>
     <string name="from_">From</string>
     <string name="to_">To</string>

@@ -18,7 +18,6 @@ import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -38,7 +37,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 import dmax.dialog.SpotsDialog;
 
-import static com.sterbsociety.orarisapienza.utils.AppUtils.KEY_VERSION;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyTheme;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 

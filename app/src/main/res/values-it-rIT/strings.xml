@@ -197,4 +197,5 @@
     <string name="professor">Prof:</string>
     <string name="search_classroom">Cerca aula</string>
     <string name="current_status">Stato attuale:</string>
+    <string name="updating_turn_on_connection">"Aggiornamento dati…\nControlla di aver abilitato la connessione a Internet."</string>
 </resources>

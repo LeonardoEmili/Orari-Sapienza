@@ -65,7 +65,7 @@ public class BuildingListViewAdapter extends ArrayAdapter<Building> {
             viewHolder.imageView.setImageDrawable(searchImg);
         }
 
-        viewHolder.buildingName.setText(building.code);
+        viewHolder.buildingName.setText(building.name);
         viewHolder.buildingDetails.setText(building.address);
         return convertView;
     }

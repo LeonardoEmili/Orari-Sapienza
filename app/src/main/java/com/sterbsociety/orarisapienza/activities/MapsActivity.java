@@ -46,7 +46,6 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.STUDY_PLAN;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getBestDates;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getFullDateFormatter;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.getStringByLocal;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 

@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         setLocale(MainActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
+
         if (isDBAvailable(this)) {
             AsyncTask.execute(() -> parseDatabase(this));
         } else {
