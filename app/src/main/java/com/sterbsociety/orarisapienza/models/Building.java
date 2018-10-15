@@ -22,6 +22,7 @@ public class Building implements Parcelable {
     public Building() {
         // Required empty public constructor
         this.aule = new ArrayList<>();
+        this.pos = new iVec2();
     }
 
     public double getLat() {
