@@ -126,13 +126,13 @@ public class StudyPlanPresenter implements Parcelable {
         building = in.readParcelable(Building.class.getClassLoader());
     }
 
-    public String[] getHours() {
+    String[] getHours() {
         String[] startDateParts = getStartDate().split(",*\\s+");
         String[] endDateParts = getEndDate().split(",*\\s+");
         return new String[]{startDateParts[4], endDateParts[4]};
     }
 
-    public String[] getDays() {
+    String[] getDays() {
         String[] startDateParts = getStartDate().split(",*\\s+");
         String[] endDateParts = getEndDate().split(",*\\s+");
         return new String[]{startDateParts[0], endDateParts[0]};

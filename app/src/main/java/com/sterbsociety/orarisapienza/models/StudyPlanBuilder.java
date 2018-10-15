@@ -27,7 +27,11 @@ public class StudyPlanBuilder {
         this.checked = new ArrayList<>();
         this.nearby = new ArrayList<>();
         this.program = new ArrayList<>();
-        this.startBuilding = spp.getBuilding();
+        if (spp.getBuilding() != null) {
+            this.startBuilding = spp.getBuilding();
+        } else {
+            this.startBuilding = AppUtils.getNearestBuilding(spp.getLatitude(), spp.getLongitude());
+        }
         this.spp = spp;
         this.st = AppUtils.timeToInt(spp.getHours()[0], AppUtils.dayToInt(spp.getDays()[0]));
         this.en = AppUtils.timeToInt(spp.getHours()[1], AppUtils.dayToInt(spp.getDays()[1]));

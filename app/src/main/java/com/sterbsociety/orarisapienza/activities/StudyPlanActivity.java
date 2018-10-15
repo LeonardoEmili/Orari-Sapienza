@@ -94,31 +94,6 @@ public class StudyPlanActivity extends AppCompatActivity {
         studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
     }
 
-    /*private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
-        studyPlan = new StudyPlan();
-        final StudyPlanBuilder utilitySPB;
-        final StudyPlanBuilder spBuilder = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter.getBuilding());
-        final List<TimeLineModel> dataList = new ArrayList<>();
-        int start, end;
-        start = timeToInt(studyPlanPresenter.getHours()[0], dayToInt(studyPlanPresenter.getDays()[0]));
-        end = timeToInt(studyPlanPresenter.getHours()[1], dayToInt(studyPlanPresenter.getDays()[1]));
-        if (start > end) {
-            spBuilder.createProgramInt(start, 341);
-            utilitySPB = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter.getBuilding());
-            utilitySPB.createProgramInt(0, end);
-            spBuilder.getProgram().addAll(utilitySPB.getProgram());
-        } else {
-            spBuilder.createProgramInt(start, end);
-        }
-        for (String[] s : spBuilder.getProgram()) {
-            if (!TextUtils.isEmpty(s[3])) {
-                dataList.add(new TimeLineModel(s[0] + s[1], s[4] + " " + s[2], AppUtils.getClassroom(s[3])));
-            }
-        }
-        studyPlan.setDataList(dataList);
-        studyPlan.setRequestDates(studyPlanPresenter.getStartDate(), studyPlanPresenter.getEndDate());
-    } */
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_study_plan, menu);

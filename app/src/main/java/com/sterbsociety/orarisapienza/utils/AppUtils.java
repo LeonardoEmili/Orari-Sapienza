@@ -367,7 +367,7 @@ public class AppUtils {
             mFavouriteBuildingSetCodes.add(mFavouriteBuildingSetCodes.size() + FAV_SEPARATOR + buildingCode);
             mFavouriteBuildingList.add(0, building);
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putStringSet(KEY_PREF_BUILDING_FAVOURITES, mFavouriteBuildingSetCodes).apply();
-            buildingList.remove(index);
+            buildingList.remove(building);
             buildingList.add(0, building);
         } else {
             // Just the history position needs to be fixed, simple thing -> hard to write.
@@ -1022,6 +1022,7 @@ public class AppUtils {
             outputStream.close();
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, dataSnapshot.child(KEY_VERSION).getValue(String.class)).apply();
             isDBAvailable = true;
+            System.out.println("save");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1034,6 +1035,7 @@ public class AppUtils {
             outputStream.close();
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, rawDB.version).apply();
             isDBAvailable = true;
+            System.out.println("move");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1233,7 +1235,7 @@ public class AppUtils {
     public static String getClassroomName(String code) {
         final String myBuildingCode = code.split("-")[0];
         final String myClassCode = code.split("-")[1];
-        for (Building b : AppUtils.getBuildingList()) {
+        for (Building b : buildingList) {
             if (myBuildingCode.equals(b.code)) {
                 for (Classroom c : b.aule) {
                     if (myClassCode.equals(c.getCode())) {
