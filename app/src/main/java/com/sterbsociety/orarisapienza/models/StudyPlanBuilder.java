@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 
@@ -121,7 +119,7 @@ public class StudyPlanBuilder {
     private void fillNearby(Building building) {
         double d;
         nearby.clear();
-        for (@Nullable Building b : buildings) {
+        for (Building b : buildings) {
             if (!this.checked.contains(b)) {
                 d = AppUtils.haversine(b.pos.getX(), b.pos.getY(), building.pos.getX(), building.pos.getY());
                 if (0 < d && d <= radius) {

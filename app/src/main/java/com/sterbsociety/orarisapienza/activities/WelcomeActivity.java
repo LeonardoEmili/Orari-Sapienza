@@ -35,8 +35,10 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.areUpdatesAllowed;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isCurrentDatabaseOutDated;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.isOfflineDBOutdated;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.moveDatabaseFromRawToInternalStorage;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.saveDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -60,7 +62,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         initBaseActivity();
         databaseExists = isDBAvailable(this);
-        if (!databaseExists || (isFirstTimeStartApp = isFirstTimeStartApp())) {
+        if (isFirstTimeStartApp = isFirstTimeStartApp() || !databaseExists) {
             setTheme(R.style.AppTheme_NoActionBar);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_welcome);
@@ -82,6 +84,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         loadSettings(this);
         setLocale(this);
+
+        onlineDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
         mProgressDialog = new SpotsDialog.Builder()
                 .setContext(this)
@@ -123,7 +128,8 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentDataSnapshot = dataSnapshot;
-                AppUtils.saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                onlineDatabase.removeEventListener(databaseDownloadListener);
                 databaseExists = true;
                 mProgressDialog.dismiss();
                 if (!isFirstTimeStartApp) {
@@ -136,8 +142,30 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, databaseError.getMessage());
+                onlineDatabase.removeEventListener(databaseDownloadListener);
             }
         };
+    }
+
+    private void firstBootUserAuth() {
+        mRunnable = () -> {
+            if (!isAuthenticated) {
+                getAuthentication();
+                mHandler.postDelayed(mRunnable, 1000);
+            } else {
+                mHandler.removeCallbacks(mRunnable);
+                onlineDatabase.child(KEY_VERSION).addValueEventListener(versionControlListener);
+            }
+        };
+
+        if (mAuth.getCurrentUser() == null) {
+            mHandler = new Handler();
+            mHandler.postDelayed(mRunnable, 0);
+        } else {
+            // This only happens if user has logged in in previous sessions.
+            isAuthenticated = true;
+            onlineDatabase.child(KEY_VERSION).addValueEventListener(versionControlListener);
+        }
     }
 
     /**
@@ -174,9 +202,6 @@ public class WelcomeActivity extends AppCompatActivity {
      * and does a login-attempt every 2 sec until the user is authenticated.
      */
     private void authUser() {
-        onlineDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
         mRunnable = () -> {
             if (!isAuthenticated) {
                 getAuthentication();
@@ -205,6 +230,8 @@ public class WelcomeActivity extends AppCompatActivity {
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
+        AsyncTask.execute(() -> AppUtils.parseRawDB(this));
+
         final ViewPager mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
         mButton = findViewById(R.id.skip_button);
@@ -213,8 +240,43 @@ public class WelcomeActivity extends AppCompatActivity {
         mSlideViewPager.setAdapter(sliderAdapter);
         addDotsIndicator(0);
 
-        AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(this));
-        databaseExists = true;
+        versionControlListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                databaseExists = true;
+                boolean isRawDBOutdated;
+                try {
+                    if (isRawDBOutdated = isOfflineDBOutdated(WelcomeActivity.this, dataSnapshot)) {
+                        onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
+                        onlineDatabase.addValueEventListener(databaseDownloadListener);
+                    } else {
+                        AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(WelcomeActivity.this));
+                    }
+                    if (isRawDBOutdated) {
+                        mProgressDialog.show();
+                    } else if (isButtonClicked) {
+                        startMainActivity();
+                    }
+                } catch (Exception ex) {
+                    // If error is thrown then db is always updated
+                    ex.printStackTrace();
+                    onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
+                    onlineDatabase.addValueEventListener(databaseDownloadListener);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, databaseError.getMessage());
+            }
+        };
+
+        if (NetworkStatus.getInstance().isOnline(this)) {
+            firstBootUserAuth();
+        } else {
+            AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(this));
+            databaseExists = true;
+        }
 
         ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
             @Override

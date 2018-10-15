@@ -36,7 +36,6 @@
                 android:contentDescription="@string/image" />
 
             <TextView
-                android:id="@+id/_gps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

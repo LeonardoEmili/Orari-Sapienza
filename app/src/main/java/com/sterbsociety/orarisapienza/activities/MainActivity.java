@@ -11,7 +11,6 @@ import android.os.Bundle;
 
 import com.google.android.gms.ads.MobileAds;
 import com.labo.kaji.fragmentanimations.CubeAnimation;
-import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.fragments.ChangeFragmentListener;
 import com.sterbsociety.orarisapienza.fragments.ContactFragment;
 import com.sterbsociety.orarisapienza.fragments.HomeFragment;
@@ -21,13 +20,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import org.codechimp.apprater.AppRater;
@@ -61,10 +58,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         if (isDBAvailable(this)) {
             AsyncTask.execute(() -> parseDatabase(this));
-        } else {
-            StyleableToast.makeText(this, getResources().getString(R.string.some_errors_occured),
-                    Toast.LENGTH_LONG, R.style.errorToast).show();
-            new Handler().postDelayed(this::finish, 400);
         }
         initActivity();
 

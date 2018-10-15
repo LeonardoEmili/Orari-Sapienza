@@ -336,10 +336,16 @@ public class MySingleDateAndTimePicker extends LinearLayout {
     }
 
     private boolean isBeforeMinDate(Date date) {
+        if (minDate == null) {
+            return false;
+        }
         return getCalendarOfDate(date).before(getCalendarOfDate(minDate));
     }
 
     private boolean isAfterMaxDate(Date date) {
+        if (maxDate == null) {
+            return false;
+        }
         return getCalendarOfDate(date).after(getCalendarOfDate(maxDate));
     }
 

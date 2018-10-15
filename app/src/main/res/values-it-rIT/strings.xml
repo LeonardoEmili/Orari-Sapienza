@@ -55,7 +55,6 @@
     <string name="email_optional">Indirizzo e-mail (opzionale)</string>
     <string name="cancel">annulla</string>
     <string name="authors">Autori</string>
-    <string name="donations">Donazioni</string>
     <string name="select_issue_type">Seleziona il tipo di problema</string>
     <string name="graphic_problem">Problema grafico</string>
     <string name="other">Altro</string>
@@ -71,7 +70,6 @@
     <string name="about">Info</string>
     <string name="location_not_allowed">(GPS non autorizzato)</string>
     <string name="location_not_active">(GPS non attivo)</string>
-    <string name="some_errors_occured">Qualcosa é andato storto.</string>
     <string name="gps_service_inactive">Servizio GPS non attivo.</string>
     <string name="open_settings">Apri in impostazioni</string>
     <string name="time_and_location">TEMPO + LUOGO</string>
@@ -103,8 +101,6 @@
     <string name="classroom">Classe</string>
     <string name="favourite_classroom">Classi preferite</string>
     <string name="name_class_detail">Dettaglio aula</string>
-    <string name="add_to_favs">AGGIUNGI AI PREFERITI</string>
-    <string name="status">Stato:</string>
     <string name="_course">Corso:</string>
     <string name="_time">Orario:</string>
     <string name="updating">Aggiornamento dati…</string>
@@ -189,13 +185,12 @@
     <string name="the_indicators_inform_you_about_the_current_state_of_that_particular_classroom">Gli indicatori ti informano sullo stato corrente di un\'aula.</string>
     <string name="what_are_those_coloured_indicators_in_classroom_list">Cosa sono quegli indicatori in  Elenco Aule?</string>
     <string name="what_is_a_study_plan">Cos\'è un Piano di studi?</string>
-    <string name="same_study_plan_alert">Stai inviando la stessa richiesta più volte. Sei sicuro?</string>
     <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">Il piano di studio è un potente strumento per l\'organizzazione dello studio alla Sapienza. Per provarlo basta inserire un luogo e una fascia oraria. Saprai sempre in che aula studiare e a che ora andarci!</string>
     <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">Il mio professore ha spostato l\'orario della mia lezione di 1 ora, perchè la lezione non è aggiornata nell\'app?</string>
     <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Gli orari delle lezioni non vengono aggiornati in tempo reale. Aggiorniamo i nostri dati il più possibile, i dati mostrati in app sono le sole lezioni programmate durante l\'anno corrente.</string>
-    <string name="_20_year_old_developer_rome">Sviluppatore, 20 anni. Roma.</string>
     <string name="professor">Prof:</string>
     <string name="search_classroom">Cerca aula</string>
     <string name="current_status">Stato attuale:</string>
     <string name="updating_turn_on_connection">"Aggiornamento dati…\nControlla di aver abilitato la connessione a Internet."</string>
+    <string name="loading_data_msg">Attendi che i dati vengano caricati.</string>
 </resources>

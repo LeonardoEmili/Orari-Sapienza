@@ -13,13 +13,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.sterbsociety.orarisapienza.activities.CurrentPlanActivity;
 import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.activities.ClassListActivity;
 import com.sterbsociety.orarisapienza.activities.FaqActivity;
 import com.sterbsociety.orarisapienza.activities.MapsActivity;
+import com.sterbsociety.orarisapienza.utils.AppUtils;
 
 
 /**
@@ -30,13 +33,14 @@ import com.sterbsociety.orarisapienza.activities.MapsActivity;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
     private ChangeFragmentListener changeFragmentListener;
     public final static String TAG = "HOME_FRAGMENT";
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
+    private boolean userClicked;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,6 +61,13 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        userClicked = false;
+
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
@@ -69,12 +80,13 @@ public class HomeFragment extends Fragment {
         CardView faqBtn = view.findViewById(R.id.faq_btn);
         CardView contactBtn = view.findViewById(R.id.contact_btn);
 
-        contactBtn.setOnClickListener(view16 -> changeFragmentListener.onChangeFragmentLicked("CONTACT_FRAGMENT"));
-        faqBtn.setOnClickListener(view15 -> startActivity(new Intent(mContext, FaqActivity.class)));
-        classListBtn.setOnClickListener(view14 -> startActivity(new Intent(mContext, ClassListActivity.class)));
-        timeTablesBtn.setOnClickListener(view13 -> startActivity(new Intent(mContext, LessonTimetableActivity.class)));
-        studyPlanBtn.setOnClickListener(view12 -> startActivity(new Intent(mContext, MapsActivity.class)));
-        currentPlanBtn.setOnClickListener(view1 -> startActivity(new Intent(mContext, CurrentPlanActivity.class)));
+        faqBtn.setOnClickListener(this);
+        classListBtn.setOnClickListener(this);
+        timeTablesBtn.setOnClickListener(this);
+        studyPlanBtn.setOnClickListener(this);
+        currentPlanBtn.setOnClickListener(this);
+
+        contactBtn.setOnClickListener(view16 -> changeFragmentListener.onChangeFragmentLicked(ContactFragment.TAG));
 
         return view;
     }
@@ -100,6 +112,38 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.study_plan_btn || view.getId() == R.id.timetables_btn
+                || view.getId() == R.id.current_plan_btn || view.getId() == R.id.class_list_btn) {
+            if (AppUtils.isDBFullyLoaded) {
+                if (!userClicked) {
+                    userClicked = true;
+                    switch (view.getId()) {
+                        case R.id.study_plan_btn:
+                            startActivity(new Intent(mContext, MapsActivity.class));
+                            break;
+                        case R.id.timetables_btn:
+                            startActivity(new Intent(mContext, LessonTimetableActivity.class));
+                            break;
+                        case R.id.current_plan_btn:
+                            startActivity(new Intent(mContext, CurrentPlanActivity.class));
+                            break;
+                        case R.id.class_list_btn:
+                            startActivity(new Intent(mContext, ClassListActivity.class));
+                            break;
+                    }
+                }
+            } else {
+                StyleableToast.makeText(mContext, getString(R.string.loading_data_msg),
+                        Toast.LENGTH_LONG, R.style.loadingToast).show();
+            }
+        } else if (view.getId() == R.id.faq_btn && !userClicked) {
+            userClicked = true;
+            startActivity(new Intent(mContext, FaqActivity.class));
+        }
     }
 
     /**

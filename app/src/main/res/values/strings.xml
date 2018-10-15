@@ -104,7 +104,6 @@
     <string name="email_optional">E-mail address (optional)</string>
     <string name="bug" translatable="false">Bug</string>
     <string name="authors">Authors</string>
-    <string name="donations">Donations</string>
     <string name="base_theme">Base Theme</string>
     <string name="general">General</string>
     <string name="notifications">Notifications</string>
@@ -112,7 +111,6 @@
     <string name="infinity" translatable="false">&#8734;</string>
     <string name="location_not_allowed">(GPS not allowed)</string>
     <string name="location_not_active">(GPS not active)</string>
-    <string name="some_errors_occured">Some errors occurred.</string>
     <string name="gps_service_inactive">GPS service is not active</string>
     <string name="open_settings">Open in Settings</string>
     <string name="time_and_location">TIME + LOCATION</string>
@@ -147,8 +145,6 @@
     <string name="classroom">Class</string>
     <string name="favourites">Favourites</string>
     <string name="title_activity_maps" translatable="false">Map</string>
-    <string name="add_to_favs">ADD TO FAVOURITES</string>
-    <string name="status">Status:</string>
     <string name="_course">Course:</string>
     <string name="_time">Time:</string>
     <string name="updating">Updating data…</string>
@@ -224,7 +220,6 @@
     <string name="donate_title">Donate</string>
     <string name="donate_desc">Donate and get an ad-free version of the App.</string>
     <string name="sat">Sat</string>
-    <string name="same_study_plan_alert">You are submitting the same study plan request as before, are you sure?</string>
     <string name="what_is_a_study_plan">What is a study plan?</string>
     <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">The study plan is a powerful tool which helps you when you want to study at Sapienza. To obtain one simply ask for a place and a time and you will always know in which classroom to study and at what time!</string>
     <string name="check_timetables">How can I check my course timetables?</string>
@@ -243,10 +238,10 @@
     <string name="created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic">Every Study Plan is constantly validated. It means that the plan has expired. You may want to create another one ... don\'t make the Storm Trooper sad!</string>
     <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">My professor moved the lesson to 1 hour later, why isn\'t the lesson updated inside the app?</string>
     <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Lesson timetables are not updated in real time. They are updated as often as possible, timetables shown inside the app come from scheduled lessons for the current year.</string>
-    <string name="_20_year_old_developer_rome">20 year old developer, Rome.</string>
     <string name="professor">Prof:</string>
     <string name="search_classroom">Search classroom</string>
     <string name="current_status">Current status:</string>
+    <string name="loading_data_msg">Please wait data is being loaded.</string>
 
 
 </resources>

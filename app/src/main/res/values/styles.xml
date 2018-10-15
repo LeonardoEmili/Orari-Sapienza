@@ -64,12 +64,25 @@
     <style name="errorToast">
         <item name="textBold">true</item>
         <item name="textColor">#fff</item>
-        <item name="textSize">14sp</item>
+        <item name="textSize">15sp</item>
         <item name="colorBackground">@android:color/holo_red_light</item>
         <item name="solidBackground">true</item>
         <item name="strokeWidth">3dp</item>
         <item name="length">LONG</item>
         <item name="iconStart">@drawable/ic_error</item>
+        <item name="gravity">top</item>
+        <item name="radius">20dp</item>
+    </style>
+
+    <style name="loadingToast">
+        <item name="textBold">true</item>
+        <item name="textColor">#fff</item>
+        <item name="textSize">15sp</item>
+        <item name="colorBackground">@android:color/holo_orange_light</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="length">LONG</item>
+        <item name="iconStart">@drawable/ic_sync_white_24dp</item>
         <item name="gravity">top</item>
         <item name="radius">20dp</item>
     </style>

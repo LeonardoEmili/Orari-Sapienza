@@ -191,9 +191,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
                     currentSelectedType = listTypes[0];
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.select_course)
-                            .setSingleChoiceItems(listEntries, 0, (dialogInterface, which) -> {
-                                currentSelectedType = listTypes[which];
-                            })
+                            .setSingleChoiceItems(listEntries, 0, (dialogInterface, which) -> currentSelectedType = listTypes[which])
                             .setCancelable(false)
                             .setPositiveButton(AppUtils.getStringByLocal(this, R.string.ok), (dialog, index) -> {
                                 if (doesPDFTableExist(this, courseCode + currentSelectedType)) {

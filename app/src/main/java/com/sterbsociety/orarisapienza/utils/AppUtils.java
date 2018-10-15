@@ -966,6 +966,34 @@ public class AppUtils {
         }
     }
 
+    @Nullable
+    private static Root rawDB = null;
+
+    public static void parseRawDB(Activity activity) {
+        try {
+            InputStream inputStream = activity.getResources().openRawResource(activity.getResources()
+                    .getIdentifier("root", "raw", activity.getPackageName()));
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            rawDB = new Gson().fromJson(sb.toString(), Root.class);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static boolean isOfflineDBOutdated(Activity activity, DataSnapshot dataSnapshot) {
+        if (rawDB == null) {
+            return true;
+        }
+        int onlineVersion = Integer.parseInt(Objects.requireNonNull(dataSnapshot.getValue(String.class)).replaceAll("\\.", ""));
+        return Integer.parseInt(rawDB.version.replaceAll("\\.", "")) < onlineVersion;
+    }
+
     private static boolean isDBAvailable;
 
     public static boolean isDBAvailable(Activity activity) {
@@ -1001,20 +1029,10 @@ public class AppUtils {
 
     public static void moveDatabaseFromRawToInternalStorage(Activity activity) {
         try {
-            InputStream inputStream = activity.getResources().openRawResource(activity.getResources()
-                    .getIdentifier("root", "raw", activity.getPackageName()));
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-            final Root root = new Gson().fromJson(sb.toString(), Root.class);
-            FileOutputStream outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
-            outputStream.write(new Gson().toJson(root.finalDB).getBytes());
+            final FileOutputStream outputStream = activity.openFileOutput(DATABASE_NAME, Context.MODE_PRIVATE);
+            outputStream.write(new Gson().toJson(Objects.requireNonNull(rawDB).finalDB).getBytes());
             outputStream.close();
-            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, root.version).apply();
+            activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, rawDB.version).apply();
             isDBAvailable = true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1023,6 +1041,7 @@ public class AppUtils {
 
     public static final String KEY_VERSION = "version";
     public static HashMap<String, HashMap<String, String>> SPECIAL_COURSES;
+    public static volatile boolean isDBFullyLoaded = false;
 
     public static void parseDatabase(Activity activity) {
         try {
@@ -1040,8 +1059,10 @@ public class AppUtils {
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
             MATRIX = new HashMap<>(database.matrix);
+            isDBFullyLoaded = true;
         } catch (Exception ex) {
             ex.printStackTrace();
+            isDBFullyLoaded = false;
         }
     }
 
