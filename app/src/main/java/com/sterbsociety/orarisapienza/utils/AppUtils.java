@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -971,8 +973,17 @@ public class AppUtils {
 
     public static void parseRawDB(Activity activity) {
         try {
-            InputStream inputStream = activity.getResources().openRawResource(activity.getResources()
-                    .getIdentifier("root", "raw", activity.getPackageName()));
+            AssetManager assetManager = activity.getAssets();
+            String[] assets = assetManager.list("");
+            System.out.println("luca");
+            System.out.println(Arrays.toString(assets));
+            // We assume this array to have at least one element.
+            Log.w("inputstream", "prova");
+            System.out.println("cazzo");
+            InputStream inputStream = assetManager.open("root.json");
+            Log.w("inputstream", "provino");
+            //Toast.makeText(activity, "opened", Toast.LENGTH_SHORT).show();
+            //InputStream inputStream = activity.getResources().openRawResource(activity.getResources().getIdentifier("root", "raw", activity.getPackageName()));
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder sb = new StringBuilder();
@@ -981,7 +992,9 @@ public class AppUtils {
                 sb.append(line);
             }
             rawDB = new Gson().fromJson(sb.toString(), Root.class);
+            Log.w("done", sb.toString());
         } catch (Exception ex) {
+            System.out.println("gigino");
             ex.printStackTrace();
         }
     }
@@ -1047,17 +1060,34 @@ public class AppUtils {
 
     public static void parseDatabase(Activity activity) {
         try {
+            //Toast.makeText(activity, activity.getFilesDir().getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity, (new File(activity.getFilesDir().getAbsolutePath() + "/" + DATABASE_NAME).length()/1024) + "", Toast.LENGTH_SHORT).show();
+            Log.w("camion", "prima crash");
+            File f = new File(activity.getFilesDir().getAbsolutePath() + "/" + DATABASE_NAME);
+            Log.w("canRead: ", f.canRead()+"");
+            //FileInputStream fis = new FileInputStream(f);
             FileInputStream fis = activity.openFileInput(DATABASE_NAME);
+            //Toast.makeText(activity, "Open", Toast.LENGTH_SHORT).show();
             InputStreamReader isr = new InputStreamReader(fis);
+            Log.w("primaIS", "a");
+            //Toast.makeText(activity, "Is", Toast.LENGTH_SHORT).show();
             BufferedReader bufferedReader = new BufferedReader(isr);
+            Log.w("primaBr", "a");
+            //Toast.makeText(activity, "BR", Toast.LENGTH_SHORT).show();
             StringBuilder sb = new StringBuilder();
+            //Toast.makeText(activity, "SB", Toast.LENGTH_SHORT).show();
+            Log.w("pasta", "asciutta");
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
+            //Toast.makeText(activity, "Gson", Toast.LENGTH_SHORT).show();
+            Log.w("pasta", sb.toString());
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
+            //Toast.makeText(activity, "specialCourses", Toast.LENGTH_SHORT).show();
             SPECIAL_COURSES = new HashMap<>(database.specialCourses);
             // remove end
+            //Toast.makeText(activity, "parseData", Toast.LENGTH_SHORT).show();
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
             MATRIX = new HashMap<>(database.matrix);

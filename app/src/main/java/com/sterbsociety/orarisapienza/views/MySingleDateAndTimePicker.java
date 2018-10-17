@@ -84,7 +84,6 @@ public class MySingleDateAndTimePicker extends LinearLayout {
     private boolean displayMinutes = true;
     private boolean displayHours = true;
 
-    private boolean isAmPm;
     private int selectorHeight;
 
     public MySingleDateAndTimePicker(Context context) {
@@ -99,7 +98,6 @@ public class MySingleDateAndTimePicker extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         defaultDate = new Date();
-        isAmPm = !(DateFormat.is24HourFormat(context));
 
         inflate(context, com.sterbsociety.orarisapienza.R.layout.single_day_picker, this);
 
@@ -221,8 +219,7 @@ public class MySingleDateAndTimePicker extends LinearLayout {
     public void setDisplayHours(boolean displayHours) {
         this.displayHours = displayHours;
         hoursPicker.setVisibility(displayHours ? VISIBLE : GONE);
-
-        hoursPicker.setIsAmPm(isAmPm);
+        hoursPicker.setIsAmPm(false);
     }
 
     public void setDisplayMonthNumbers(boolean displayMonthNumbers) {
@@ -286,10 +283,6 @@ public class MySingleDateAndTimePicker extends LinearLayout {
         if (simpleDateFormat != null) {
             this.daysPicker.setDayFormatter(simpleDateFormat);
         }
-    }
-
-    public boolean isAmPm() {
-        return isAmPm;
     }
 
     public Date getMinDate() {
@@ -427,8 +420,7 @@ public class MySingleDateAndTimePicker extends LinearLayout {
 
     private void updateListener() {
         final Date date = getDate();
-        final CharSequence format = isAmPm ? FORMAT_12_HOUR : FORMAT_24_HOUR;
-        final String displayed = DateFormat.format(format, date).toString();
+        final String displayed = DateFormat.format(FORMAT_24_HOUR, date).toString();
         for (OnDateChangedListener listener : listeners) {
             listener.onDateChanged(displayed, date);
         }

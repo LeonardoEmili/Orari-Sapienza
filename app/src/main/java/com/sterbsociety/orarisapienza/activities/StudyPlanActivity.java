@@ -81,7 +81,6 @@ public class StudyPlanActivity extends AppCompatActivity {
 
     private void createStudyPlan(StudyPlanPresenter studyPlanPresenter) {
         studyPlan = new StudyPlan();
-        studyPlan = new StudyPlan();
         final StudyPlanBuilder spBuilder = new StudyPlanBuilder(getBuildingList(), MATRIX, studyPlanPresenter);
         final List<TimeLineModel> dataList = new ArrayList<>();
         spBuilder.createProgramInt();

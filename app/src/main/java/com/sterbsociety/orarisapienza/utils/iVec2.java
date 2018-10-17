@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class iVec2 implements Parcelable {
 
-    private double x;
+    public double x;
     private double y;
 
     public iVec2() {

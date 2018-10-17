@@ -26,7 +26,7 @@
     <string name="describe">Descrizione</string>
     <string name="app_version">Versione App</string>
     <string name="study_plan_active">P.D.S. attivo</string>
-    <string name="classrooms_list">Elenco aule</string>
+    <string name="classrooms_list">Dettaglio aule</string>
     <string name="contacts">Contatti</string>
     <string name="report_a_bug">Segnala un bug</string>
     <string name="lets_start">AVVIA L\'APP</string>
@@ -167,7 +167,7 @@
     <string name="download_course_fail">Corso non scaricato. Riprova piú tardi.</string>
     <string name="no_app_for_pdf_error">Nessuna applicazione disponibile per aprire il PDF</string>
     <string name="semester">" semestre."</string>
-    <string name="donate_title">Dona</string>
+    <string name="donate_title">Donazione</string>
     <string name="donate_desc">Dona e ricevi una versione senza pubblicitá</string>
     <string name="sat">Sab</string>
     <string name="check_timetables">Come posso controllare gli orari del mio corso?</string>

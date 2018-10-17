@@ -6,12 +6,12 @@ import java.util.List;
 
 public class POJO {
 
-    public HashMap<String, HashMap<String, List<Integer>>> timeTables;
-    public HashMap<String, List<Integer>> matrix;
-    public SapienzaMap smap;
-    public List<String> alist;
+    public HashMap<String, HashMap<String, List<Integer>>> timeTables = new HashMap<>();
+    public HashMap<String, List<Integer>> matrix = new HashMap<>();
+    public SapienzaMap smap = new SapienzaMap();
+    public List<String> alist = new ArrayList<>();
     // String key is formed by courseName_courseCode
-    public HashMap<String, HashMap<String, String>> specialCourses;
+    public HashMap<String, HashMap<String, String>> specialCourses = new HashMap<>();
 
     public POJO() {
         // Required empty public constructor
@@ -37,5 +37,29 @@ public class POJO {
             specialCourses = new HashMap<>();
         }
         return specialCourses;
+    }
+
+    public void setAlist(List<String> alist) {
+        this.alist = alist;
+    }
+
+    public void setSpecialCourses(HashMap<String, HashMap<String, String>> specialCourses) {
+        this.specialCourses = specialCourses;
+    }
+
+    public void setTimeTables(HashMap<String, HashMap<String, List<Integer>>> timeTables) {
+        this.timeTables = timeTables;
+    }
+
+    public void setMatrix(HashMap<String, List<Integer>> matrix) {
+        this.matrix = matrix;
+    }
+
+    public void setSmap(SapienzaMap smap) {
+        this.smap = smap;
+    }
+
+    public SapienzaMap getSmap() {
+        return smap;
     }
 }

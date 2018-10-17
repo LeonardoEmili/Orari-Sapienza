@@ -56,9 +56,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
 
-        if (isDBAvailable(this)) {
-            AsyncTask.execute(() -> parseDatabase(this));
-        }
+        /*if (isDBAvailable(this)) {
+            //AsyncTask.execute(() -> parseDatabase(this));
+            parseDatabase(this);
+        }*/
+
         initActivity();
 
         // DOCS here: https://github.com/codechimp-org/AppRater

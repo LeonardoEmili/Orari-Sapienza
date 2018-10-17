@@ -38,6 +38,8 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.isFirstTimeStartApp;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isOfflineDBOutdated;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.moveDatabaseFromRawToInternalStorage;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.parseDatabase;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.parseRawDB;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
@@ -51,7 +53,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private DatabaseReference onlineDatabase;
     private DataSnapshot currentDataSnapshot;
     private FirebaseAuth mAuth;
-    private volatile boolean isAuthenticated;
+    private volatile boolean isAuthenticated, dbStatusFlag;
     private Handler mHandler;
     private Runnable mRunnable;
     private AlertDialog mProgressDialog;
@@ -128,7 +130,11 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentDataSnapshot = dataSnapshot;
-                saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                dbStatusFlag = true;
+                AsyncTask.execute(() -> {
+                    saveDatabase(WelcomeActivity.this, currentDataSnapshot);
+                    parseDatabase(WelcomeActivity.this);
+                });
                 onlineDatabase.removeEventListener(databaseDownloadListener);
                 databaseExists = true;
                 mProgressDialog.dismiss();
@@ -230,7 +236,8 @@ public class WelcomeActivity extends AppCompatActivity {
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
-        AsyncTask.execute(() -> AppUtils.parseRawDB(this));
+        //AsyncTask.execute(() -> AppUtils.parseRawDB(this));
+        AppUtils.parseRawDB(this);
 
         final ViewPager mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
@@ -248,9 +255,15 @@ public class WelcomeActivity extends AppCompatActivity {
                 try {
                     if (isRawDBOutdated = isOfflineDBOutdated(WelcomeActivity.this, dataSnapshot)) {
                         onlineDatabase.child(KEY_VERSION).removeEventListener(versionControlListener);
+                        System.out.println("outdated");
                         onlineDatabase.addValueEventListener(databaseDownloadListener);
                     } else {
-                        AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(WelcomeActivity.this));
+                        dbStatusFlag = true;
+                        AsyncTask.execute(() -> {
+                            moveDatabaseFromRawToInternalStorage(WelcomeActivity.this);
+                            parseDatabase(WelcomeActivity.this);
+                        });
+                        //AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(WelcomeActivity.this));
                     }
                     if (isRawDBOutdated) {
                         mProgressDialog.show();
@@ -274,7 +287,12 @@ public class WelcomeActivity extends AppCompatActivity {
         if (NetworkStatus.getInstance().isOnline(this)) {
             firstBootUserAuth();
         } else {
-            AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(this));
+            dbStatusFlag = true;
+            AsyncTask.execute(() -> {
+                moveDatabaseFromRawToInternalStorage(WelcomeActivity.this);
+                parseDatabase(WelcomeActivity.this);
+            });
+            //AsyncTask.execute(() -> moveDatabaseFromRawToInternalStorage(this));
             databaseExists = true;
         }
 
@@ -339,6 +357,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void startMainActivity() {
         AppUtils.setFirstTimeStartApp(this);
+        if (!dbStatusFlag) {
+            // This means that the entire parsing action has been handled before.
+            AsyncTask.execute(() -> parseDatabase(this));
+        }
         mProgressDialog.dismiss();
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

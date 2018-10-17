@@ -53,7 +53,7 @@
     <string name="attachment_remove">Attachment removal</string>
     <string name="faq" translatable="false">FAQ</string>
     <string name="study_plan_active">Active Study Plan</string>
-    <string name="classrooms_list">Classroom list</string>
+    <string name="classrooms_list">Classroom detail</string>
     <string name="contacts">Contatcs</string>
     <string name="report_a_bug">Report a Bug</string>
     <string name="lets_start">LET\'S START</string>
@@ -217,7 +217,7 @@
     <string name="star_class" translatable="false">Star class</string>
     <string name="manual_update_title">Force data update</string>
     <string name="manual_update_desc">This will force the app to download again lesson data.</string>
-    <string name="donate_title">Donate</string>
+    <string name="donate_title">Donation</string>
     <string name="donate_desc">Donate and get an ad-free version of the App.</string>
     <string name="sat">Sat</string>
     <string name="what_is_a_study_plan">What is a study plan?</string>
