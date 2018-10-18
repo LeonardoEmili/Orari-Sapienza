@@ -5,15 +5,20 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+
+import androidx.annotation.Nullable;
 
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 
 public class StudyPlanBuilder {
 
+    @Nullable
+    private Building startBuilding;
+
     private ArrayList<String[]> program;
     private ArrayList<Building> buildings;
-    private Building startBuilding;
     private StudyPlanPresenter spp;
     private HashMap<String, List<Integer>> dataMatrix;
     private ArrayList<Building> checked, nearby;
@@ -27,14 +32,14 @@ public class StudyPlanBuilder {
         this.checked = new ArrayList<>();
         this.nearby = new ArrayList<>();
         this.program = new ArrayList<>();
-        if (spp.getBuilding() != null) {
-            this.startBuilding = spp.getBuilding();
-        } else {
-            this.startBuilding = AppUtils.getNearestBuilding(spp.getLatitude(), spp.getLongitude());
-        }
         this.spp = spp;
         this.st = AppUtils.timeToInt(spp.getHours()[0], AppUtils.dayToInt(spp.getDays()[0]));
         this.en = AppUtils.timeToInt(spp.getHours()[1], AppUtils.dayToInt(spp.getDays()[1]));
+        if (spp.getBuilding() != null) {
+            this.startBuilding = spp.getBuilding();
+        } else {
+            this.startBuilding = getRandBuilding();
+        }
     }
 
     public void add(String classroom, String time) {
@@ -148,5 +153,15 @@ public class StudyPlanBuilder {
 
     public String getClassroomMoment(int i) {
         return program.get(i)[3];
+    }
+
+    private Building getRandBuilding() {
+        final List<Building> CU = new ArrayList<>();
+        for (Building building : buildings) {
+            if (building.name.startsWith("CU")) {
+                CU.add(building);
+            }
+        }
+        return CU.get(new Random().nextInt(CU.size()));
     }
 }

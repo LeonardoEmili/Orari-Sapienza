@@ -350,7 +350,7 @@ public class AppUtils {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            sendSilentReport(activity, 333, ex, AppUtils.class.toString());
+            sendSilentReport(activity, 333, ex, AppUtils.class.getSimpleName());
             clearCachedStudyPlan(activity);
         }
     }
@@ -621,16 +621,20 @@ public class AppUtils {
         return sw.toString();
     }
 
-    public static void sendSilentReport(Activity activity, int errorLine, Exception ex, String className) {
+    public static void sendSilentReport(Activity activity, int errorLine, String error, String className) {
         new MailTask(activity, null, null, null, null).
                 execute(CRASH_REPORT_TITLE                          // Crash report title
                         , CRASH_REPORT_BODY_HEADER                  // The header
                                 + errorLine                                 // Line of the begin of try-catch block
                                 + CRASH_REPORT_BODY_WHERE                   // Where the error is occurred
                                 + CRASH_REPORT_ERROR_STACKTRACE             // Default stacktrace message
-                                + getStackTraceAsString(ex)                 // Utility method
+                                + error
                                 + className                                 // Where the error occurred.
                         , null);                                    // Not required param.
+    }
+
+    public static void sendSilentReport(Activity activity, int errorLine, Exception ex, String className) {
+        sendSilentReport(activity, errorLine, getStackTraceAsString(ex), className);
     }
 
     private static int SELECTED_CLASS_BTN_INDEX = 0;
@@ -1437,16 +1441,18 @@ public class AppUtils {
         return null;
     }
 
+    @NonNull
     public static Building getNearestBuilding(double latitude, double longitude) {
         double distance, minimum = 10000.0;
         Building nearestBuilding = null;
         for (Building building : buildingList) {
             distance = haversine(latitude, longitude, building.getLat(), building.getLong());
-            if (distance < minimum) {
+            if (distance < minimum | nearestBuilding == null) {
                 minimum = distance;
                 nearestBuilding = building;
             }
         }
+        // getNearestBuilding may be null only if our database is empty <---> buildinglist is empty.
         return nearestBuilding;
     }
 

@@ -33,6 +33,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.getStringByLocal;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.isThereAnActiveStudyPlan;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.sendSilentReport;
 
+
 public class CurrentPlanActivity extends AppCompatActivity {
 
     @Override
@@ -144,7 +145,7 @@ public class CurrentPlanActivity extends AppCompatActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            sendSilentReport(this, 76, ex, CurrentPlanActivity.class.toString());
+            sendSilentReport(this, 76, ex, CurrentPlanActivity.class.getSimpleName());
         }
         return dataList.size() - 1;
     }

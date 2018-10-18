@@ -340,5 +340,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapInitializedL
         if (lastAirMapMarker != null) {
             mapView.removeMarker(lastAirMapMarker);
         }
+        studyPlanPresenter.reset();
     }
 }

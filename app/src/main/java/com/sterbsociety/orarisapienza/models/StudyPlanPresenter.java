@@ -18,6 +18,8 @@ public class StudyPlanPresenter implements Parcelable {
     private String startDate, endDate;
     private double latitude, longitude;
     private Building building;
+    private final double defaultLatitude = 41.9014632;
+    private final double defaultLongitude = 12.5101352;
 
     /**
      * Since the user is allowed to fast create the plan by skipping settings,
@@ -25,8 +27,8 @@ public class StudyPlanPresenter implements Parcelable {
      * create a study plan inside the campus.
      */
     public StudyPlanPresenter() {
-        latitude = 41.9014632;
-        longitude = 12.5101352;
+        latitude = defaultLatitude;
+        longitude = defaultLongitude;
     }
 
     public StudyPlanPresenter(String startDate, String endDate, double latitude, double longitude, Building building) {
@@ -58,6 +60,12 @@ public class StudyPlanPresenter implements Parcelable {
             this.latitude = gpsLocation.getLatitude();
             this.longitude = gpsLocation.getLongitude();
         }
+    }
+
+    public void reset() {
+        this.building = null;
+        this.latitude = defaultLatitude;
+        this.longitude = defaultLongitude;
     }
 
     public Building getBuilding() {
