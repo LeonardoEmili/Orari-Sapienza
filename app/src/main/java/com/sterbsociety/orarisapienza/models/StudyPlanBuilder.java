@@ -5,7 +5,6 @@ import com.sterbsociety.orarisapienza.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import androidx.annotation.Nullable;
 
@@ -35,11 +34,8 @@ public class StudyPlanBuilder {
         this.spp = spp;
         this.st = AppUtils.timeToInt(spp.getHours()[0], AppUtils.dayToInt(spp.getDays()[0]));
         this.en = AppUtils.timeToInt(spp.getHours()[1], AppUtils.dayToInt(spp.getDays()[1]));
-        if (spp.getBuilding() != null) {
-            this.startBuilding = spp.getBuilding();
-        } else {
-            this.startBuilding = getRandBuilding();
-        }
+        this.startBuilding = spp.getBuilding();
+
     }
 
     public void add(String classroom, String time) {
@@ -75,7 +71,7 @@ public class StudyPlanBuilder {
             return;
         }
         if (building == null) {
-            if (this.program.get(program.size() - 1)[3].equals("")) {
+            if (this.program.size() > 0 && this.program.get(program.size() - 1)[3].equals("")) {
                 this.program.get(program.size() - 1)[2] = getHourByIndex(start + 1);
                 findNextRoom(start + 1, end, startBuilding);
                 return;
@@ -116,11 +112,14 @@ public class StudyPlanBuilder {
     private Building changeBuilding(Building b) {
         checked.add(b);
         int MAX_RAD = 2000;
-        if (nearby.size() == 0 && radius < MAX_RAD) {
+        if (radius < MAX_RAD) {
             radius += 100;
             fillNearby(b);
-        } else if (radius >= MAX_RAD) {
+        } else {
             return null;
+        }
+        if (nearby.size() == 0) {
+            return changeBuilding(b);
         }
         return nearby.remove(0);
     }
@@ -153,15 +152,5 @@ public class StudyPlanBuilder {
 
     public String getClassroomMoment(int i) {
         return program.get(i)[3];
-    }
-
-    private Building getRandBuilding() {
-        final List<Building> CU = new ArrayList<>();
-        for (Building building : buildings) {
-            if (building.name.startsWith("CU")) {
-                CU.add(building);
-            }
-        }
-        return CU.get(new Random().nextInt(CU.size()));
     }
 }

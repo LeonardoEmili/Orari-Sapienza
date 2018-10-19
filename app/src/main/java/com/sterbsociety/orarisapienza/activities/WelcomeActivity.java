@@ -39,7 +39,6 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.isOfflineDBOutdated;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.loadSettings;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.moveDatabaseFromRawToInternalStorage;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.parseDatabase;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.parseRawDB;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.saveDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 

@@ -21,7 +21,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -76,6 +75,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
@@ -260,12 +260,11 @@ public class AppUtils {
         currentTheme = sharedPref.getBoolean(SettingsActivity.KEY_PREF_THEME, false);
         sCurrentRingtone = sharedPref.getString(SettingsActivity.KEY_PREF_RINGTONE, "");
         currentLanguage = sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
-
         if (currentLanguage.equals("")) {
             if (isUserLanguageSupported(activity)) {
                 currentLanguage = Locale.getDefault().getLanguage();
             } else {
-                currentLanguage = "en";
+                currentLanguage = "it";
             }
             sharedPref.edit().putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage).apply();
         }
@@ -525,7 +524,7 @@ public class AppUtils {
     }
 
     public static void setLocale(Activity activity) {
-        Locale myLocale = new Locale(AppUtils.getCurrentLanguage());
+        Locale myLocale = new Locale(getCurrentLanguage());
         Resources res = activity.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
@@ -978,16 +977,8 @@ public class AppUtils {
     public static void parseRawDB(Activity activity) {
         try {
             AssetManager assetManager = activity.getAssets();
-            String[] assets = assetManager.list("");
-            System.out.println("luca");
-            System.out.println(Arrays.toString(assets));
             // We assume this array to have at least one element.
-            Log.w("inputstream", "prova");
-            System.out.println("cazzo");
             InputStream inputStream = assetManager.open("root.json");
-            Log.w("inputstream", "provino");
-            //Toast.makeText(activity, "opened", Toast.LENGTH_SHORT).show();
-            //InputStream inputStream = activity.getResources().openRawResource(activity.getResources().getIdentifier("root", "raw", activity.getPackageName()));
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder sb = new StringBuilder();
@@ -996,9 +987,7 @@ public class AppUtils {
                 sb.append(line);
             }
             rawDB = new Gson().fromJson(sb.toString(), Root.class);
-            Log.w("done", sb.toString());
         } catch (Exception ex) {
-            System.out.println("gigino");
             ex.printStackTrace();
         }
     }
@@ -1039,7 +1028,6 @@ public class AppUtils {
             outputStream.close();
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, dataSnapshot.child(KEY_VERSION).getValue(String.class)).apply();
             isDBAvailable = true;
-            System.out.println("save");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1052,7 +1040,6 @@ public class AppUtils {
             outputStream.close();
             activity.getSharedPreferences(GENERAL_PREF, Context.MODE_PRIVATE).edit().putString(DB_KEY, rawDB.version).apply();
             isDBAvailable = true;
-            System.out.println("move");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1064,34 +1051,17 @@ public class AppUtils {
 
     public static void parseDatabase(Activity activity) {
         try {
-            //Toast.makeText(activity, activity.getFilesDir().getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            //Toast.makeText(activity, (new File(activity.getFilesDir().getAbsolutePath() + "/" + DATABASE_NAME).length()/1024) + "", Toast.LENGTH_SHORT).show();
-            Log.w("camion", "prima crash");
             File f = new File(activity.getFilesDir().getAbsolutePath() + "/" + DATABASE_NAME);
-            Log.w("canRead: ", f.canRead()+"");
-            //FileInputStream fis = new FileInputStream(f);
             FileInputStream fis = activity.openFileInput(DATABASE_NAME);
-            //Toast.makeText(activity, "Open", Toast.LENGTH_SHORT).show();
             InputStreamReader isr = new InputStreamReader(fis);
-            Log.w("primaIS", "a");
-            //Toast.makeText(activity, "Is", Toast.LENGTH_SHORT).show();
             BufferedReader bufferedReader = new BufferedReader(isr);
-            Log.w("primaBr", "a");
-            //Toast.makeText(activity, "BR", Toast.LENGTH_SHORT).show();
             StringBuilder sb = new StringBuilder();
-            //Toast.makeText(activity, "SB", Toast.LENGTH_SHORT).show();
-            Log.w("pasta", "asciutta");
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-            //Toast.makeText(activity, "Gson", Toast.LENGTH_SHORT).show();
-            Log.w("pasta", sb.toString());
             final POJO database = new Gson().fromJson(sb.toString(), POJO.class);
-            //Toast.makeText(activity, "specialCourses", Toast.LENGTH_SHORT).show();
             SPECIAL_COURSES = new HashMap<>(database.specialCourses);
-            // remove end
-            //Toast.makeText(activity, "parseData", Toast.LENGTH_SHORT).show();
             parseData(activity, database);
             // We create another HashMap to allow JVM to garbageCollect the database instance
             MATRIX = new HashMap<>(database.matrix);
@@ -1384,7 +1354,7 @@ public class AppUtils {
         lat2 = Math.toRadians(lat2);
         double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
         double c = 2 * Math.asin(Math.sqrt(a));
-        return R * c * 1000;
+        return R * c;
     }
 
     private static Date minHour, maxHour;
@@ -1452,7 +1422,7 @@ public class AppUtils {
                 nearestBuilding = building;
             }
         }
-        // getNearestBuilding may be null only if our database is empty <---> buildinglist is empty.
+        // getNearestBuilding may be null only if our database is empty <---> buildingList is empty.
         return nearestBuilding;
     }
 
@@ -1477,5 +1447,15 @@ public class AppUtils {
 
     public static boolean doesPDFTableExist(Activity activity, String courseCode) {
         return new File(activity.getFilesDir().getAbsolutePath(), courseCode + ".pdf").exists();
+    }
+
+    public static Building getRandBuilding() {
+        final List<Building> CU = new ArrayList<>();
+        for (Building building : buildingList) {
+            if (building.name.startsWith("CU")) {
+                CU.add(building);
+            }
+        }
+        return CU.get(new Random().nextInt(CU.size()));
     }
 }

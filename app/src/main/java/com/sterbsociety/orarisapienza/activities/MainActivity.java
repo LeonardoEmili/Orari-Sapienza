@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.gms.ads.MobileAds;
@@ -19,6 +18,7 @@ import com.sterbsociety.orarisapienza.R;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,9 +29,8 @@ import android.widget.LinearLayout;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import org.codechimp.apprater.AppRater;
 
+import static com.sterbsociety.orarisapienza.activities.SettingsActivity.KEY_PREF_LANGUAGE;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.isDBAvailable;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.parseDatabase;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
 
 
@@ -55,11 +54,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         setContentView(R.layout.activity_main);
 
         MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
-
-        /*if (isDBAvailable(this)) {
-            //AsyncTask.execute(() -> parseDatabase(this));
-            parseDatabase(this);
-        }*/
+        System.out.println("craaaash");
 
         initActivity();
 

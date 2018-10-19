@@ -166,6 +166,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
                     onlineDatabase.removeEventListener(databaseDownloadListener);
                     StyleableToast.makeText(activity, getResources().getString(R.string.lesson_data_updated), Toast.LENGTH_LONG, R.style.successToast).show();
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     onlineDatabase.removeEventListener(databaseDownloadListener);
@@ -452,9 +453,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Sha
      */
     private void checkSharedPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-        boolean areNowAnimationsAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ANIMATION_SWITCH, false);
+        boolean areNowAnimationsAllowed = sharedPref.getBoolean(KEY_PREF_ANIMATION_SWITCH, false);
         if (areNowAnimationsAllowed != AppUtils.areAnimationsAllowed()
-                || !sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "").equals(userLanguage)) {
+                || !sharedPref.getString(KEY_PREF_LANGUAGE, "").equals(userLanguage)) {
+
+            // Update user language and schedule at reboot.
+            sharedPref.edit().putString(KEY_PREF_LANGUAGE, userLanguage).apply();
             AppUtils.scheduleReboot();
         }
     }

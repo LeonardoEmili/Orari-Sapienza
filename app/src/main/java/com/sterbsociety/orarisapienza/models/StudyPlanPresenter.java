@@ -70,7 +70,11 @@ public class StudyPlanPresenter implements Parcelable {
 
     public Building getBuilding() {
         if (building == null) {
-            return AppUtils.getNearestBuilding(latitude, longitude);
+            if (latitude == defaultLatitude && longitude == defaultLongitude) {
+                building =  AppUtils.getRandBuilding();
+            } else {
+                building =  AppUtils.getNearestBuilding(latitude, longitude);
+            }
         }
         return building;
     }
