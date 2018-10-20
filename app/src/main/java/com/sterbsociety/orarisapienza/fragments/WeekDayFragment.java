@@ -1,5 +1,6 @@
 package com.sterbsociety.orarisapienza.fragments;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.sterbsociety.orarisapienza.R;
+import com.sterbsociety.orarisapienza.activities.ClassDetailActivity;
 import com.sterbsociety.orarisapienza.views.SortableCourseTableView;
 import com.sterbsociety.orarisapienza.activities.LessonTimetableActivity;
 import com.sterbsociety.orarisapienza.adapters.CourseTableDataAdapter;
@@ -105,7 +107,9 @@ public abstract class WeekDayFragment extends Fragment {
 
         @Override
         public void onDataClicked(final int rowIndex, final Lesson clickedData) {
-
+            Intent i = new Intent(getContext(), ClassDetailActivity.class);
+            i.putExtra(AppUtils.DEFAULT_KEY, clickedData.getClassroom());
+            startActivity(i);
         }
     }
 

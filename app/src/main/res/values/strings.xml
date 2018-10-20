@@ -171,7 +171,7 @@
     <string name="whooops" translatable="false">WHOOOPS!</string>
     <string name="no_internet_connection">NO INTERNET CONNECTION</string>
     <string name="enable_it_for_a_more_accurate_study_plan_calculation">Enable it for a more accurate Study program calculation.</string>
-    <string name="active_study_plan">Active Study program</string>
+    <string name="active_study_plan">Current program</string>
     <string name="you_haven_t_created_a_study_plan_yet">You haven\'t created a study program yet</string>
     <string name="you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan">You can do it by going back to previous page and create your custom profile at Study program</string>
     <string name="study_plan_created">Your Study program has been successfully created!</string>
@@ -244,6 +244,7 @@
     <string name="loading_data_msg">Please wait data is being loaded.</string>
     <string name="why_aren_t_lessons_timetables_100_accurate">Why aren\'t lessons\' timetables 100% accurate?</string>
     <string name="lesson_timetables_are_mostly_retrived_from_gomp_and_unfortunately_there_there_are_some_inaccuracies_you_can_help_us_by_reporting_them_in_feedback_section_please_be_as_accurate_as_possible_in_reporting_the_problem">Lesson timetables are mostly retrived from GOMP, and unfortunately there there are some inaccuracies. You can help us by reporting them in Feedback section. Please be as accurate as possible in reporting the problem.</string>
+    <string name="search_course">Search course</string>
 
 
 </resources>

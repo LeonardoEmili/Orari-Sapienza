@@ -28,6 +28,7 @@ import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.SearchViewAdapter;
 import com.sterbsociety.orarisapienza.adapters.WeekDayFragmentPagerAdapter;
 import com.sterbsociety.orarisapienza.fragments.WeekDayFragment;
+import com.sterbsociety.orarisapienza.models.Classroom;
 import com.sterbsociety.orarisapienza.models.Course;
 import com.sterbsociety.orarisapienza.models.Lesson;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
@@ -50,6 +51,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.WEEK_LENGTH;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.addCourseToFavourites;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.doesPDFTableExist;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroom;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
@@ -133,6 +135,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
         searchView.setVoiceSearch(false);
         final SearchViewAdapter searchViewAdapter = new SearchViewAdapter(this, AppUtils.getCoursesList());
         searchView.setAdapter(searchViewAdapter);
+        searchView.setHint(getStringByLocal(this, R.string.search_course));
 
         searchView.setOnItemClickListener((adapterView, view, position, id) -> {
 
@@ -365,7 +368,8 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 if (scrollIndex >= WEEK_LENGTH) {
                     scrollIndex = WEEK_LENGTH - 1;
                 }
-                scheduledLessons.get(scrollIndex / DAY_LENGTH).add(new Lesson(getClassroomName(classroomCode), course.getId(), course.getName(), day, getHourByIndex(scrollIndex + 1), professor, startLesson, subjectName, year, channel));
+                Classroom classroom = getClassroom(classroomCode);
+                scheduledLessons.get(scrollIndex / DAY_LENGTH).add(new Lesson(classroom, course.getId(), course.getName(), day, getHourByIndex(scrollIndex + 1), professor, startLesson, subjectName, year, channel));
             }
         }
     }

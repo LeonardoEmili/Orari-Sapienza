@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         setContentView(R.layout.activity_main);
 
         MobileAds.initialize(this, "ca-app-pub-9817701892167034~2496155654");
-        System.out.println("craaaash");
 
         initActivity();
 

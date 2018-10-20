@@ -2,7 +2,7 @@ package com.sterbsociety.orarisapienza.models;
 
 public class Lesson {
 
-    private String classRoom;
+    private Classroom classroom;
     private int courseId;
     private String courseName;
     private String day;
@@ -13,8 +13,8 @@ public class Lesson {
     private String year;
     private String channel;
 
-    public Lesson(String classRoom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
-        this.classRoom = classRoom;
+    public Lesson(Classroom classroom, int courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
+        this.classroom = classroom;
         this.courseId = courseId;
         this.courseName = courseName;
         this.day = day;
@@ -26,11 +26,12 @@ public class Lesson {
         this.channel = channel;
     }
 
-    public Lesson(String classRoom, String courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
-        this(classRoom, Integer.parseInt(courseId), courseName, day, endLesson, professor, startLesson, subjectName, year, channel);
+    public Lesson(Classroom classroom, String courseId, String courseName, String day, String endLesson, String professor, String startLesson, String subjectName, String year, String channel) {
+        this(classroom, Integer.parseInt(courseId), courseName, day, endLesson, professor, startLesson, subjectName, year, channel);
     }
 
-    public Lesson() {}
+    public Lesson() {
+    }
 
     public String getSubjectName() {
         return subjectName;
@@ -88,12 +89,19 @@ public class Lesson {
         this.courseId = courseId;
     }
 
-    public String getClassRoom() {
-        return classRoom;
+    public String getClassroomName() {
+        if (classroom != null) {
+            return classroom.getName();
+        }
+        return "Not available";
     }
 
-    public void setClassRoom(String classRoom) {
-        this.classRoom = classRoom;
+    public Classroom getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(Classroom classRoom) {
+        this.classroom = classRoom;
     }
 
     public int getStartLessonHour() {

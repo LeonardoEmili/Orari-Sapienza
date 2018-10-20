@@ -34,7 +34,7 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
                 renderedView = renderString(lesson.getSubjectName());
                 break;
             case 2:
-                renderedView = renderString(lesson.getClassRoom());
+                renderedView = renderString(lesson.getClassroomName());
                 break;
         }
         return renderedView;

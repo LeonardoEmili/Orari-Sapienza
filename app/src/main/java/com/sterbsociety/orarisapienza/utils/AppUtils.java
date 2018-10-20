@@ -1251,6 +1251,8 @@ public class AppUtils {
         return code;
     }
 
+
+
     public static boolean isTableVisible;
 
     public static String getLiteralYearByNumber(Activity activity, String courseYear) {

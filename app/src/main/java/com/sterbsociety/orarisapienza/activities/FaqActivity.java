@@ -37,7 +37,6 @@ public class FaqActivity extends AppCompatActivity {
         initActivity();
     }
 
-
     /**
      * This method allows to go back to MainActivity.
      */
@@ -67,10 +66,10 @@ public class FaqActivity extends AppCompatActivity {
         // From here is code for setting up the Q&A list
         ArrayList<View> questionList = new ArrayList<>(Arrays.asList(findViewById(R.id.first_q), findViewById(R.id.second_q), findViewById(R.id.third_q),
                 findViewById(R.id.fourth_q), findViewById(R.id.fifth_q), findViewById(R.id.sixth_q),
-                findViewById(R.id.seventh_q), findViewById(R.id.eighth_q), findViewById(R.id.ninth_q), findViewById(R.id.ninth_q)));
+                findViewById(R.id.seventh_q), findViewById(R.id.eighth_q), findViewById(R.id.ninth_q), findViewById(R.id.tenth_q)));
         ArrayList<View> answerList =  new ArrayList<>(Arrays.asList(findViewById(R.id.first_a), findViewById(R.id.second_a), findViewById(R.id.third_a),
                 findViewById(R.id.fourth_a), findViewById(R.id.fifth_a), findViewById(R.id.sixth_a),
-                findViewById(R.id.seventh_a), findViewById(R.id.eighth_a), findViewById(R.id.ninth_a), findViewById(R.id.ninth_a)));
+                findViewById(R.id.seventh_a), findViewById(R.id.eighth_a), findViewById(R.id.ninth_a), findViewById(R.id.tenth_a)));
 
         for (int i = 0; i < questionList.size(); i++) {
 

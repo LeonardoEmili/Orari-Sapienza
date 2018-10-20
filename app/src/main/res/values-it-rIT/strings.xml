@@ -123,7 +123,7 @@
     <string name="query_example">Ad esempio Aula P1 …</string>
     <string name="no_internet_connection">NESSUNA CONNESSIONE A INTERNET</string>
     <string name="enable_it_for_a_more_accurate_study_plan_calculation">Attivala per una maggiore accuratezza nel calcolo del programma di studio.</string>
-    <string name="active_study_plan">Programma di studi attivo</string>
+    <string name="active_study_plan">Programma attivo</string>
     <string name="you_haven_t_created_a_study_plan_yet">Non hai ancora creato un programma di studi</string>
     <string name="you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan">Per crearlo ti basta tornare alla schermata principale e creare un tuo profilo alla sezione \"Programma di studi</string>
     <string name="study_plan_created">Il tuo Programma di studi é stato creato con successo!</string>
@@ -195,4 +195,5 @@
     <string name="loading_data_msg">Attendi che i dati vengano caricati.</string>
     <string name="why_aren_t_lessons_timetables_100_accurate">Perché gli orari delle lezioni non sono precisi al 100%?</string>
     <string name="lesson_timetables_are_mostly_retrived_from_gomp_and_unfortunately_there_there_are_some_inaccuracies_you_can_help_us_by_reporting_them_in_feedback_section_please_be_as_accurate_as_possible_in_reporting_the_problem">Gli orari sono presi per la maggior parte in automatico dal GOMP, e riportano purtroppo le imprecisioni che quest\'ultimo presenta. Puoi aiutarci a migliorare il nostro database segnalando nella sezione Feedback il problema e fornendo la correzione nel modo più dettagliato possibile.</string>
+    <string name="search_course">Cerca corso</string>
 </resources>

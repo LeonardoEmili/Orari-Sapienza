@@ -39,7 +39,7 @@ public final class CourseComparator {
 
         @Override
         public int compare(Lesson lesson1, Lesson lesson2) {
-            return lesson1.getCourseName().compareTo(lesson2.getCourseName());
+            return lesson1.getSubjectName().compareTo(lesson2.getSubjectName());
         }
     }
 
@@ -47,7 +47,7 @@ public final class CourseComparator {
 
         @Override
         public int compare(Lesson lesson1, Lesson lesson2) {
-            return lesson1.getClassRoom().compareTo(lesson2.getClassRoom());
+            return lesson1.getClassroomName().compareTo(lesson2.getClassroomName());
         }
     }
 
