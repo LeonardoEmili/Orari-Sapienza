@@ -29,10 +29,8 @@ import android.widget.LinearLayout;
 import com.sterbsociety.orarisapienza.utils.AppUtils;
 import org.codechimp.apprater.AppRater;
 
-import static com.sterbsociety.orarisapienza.activities.SettingsActivity.KEY_PREF_LANGUAGE;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.setLocale;
-
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         ContactFragment.OnFragmentInteractionListener, ChangeFragmentListener {

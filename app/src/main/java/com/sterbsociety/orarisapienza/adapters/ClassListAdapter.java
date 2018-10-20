@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,7 +94,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     }
 
     public void filterClassroomList() {
-        final boolean[] tmpArray = new boolean[5];
+        final boolean[] tmpArray = new boolean[6];
         tmpArray[getCurrentWeekDayIndex()] = true;
         filterClassroomList(tmpArray, 0, "", -1, null);
     }
