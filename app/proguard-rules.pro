@@ -20,13 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--optimizations   code/simplification/arithmetic,!code/simplification/cast,!field/*,! class/merging/*,!method/inlining/*
--optimizationpasses 5
--allowaccessmodification
-
--keep class package.model.* {*;}
--keepattributes *Annotation*,Signature, InnerClasses
-
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
@@ -49,3 +42,8 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 ##---------------End: proguard configuration for Gson  ----------
+
+-keep class com.sterbsociety.** {*;}
+-keep class package.model.* {*;}
+-keep class androidx.recyclerview.widget.** {*;}
+-keepattributes *Annotation*,Signature, InnerClasses

@@ -39,7 +39,7 @@
     <string name="device_name">Device:</string>
     <string name="device_model">Model:</string>
     <string name="os_version">OS Version:</string>
-    <string name="piano_di_studi">Study plan</string>
+    <string name="piano_di_studi">Study program</string>
     <string name="add_attachments">ATTACH FOTO</string>
     <string name="type_of_problem">Issue type</string>
     <string name="frequency">Frequency</string>
@@ -52,7 +52,7 @@
     <string name="attachment_too_many">This is an error message, you have entered too many attachments!</string>
     <string name="attachment_remove">Attachment removal</string>
     <string name="faq" translatable="false">FAQ</string>
-    <string name="study_plan_active">Active Study Plan</string>
+    <string name="study_plan_active">Active Study Program</string>
     <string name="classrooms_list">Classroom detail</string>
     <string name="contacts">Contatcs</string>
     <string name="report_a_bug">Report a Bug</string>
@@ -61,7 +61,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="confirm_exit">Are you sure you want to exit?</string>
     <string name="yes">Yes</string>
-    <string name="confirm_plan_overriding">A study plan is still active, if you choose to create another one the past will be erased</string>
+    <string name="confirm_plan_overriding">A Study program is still active, if you choose to create another one the past will be erased</string>
 
 
     <!-- Strings related to Settings -->
@@ -156,29 +156,29 @@
     <string name="set_study_time">SET STUDY TIME</string>
     <string name="use_current_gps_pos">Use current GPS position</string>
     <string name="your_position">Your position</string>
-    <string name="create_plan">Create plan</string>
+    <string name="create_plan">Create program</string>
     <string name="place_not_selected">No place selected, by default Sapienza Campus will considered as place of study.</string>
     <string name="ok" translatable="false">OK</string>
     <string name="_no" translatable="false">No</string>
-    <string name="study_plan">Study plan</string>
+    <string name="study_plan">Study program</string>
     <string name="save_it">Save it</string>
     <string name="from">from</string>
     <string name="_from">"from "</string>
     <string name="_up_to_">" up to "</string>
     <string name="_special_" translatable="false">" - "</string>
-    <string name="study_plan_corrupt">Your Study Plan is corrupted. It can\'t be used in app</string>
+    <string name="study_plan_corrupt">Your Study Program is corrupted. It can\'t be used in app</string>
     <string name="query_example">For example Aula P1 …</string>
     <string name="whooops" translatable="false">WHOOOPS!</string>
     <string name="no_internet_connection">NO INTERNET CONNECTION</string>
-    <string name="enable_it_for_a_more_accurate_study_plan_calculation">Enable it for a more accurate study plan calculation.</string>
-    <string name="active_study_plan">Active Study Plan</string>
-    <string name="you_haven_t_created_a_study_plan_yet">You haven\'t created a study plan yet</string>
-    <string name="you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan">You can do it by going back to previous page and create your custom profile at Study plan</string>
-    <string name="study_plan_created">Your study plan has been successfully created!</string>
-    <string name="delete_study_plan">Delete study plan</string>
-    <string name="delete_study_plan_hint">Are you sure you want to permanently delete your current Study Plan?</string>
-    <string name="study_plan_deleted">Study plan successfully eliminated</string>
-    <string name="selected_dates_are_incompatibles">It is not possible to create a plan with the chosen dates</string>
+    <string name="enable_it_for_a_more_accurate_study_plan_calculation">Enable it for a more accurate Study program calculation.</string>
+    <string name="active_study_plan">Active Study program</string>
+    <string name="you_haven_t_created_a_study_plan_yet">You haven\'t created a study program yet</string>
+    <string name="you_can_do_it_by_going_back_to_previous_page_and_then_tap_on_study_plan">You can do it by going back to previous page and create your custom profile at Study program</string>
+    <string name="study_plan_created">Your Study program has been successfully created!</string>
+    <string name="delete_study_plan">Delete Study program</string>
+    <string name="delete_study_plan_hint">Are you sure you want to permanently delete your current Study program?</string>
+    <string name="study_plan_deleted">Study program successfully eliminated</string>
+    <string name="selected_dates_are_incompatibles">It is not possible to create a program with the chosen dates</string>
     <string name="dates_error">Error in choosing dates</string>
     <string name="year">" year "</string>
     <string name="of">"of "</string>
@@ -195,8 +195,8 @@
     <string name="lesson_data_update_wrong">Data can\'t be updated now. Please try again later.</string>
     <string name="updated_timetables_title">Updated timetables</string>
     <string name="updated_timetables_desc">You will find the list of timetables of Sapienza\'s courses. They are periodically updated and available also offline !</string>
-    <string name="study_plan_title">Study plan</string>
-    <string name="study_plan_desc">Are you looking for a quiet place where to study at Sapienza? Create now your custom Study Plan and you will always know where to go and at what time !</string>
+    <string name="study_plan_title">Study program</string>
+    <string name="study_plan_desc">Are you looking for a quiet place where to study at Sapienza? Create now your custom Study program and you will always know where to go and at what time !</string>
     <string name="class_info_title">Classroom detail</string>
     <string name="class_info_desc">Discover now the functionality classroom detail, here you can find out which one is available and get useful information about classrooms.</string>
     <string name="download_course_title">Downloading course</string>
@@ -220,8 +220,8 @@
     <string name="donate_title">Donation</string>
     <string name="donate_desc">Donate and get an ad-free version of the App.</string>
     <string name="sat">Sat</string>
-    <string name="what_is_a_study_plan">What is a study plan?</string>
-    <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">The study plan is a powerful tool which helps you when you want to study at Sapienza. To obtain one simply ask for a place and a time and you will always know in which classroom to study and at what time!</string>
+    <string name="what_is_a_study_plan">What is a Study program?</string>
+    <string name="a_study_plan_is_a_powerful_tool_which_helps_you_when_you_want_to_study_at_sapienza_simply_ask_for_a_place_and_a_time_and_you_will_know_where_to_go_and_at_what_time">The study program is a powerful tool which helps you when you want to study at Sapienza. To obtain one simply ask for a place and a time and you will always know in which classroom to study and at what time!</string>
     <string name="check_timetables">How can I check my course timetables?</string>
     <string name="of_course_all_you_need_to_do_is_click_on_lesson_timetable_button_in_previous_page_and_search_you_course">All you need to do is click on Lesson Timetable button in previous page and search you course.</string>
     <string name="what_are_those_coloured_indicators_in_classroom_list">What are those coloured indicators in Classroom list?</string>
@@ -234,14 +234,16 @@
     <string name="just_go_to_settings_and_tap_on_current_language_to_change_it">Just go to Settings and tap on Current language to change it.</string>
     <string name="i_m_experiencing_some_problems_with_lesson_timetables_how_can_i_fix_it">I\'m experiencing some problems with lesson timetables, how can I fix it?</string>
     <string name="our_databases_are_periodically_updated_if_you_think_you_need_an_update_you_can_check_the_entry_automatically_check_for_updates_in_settings_or_force_a_manual_update">Our databases are periodically updated. If you think you need an update you can check the entry \'Automatically check for updates\' in Settings or force a manual update.</string>
-    <string name="i_ve_created_a_study_plan_but_now_i_can_t_see_it_anymore_what_is_happening">I\'ve created a Study Plan but now I can\'t see it anymore. What is happening?</string>
-    <string name="created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic">Every Study Plan is constantly validated. It means that the plan has expired. You may want to create another one ... don\'t make the Storm Trooper sad!</string>
+    <string name="i_ve_created_a_study_plan_but_now_i_can_t_see_it_anymore_what_is_happening">I\'ve created a Study program but now I can\'t see it anymore. What is happening?</string>
+    <string name="created_study_plan_are_constantly_monitored_it_means_that_the_plan_has_expired_you_may_want_to_create_another_one_or_just_stay_and_watch_the_storm_trooper_it_s_fantastic">Every Study program is constantly validated. It means that the program has expired. You may want to create another one … don\'t make the Storm Trooper sad!</string>
     <string name="my_professor_moved_the_lesson_to_1_hour_later_why_isn_t_the_lesson_updated_inside_the_app">My professor moved the lesson to 1 hour later, why isn\'t the lesson updated inside the app?</string>
     <string name="lesson_timetables_are_not_updated_in_real_time_they_are_updated_as_often_as_possible_timetables_shown_inside_the_app_come_from_scheduled_lessons_for_the_current_semester">Lesson timetables are not updated in real time. They are updated as often as possible, timetables shown inside the app come from scheduled lessons for the current year.</string>
     <string name="professor">Prof:</string>
     <string name="search_classroom">Search classroom</string>
     <string name="current_status">Current status:</string>
     <string name="loading_data_msg">Please wait data is being loaded.</string>
+    <string name="why_aren_t_lessons_timetables_100_accurate">Why aren\'t lessons\' timetables 100% accurate?</string>
+    <string name="lesson_timetables_are_mostly_retrived_from_gomp_and_unfortunately_there_there_are_some_inaccuracies_you_can_help_us_by_reporting_them_in_feedback_section_please_be_as_accurate_as_possible_in_reporting_the_problem">Lesson timetables are mostly retrived from GOMP, and unfortunately there there are some inaccuracies. You can help us by reporting them in Feedback section. Please be as accurate as possible in reporting the problem.</string>
 
 
 </resources>
