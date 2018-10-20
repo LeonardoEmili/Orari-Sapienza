@@ -52,7 +52,6 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.addCourseToFavourite
 import static com.sterbsociety.orarisapienza.utils.AppUtils.applyThemeNoActionBar;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.doesPDFTableExist;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroom;
-import static com.sterbsociety.orarisapienza.utils.AppUtils.getClassroomName;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDayByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getHourByIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getLiteralNumber;

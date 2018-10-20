@@ -239,9 +239,10 @@ public class AppUtils {
     }
 
     private static final String KEY_PREF_DONATION_ACTIVE = "donation_pref";
+    private static final String KEY_PREF_PRO_VERSION = "pro_ver";
 
     private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
-            vibrationAllowed, currentTheme, firstTimeStartUp;
+            vibrationAllowed, currentTheme, firstTimeStartUp, hasPurchasedNoAdsVersion;
     private static String sCurrentRingtone, currentLanguage, currentStudyPlan, currentDBVersion;
     private static Set<String> mFavouriteClassSet, mFavouriteCourseSet, mFavouriteBuildingSetCodes;
 
@@ -259,12 +260,13 @@ public class AppUtils {
         vibrationAllowed = sharedPref.getBoolean(SettingsActivity.KEY_PREF_VIBRATION_SWITCH, false);
         currentTheme = sharedPref.getBoolean(SettingsActivity.KEY_PREF_THEME, false);
         sCurrentRingtone = sharedPref.getString(SettingsActivity.KEY_PREF_RINGTONE, "");
+        hasPurchasedNoAdsVersion = sharedPref.getBoolean(KEY_PREF_PRO_VERSION, false);
         currentLanguage = sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
         if (currentLanguage.equals("")) {
             if (isUserLanguageSupported(activity)) {
                 currentLanguage = Locale.getDefault().getLanguage();
             } else {
-                currentLanguage = "it";
+                currentLanguage = "en";
             }
             sharedPref.edit().putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage).apply();
         }
@@ -844,7 +846,7 @@ public class AppUtils {
      */
     public static void setAdLayout(Activity activity, LinearLayout adContainer, String unitId) {
 
-        if (!NetworkStatus.getInstance().isOnline(activity)) {
+        if (!NetworkStatus.getInstance().isOnline(activity) || hasPurchasedNoAdsVersion) {
             // Here we could put a message to promote our app.
             // The line below removes the 'inactive' ad.
             ((ViewGroup) adContainer.getParent()).removeView(adContainer);
@@ -1235,22 +1237,6 @@ public class AppUtils {
                 + ":" +
                 String.format(Locale.getDefault(), "%02d", (465 + index % DAY_LENGTH * TIME_INTERVAL) % 60);
     }
-
-    public static String getClassroomName(String code) {
-        final String myBuildingCode = code.split("-")[0];
-        final String myClassCode = code.split("-")[1];
-        for (Building b : buildingList) {
-            if (myBuildingCode.equals(b.code)) {
-                for (Classroom c : b.aule) {
-                    if (myClassCode.equals(c.getCode())) {
-                        return c.getName();
-                    }
-                }
-            }
-        }
-        return code;
-    }
-
 
 
     public static boolean isTableVisible;
