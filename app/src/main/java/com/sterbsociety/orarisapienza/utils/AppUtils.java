@@ -545,7 +545,7 @@ public class AppUtils {
     }
 
     public static void applyThemeNoActionBar(Activity activity) {
-        if (AppUtils.isDarkTheme())
+        if (isDarkTheme())
             activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
     }
 
