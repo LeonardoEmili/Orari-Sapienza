@@ -241,7 +241,7 @@ public class AppUtils {
     private static final String KEY_PREF_DONATION_ACTIVE = "donation_pref";
     private static final String KEY_PREF_PRO_VERSION = "pro_ver";
 
-    private static Boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
+    private static boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp, hasPurchasedNoAdsVersion;
     private static String sCurrentRingtone, currentLanguage, currentStudyPlan, currentDBVersion;
     private static Set<String> mFavouriteClassSet, mFavouriteCourseSet, mFavouriteBuildingSetCodes;
@@ -270,7 +270,6 @@ public class AppUtils {
             }
             sharedPref.edit().putString(SettingsActivity.KEY_PREF_LANGUAGE, currentLanguage).apply();
         }
-
         readGeneralPreferences(activity);
     }
 

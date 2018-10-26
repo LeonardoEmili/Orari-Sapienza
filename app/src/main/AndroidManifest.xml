@@ -123,6 +123,9 @@
         <activity
             android:name=".activities.CurrentPlanActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="9958891f94b959c23697573a8a789b3219e5fc74" />
     </application>
 
 </manifest>

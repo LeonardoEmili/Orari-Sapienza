@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+import com.crashlytics.android.Crashlytics;
 import dmax.dialog.SpotsDialog;
+import io.fabric.sdk.android.Fabric;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -85,6 +87,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         loadSettings(this);
         setLocale(this);
+
+        Fabric.with(this, new Crashlytics());
 
         onlineDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();

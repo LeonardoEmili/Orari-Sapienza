@@ -23,26 +23,12 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
 
     @Override
     public View getDefaultCellView(int rowIndex, int columnIndex, ViewGroup parentView) {
-        final Lesson lesson = getRowData(rowIndex);
-        View renderedView = null;
-
-        switch (columnIndex) {
-            case 0:
-                renderedView = renderTimeString(lesson.getStartLesson(), lesson.getEndLesson());
-                break;
-            case 1:
-                renderedView = renderString(lesson.getSubjectName());
-                break;
-            case 2:
-                renderedView = renderString(lesson.getClassroomName());
-                break;
-        }
-        return renderedView;
+        return getRenderView(rowIndex, columnIndex);
     }
 
     @Override
     public View getLongPressCellView(int rowIndex, int columnIndex, ViewGroup parentView) {
-        return null;
+        return getRenderView(rowIndex, columnIndex);
     }
 
     private View renderString(final String value) {
@@ -67,5 +53,23 @@ public class CourseTableDataAdapter extends LongPressAwareTableDataAdapter<Lesso
         textView2.setTextSize(TEXT_SIZE + 1);
         linearLayout.addView(textView2);
         return linearLayout;
+    }
+
+
+    private View getRenderView(int rowIndex, int columnIndex) {
+        final Lesson lesson = getRowData(rowIndex);
+        View renderedView = null;
+        switch (columnIndex) {
+            case 0:
+                renderedView = renderTimeString(lesson.getStartLesson(), lesson.getEndLesson());
+                break;
+            case 1:
+                renderedView = renderString(lesson.getSubjectName());
+                break;
+            case 2:
+                renderedView = renderString(lesson.getClassroomName());
+                break;
+        }
+        return renderedView;
     }
 }

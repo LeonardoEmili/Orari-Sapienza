@@ -145,7 +145,6 @@ public class LessonTimetableActivity extends AppCompatActivity {
             if ((currentSpecialCourse = SPECIAL_COURSES.get(course.getName() + "_" + course.getId())) != null) {
                 // This means that this is a special course
                 if (currentSpecialCourse.size() > 1) {
-                    // The special course has more than 1 year|channel|semester
                     final ArrayList<Integer> entriesHeaders = new ArrayList<>();
                     final ArrayList<Integer> typesHeaders = new ArrayList<>();
                     final HashMap<String, ArrayList<String>> tmpListEntries = new HashMap<>();
