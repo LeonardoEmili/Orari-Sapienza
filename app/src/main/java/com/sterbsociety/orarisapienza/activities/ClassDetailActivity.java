@@ -141,6 +141,8 @@ public class ClassDetailActivity extends AppCompatActivity implements OnMapIniti
             buildingAddress.setTextColor(white);
             currentLesson.setTextColor(white);
             classTimetable.setTextColor(white);
+            professor.setTextColor(white);
+            currentProfessor.setTextColor(white);
             ((TextView) findViewById(R.id.status)).setTextColor(white);
             ((TextView) findViewById(R.id.lesson)).setTextColor(white);
             ((TextView) findViewById(R.id.time)).setTextColor(white);

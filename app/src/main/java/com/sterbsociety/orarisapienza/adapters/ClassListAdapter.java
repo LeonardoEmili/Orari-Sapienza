@@ -29,6 +29,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.CACHED_MAX_HOUR;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.CACHED_MIN_HOUR;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getCurrentWeekDayIndex;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealBuilding;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.getRealClassroomList;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.haversine;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.hourToString;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.timeToInt;
@@ -46,7 +47,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         super(context);
         mClassFavourites = AppUtils.getFavouriteClassSet();
         starImg = context.getResources().getDrawable(R.drawable.ic_starred);
-        redColor = context.getResources().getColor(R.color.red_normal);
+        redColor = context.getResources().getColor(R.color.cool_red);
         greenColor = context.getResources().getColor(R.color.green_normal);
         blackColor = context.getResources().getColor(R.color.coolBlack);
         mDataList = new ArrayList<>();
@@ -81,7 +82,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
             // This happens only the first time, if the user hasn't completed a full research,
             // then it can only filter the whole list (which shows by default only free classroom in the current day)
             backupList = new ArrayList<>(AppUtils.getRealClassroomList());
-            searchForAvailableClassrooms(backupList, getCurrentWeekDayIndex());
+            //searchForAvailableClassrooms(backupList, getCurrentWeekDayIndex());
         }
         for (Classroom model : backupList) {
             final Building building = getRealBuilding(model);
@@ -96,31 +97,41 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
     public void filterClassroomList() {
         final boolean[] tmpArray = new boolean[6];
         tmpArray[getCurrentWeekDayIndex()] = true;
-        filterClassroomList(tmpArray, 0, "", -1, null);
+        filterClassroomList(tmpArray, 2, "", -1, null);
     }
 
     public void filterClassroomList(boolean[] dayIndexArray, int onlyAvailable, String query, int distanceRadius, @Nullable Location location) {
         mDataList.clear();
-        for (int dayIndex = 0; dayIndex < dayIndexArray.length; dayIndex++) {
-            if (dayIndexArray[dayIndex]) {
-                // Foreach day request by the user
-                ArrayList<Classroom> tmpList = new ArrayList<>(AppUtils.getRealClassroomList());
+        if (onlyAvailable == 2) {
+            ArrayList<Classroom> tmpList = new ArrayList<>(getRealClassroomList());
+            tmpList = filterClassroomListByQuery(tmpList, query);
+            if (distanceRadius != -1 && location != null) {
+                tmpList = filterClassroomListByDistance(tmpList, location, distanceRadius);
+            }
+            mDataList.addAll(tmpList);
+        } else {
+            for (int dayIndex = 0; dayIndex < dayIndexArray.length; dayIndex++) {
+                if (dayIndexArray[dayIndex]) {
+                    // Foreach day request by the user
+                    ArrayList<Classroom> tmpList = new ArrayList<>(AppUtils.getRealClassroomList());
 
-                if (onlyAvailable == 0) {
-                    searchForAvailableClassrooms(tmpList, dayIndex);
-                } else if (onlyAvailable == 1) {
-                    searchForOccupiedClassrooms(tmpList, dayIndex);
+                    if (onlyAvailable == 0) {
+                        searchForAvailableClassrooms(tmpList, dayIndex);
+                    } else if (onlyAvailable == 1) {
+                        searchForOccupiedClassrooms(tmpList, dayIndex);
+                    }
+
+                    tmpList = filterClassroomListByQuery(tmpList, query);
+
+                    if (distanceRadius != -1 && location != null) {
+                        tmpList = filterClassroomListByDistance(tmpList, location, distanceRadius);
+                    }
+                    mDataList.addAll(tmpList);
                 }
-
-                tmpList = filterClassroomListByQuery(tmpList, query);
-
-                if (distanceRadius != -1 && location != null) {
-                    tmpList = filterClassroomListByDistance(tmpList, location, distanceRadius);
-                }
-                mDataList.addAll(tmpList);
             }
         }
         backupList = new ArrayList<>(mDataList);
+        filterClassroomListOnlyByQuery(query);
         notifyDataSetChanged();
     }
 
@@ -221,7 +232,7 @@ public class ClassListAdapter extends BaseClassListAdapter<ClassListAdapter.View
         }
         final Date minHour = AppUtils.getMinHour();
         final Date maxHour = AppUtils.getMaxHour();
-        if (now.before(minHour) || now.after(maxHour) || currentDay   == Calendar.SUNDAY) {
+        if (now.before(minHour) || now.after(maxHour) || currentDay == Calendar.SUNDAY) {
             holder.background.setColor(blackColor);
         } else if (AppUtils.MATRIX.get(classroom.getFullCode()).get(currentTimeIndex) == 0) {
             // Classroom is now empty

@@ -245,6 +245,9 @@
     <string name="why_aren_t_lessons_timetables_100_accurate">Why aren\'t lessons\' timetables 100% accurate?</string>
     <string name="lesson_timetables_are_mostly_retrived_from_gomp_and_unfortunately_there_there_are_some_inaccuracies_you_can_help_us_by_reporting_them_in_feedback_section_please_be_as_accurate_as_possible_in_reporting_the_problem">Lesson timetables are mostly retrived from GOMP, and unfortunately there there are some inaccuracies. You can help us by reporting them in Feedback section. Please be as accurate as possible in reporting the problem.</string>
     <string name="search_course">Search course</string>
+    <string name="version" translatable="false">1.15</string>
+    <string name="filter_class_title">Filter classroom</string>
+    <string name="filter_class_desc">Press this button to filter classrooms by availability, position and time.</string>
 
 
 </resources>

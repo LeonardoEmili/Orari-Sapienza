@@ -110,7 +110,7 @@
                     android:id="@+id/current_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/red_normal"
+                    android:textColor="#db930000"
                     android:text="@string/not_available"
                     android:textSize="@dimen/_15sdp"
                     android:textStyle="bold" />

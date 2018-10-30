@@ -81,7 +81,7 @@
         <Preference
             android:title="@string/app_version"
             android:key="version"
-            android:summary="1.0" />
+            android:summary="@string/version" />
 
     </PreferenceCategory>
 

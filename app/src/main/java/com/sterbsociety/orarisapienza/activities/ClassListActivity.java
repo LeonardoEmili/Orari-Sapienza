@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sterbsociety.orarisapienza.R;
 import com.sterbsociety.orarisapienza.adapters.ClassListAdapter;
 import com.sterbsociety.orarisapienza.models.Classroom;
@@ -35,6 +38,7 @@ import static com.sterbsociety.orarisapienza.utils.AppUtils.SELECTED_DAY_BTN_IND
 import static com.sterbsociety.orarisapienza.utils.AppUtils.askForGPSPermission;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getDistanceFromCurrentPosition;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.getSelectedClassBtnIndex;
+import static com.sterbsociety.orarisapienza.utils.AppUtils.setShowcaseFilter;
 import static com.sterbsociety.orarisapienza.utils.AppUtils.updateCachedFilters;
 
 public class ClassListActivity extends AppCompatActivity implements SwipeItemClickListener {
@@ -48,6 +52,7 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
     private static Location lastLocation;
     private String lastQuery = "";
     private boolean isBuildingClickable;
+    private ShowcaseView showcaseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +119,26 @@ public class ClassListActivity extends AppCompatActivity implements SwipeItemCli
         // This is needed for hiding the bottom navigation bar.
         AppUtils.hideSystemUI(getWindow().getDecorView());
 
-        setSupportActionBar(findViewById(R.id.toolbar));
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        if (AppUtils.firstShowcaseFilter) {
+
+            showcaseView = new ShowcaseView.Builder(this)
+                    .withMaterialShowcase()
+                    .setTarget(new ViewTarget(findViewById(R.id.filter_icon)))
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .setContentTitle(R.string.filter_class_title)
+                    .setContentText(R.string.filter_class_desc)
+                    .setOnClickListener(view -> {
+                        setShowcaseFilter(this);
+                        showcaseView.hide();
+                    })
+                    .withHoloShowcase()
+                    .build();
         }
 
         searchView = findViewById(R.id.search_view);

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        Context mContext = inflater.getContext();
         CardView studyPlanBtn = view.findViewById(R.id.study_plan_btn);
         CardView timeTablesBtn = view.findViewById(R.id.timetables_btn);
         CardView currentPlanBtn = view.findViewById(R.id.current_plan_btn);
@@ -85,6 +86,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         timeTablesBtn.setOnClickListener(this);
         studyPlanBtn.setOnClickListener(this);
         currentPlanBtn.setOnClickListener(this);
+
+        ((TextView)studyPlanBtn.findViewById(R.id.txt_study_plan)).setText(AppUtils.getStringByLocal(mContext, R.string.piano_di_studi));
+        ((TextView)timeTablesBtn.findViewById(R.id.txt_timetables)).setText(AppUtils.getStringByLocal(mContext, R.string.lessons_timetable));
+        ((TextView)currentPlanBtn.findViewById(R.id.txt_current_plan)).setText(AppUtils.getStringByLocal(mContext, R.string.study_plan_active));
+        ((TextView)classListBtn.findViewById(R.id.txt_classroom_plan)).setText(AppUtils.getStringByLocal(mContext, R.string.classrooms_list));
+        ((TextView)contactBtn.findViewById(R.id.txt_contacts)).setText(AppUtils.getStringByLocal(mContext, R.string.contacts));
 
         contactBtn.setOnClickListener(view16 -> changeFragmentListener.onChangeFragmentLicked(ContactFragment.TAG));
 

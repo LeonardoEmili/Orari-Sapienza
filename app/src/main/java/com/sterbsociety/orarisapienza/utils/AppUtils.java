@@ -240,6 +240,9 @@ public class AppUtils {
 
     private static final String KEY_PREF_DONATION_ACTIVE = "donation_pref";
     private static final String KEY_PREF_PRO_VERSION = "pro_ver";
+    private static final String KEY_PREF_SHOWCASE_FILTER = "filter_showcase";
+
+    public static boolean firstShowcaseFilter;
 
     private static boolean animationsAllowed, updatesAllowed, secureExitAllowed, notificationAllowed,
             vibrationAllowed, currentTheme, firstTimeStartUp, hasPurchasedNoAdsVersion;
@@ -261,6 +264,7 @@ public class AppUtils {
         currentTheme = sharedPref.getBoolean(SettingsActivity.KEY_PREF_THEME, false);
         sCurrentRingtone = sharedPref.getString(SettingsActivity.KEY_PREF_RINGTONE, "");
         hasPurchasedNoAdsVersion = sharedPref.getBoolean(KEY_PREF_PRO_VERSION, false);
+        firstShowcaseFilter = sharedPref.getBoolean(KEY_PREF_SHOWCASE_FILTER, true);
         currentLanguage = sharedPref.getString(SettingsActivity.KEY_PREF_LANGUAGE, "");
         if (currentLanguage.equals("")) {
             if (isUserLanguageSupported(activity)) {
@@ -274,6 +278,11 @@ public class AppUtils {
     }
 
     private static ArrayList<Classroom> classroomList, favouriteClassroomList;
+
+    public static void setShowcaseFilter(Activity activity) {
+        firstShowcaseFilter = false;
+        PreferenceManager.getDefaultSharedPreferences(activity).edit().putBoolean(KEY_PREF_SHOWCASE_FILTER, false).apply();
+    }
 
     public static ArrayList<Classroom> getFavouriteClassroomList() {
         return favouriteClassroomList;
@@ -637,7 +646,7 @@ public class AppUtils {
         sendSilentReport(activity, errorLine, getStackTraceAsString(ex), className);
     }
 
-    private static int SELECTED_CLASS_BTN_INDEX = 0;
+    private static int SELECTED_CLASS_BTN_INDEX = 2;
 
     public static int getSelectedClassBtnIndex() {
         return SELECTED_CLASS_BTN_INDEX;
@@ -725,7 +734,7 @@ public class AppUtils {
     public static void initClassroomFilters() {
         SELECTED_DAY_BTN_INDEX = new boolean[6];
         SELECTED_DAY_BTN_INDEX[getCurrentWeekDayIndex()] = true;
-        SELECTED_CLASS_BTN_INDEX = 0;
+        SELECTED_CLASS_BTN_INDEX = 2;
         CACHED_MIN_HOUR = 10;
         CACHED_MAX_HOUR = 14;
         DISTANCE_FROM_CURRENT_POSITION = 21;

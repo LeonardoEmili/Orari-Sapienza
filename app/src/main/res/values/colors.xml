@@ -14,10 +14,12 @@
     <color name="darkGray">#9a000000</color>
     <color name="divider_color">#FFB7B2B2</color>
     <color name="red_normal">#FF0000</color>
+    <color name="cool_red">#db930000</color>
     <color name="green_normal">#37C000</color>
     <color name="green_pressed">#30A070</color>
     <color name="yellow_normal">#ffe033</color>
     <color name="yellow_pressed">#dec120</color>
+    <color name="blue">#6200EE</color>
     <color name="table_data_row_even">#11C5CAE9</color>
     <color name="table_data_row_odd">#33C5CAE9</color>
 </resources>

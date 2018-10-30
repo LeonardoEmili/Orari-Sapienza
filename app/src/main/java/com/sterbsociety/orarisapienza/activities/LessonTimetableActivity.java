@@ -216,7 +216,7 @@ public class LessonTimetableActivity extends AppCompatActivity {
                 displayRightCourse();
             }
             searchView.closeSearch();
-            Objects.requireNonNull(getSupportActionBar()).setSubtitle(getString(R.string.course_code) + ": " + courseCode);
+            Objects.requireNonNull(getSupportActionBar()).setSubtitle(course.getFullName());
         });
     }
 

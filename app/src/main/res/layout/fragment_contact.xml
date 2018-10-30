@@ -42,6 +42,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/txt_feedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/feedback"
@@ -84,6 +85,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/txt_bug"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bug"
@@ -129,6 +131,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/txt_authors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/authors"

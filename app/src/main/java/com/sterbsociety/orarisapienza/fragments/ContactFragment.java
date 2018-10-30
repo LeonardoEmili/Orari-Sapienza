@@ -7,12 +7,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.labo.kaji.fragmentanimations.CubeAnimation;
 import com.sterbsociety.orarisapienza.activities.DevActivity;
@@ -64,10 +67,16 @@ public class ContactFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
-
-        view.findViewById(R.id.feedback_btn).setOnClickListener(view13 -> startActivity(new Intent(getActivity(), FeedbackActivity.class)));
-        view.findViewById(R.id.bug_report_btn).setOnClickListener(view12 -> startActivity(new Intent(getActivity(), BugReportActivity.class)));
-        view.findViewById(R.id.dev_btn).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), DevActivity.class)));
+        Context mContext = inflater.getContext();
+        CardView feedbackBtn = view.findViewById(R.id.feedback_btn);
+        CardView bugReportBtn = view.findViewById(R.id.bug_report_btn);
+        CardView devBtn = view.findViewById(R.id.dev_btn);
+        feedbackBtn.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), FeedbackActivity.class)));
+        bugReportBtn.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), BugReportActivity.class)));
+        devBtn.setOnClickListener(view1 -> startActivity(new Intent(getActivity(), DevActivity.class)));
+        ((TextView)feedbackBtn.findViewById(R.id.txt_feedback)).setText(AppUtils.getStringByLocal(mContext, R.string.feedback));
+        ((TextView)bugReportBtn.findViewById(R.id.txt_bug)).setText(AppUtils.getStringByLocal(mContext, R.string.bug));
+        ((TextView)devBtn.findViewById(R.id.txt_authors)).setText(AppUtils.getStringByLocal(mContext, R.string.authors));
         return view;
     }
 

@@ -196,4 +196,6 @@
     <string name="why_aren_t_lessons_timetables_100_accurate">Perché gli orari delle lezioni non sono precisi al 100%?</string>
     <string name="lesson_timetables_are_mostly_retrived_from_gomp_and_unfortunately_there_there_are_some_inaccuracies_you_can_help_us_by_reporting_them_in_feedback_section_please_be_as_accurate_as_possible_in_reporting_the_problem">Gli orari sono presi per la maggior parte in automatico dal GOMP, e riportano purtroppo le imprecisioni che quest\'ultimo presenta. Puoi aiutarci a migliorare il nostro database segnalando nella sezione Feedback il problema e fornendo la correzione nel modo più dettagliato possibile.</string>
     <string name="search_course">Cerca corso</string>
+    <string name="filter_class_title">Filtra aule</string>
+    <string name="filter_class_desc">Premi questo pulsante per filtrare aule in base alla loro disponiblitá, orari e posizione.</string>
 </resources>
